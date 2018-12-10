@@ -1,0 +1,27 @@
+{
+  "name": "node-op",
+  "version": "0.5.4",
+  "description": "One password installer",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js",
+    "postinstall": "node install-op.js",
+    "obtain-fingerprint": "echo -n | openssl s_client -connect cache.agilebits.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > cert.pem && openssl x509 -noout -in cert.pem -fingerprint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zaripych/node-op.git"
+  },
+  "keywords": [
+    "one-password"
+  ],
+  "author": "@zaripych",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zaripych/node-op/issues"
+  },
+  "homepage": "https://github.com/zaripych/node-op#readme",
+  "dependencies": {
+    "adm-zip": "0.4.13"
+  }
+}

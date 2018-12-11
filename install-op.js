@@ -8,6 +8,7 @@ const { url, fingerprint, contributeUrl } = require("./index");
 
 const mkdir = promisify(fs.mkdir);
 const pipeline = promisify(stream.pipeline);
+const chmod = promisify(fs.chmod);
 
 const req = https.get(url, res => {
   mkdir("./bin")
@@ -26,7 +27,8 @@ const req = https.get(url, res => {
       const zip = new AdmZip("./bin/package.zip");
       zip.extractEntryTo("op", "./bin", false, true);
       zip.extractEntryTo("op.sig", "./bin", false, true);
-    });
+    })
+    .then(() => chmod("./bin/op", 0755));
 });
 
 req.on("socket", socket => {

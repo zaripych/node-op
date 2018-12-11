@@ -1,12 +1,16 @@
 {
-  "name": "node-op",
-  "version": "0.5.4",
+  "name": "@zaripych/node-op",
+  "version": "0.0.1-rc.2",
+  "op_version": "0.5.4",
   "description": "One password installer",
   "main": "index.js",
   "scripts": {
     "test": "node index.js",
     "postinstall": "node install-op.js",
     "obtain-fingerprint": "echo -n | openssl s_client -connect cache.agilebits.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > cert.pem && openssl x509 -noout -in cert.pem -fingerprint"
+  },
+  "bin": {
+    "op": "./bin/op"
   },
   "repository": {
     "type": "git",

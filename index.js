@@ -5,7 +5,7 @@ const fingerprint =
   "57:49:78:F8:DB:81:3C:09:39:B9:0D:3D:E8:BA:96:2C:13:A2:77:B3";
 
 const contributeUrl = pack.homepage;
-const version = pack.version;
+const version = pack.op_version;
 
 const config = {
   darwin: {

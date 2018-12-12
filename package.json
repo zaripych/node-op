@@ -1,6 +1,6 @@
 {
-  "name": "@zaripych/node-op",
-  "version": "0.0.1-rc.17",
+  "name": "node-op",
+  "version": "0.0.1",
   "op_version": "0.5.4",
   "description": "One password installer",
   "main": "index.js",

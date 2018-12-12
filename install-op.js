@@ -10,25 +10,52 @@ const mkdir = promisify(fs.mkdir);
 const pipeline = promisify(stream.pipeline);
 const chmod = promisify(fs.chmod);
 
+if (
+  fs.existsSync("./lib/package.zip") &&
+  fs.existsSync("./lib/op") &&
+  fs.existsSync("./lib/op.sig")
+) {
+  console.log(
+    "node-op: Binary already downloaded and unpacked, skipping installation ... "
+  );
+  return;
+}
+
+console.log("node-op: Will download the library ... ");
+
 const req = https.get(url, res => {
-  mkdir("./bin")
+  if (res.statusCode !== 200) {
+    throw new Error(`HTTP ${res.statusCode}: ${res.statusMessage}`);
+  }
+
+  mkdir("./lib")
     .catch(() => Promise.resolve())
     .then(() => {
-      const outFile = fs.createWriteStream("./bin/package.zip");
+      const outFile = fs.createWriteStream("./lib/package.zip");
       return pipeline(res, outFile).catch(err => {
         res.destroy();
         outFile.destroy();
+
         throw new Error(
           `Cannot download the package from url '${url}'. ${err.message}`
         );
       });
     })
     .then(() => {
-      const zip = new AdmZip("./bin/package.zip");
-      zip.extractEntryTo("op", "./bin", false, true);
-      zip.extractEntryTo("op.sig", "./bin", false, true);
+      const zip = new AdmZip("./lib/package.zip");
+      zip.extractEntryTo("op", "./lib", false, true);
+      zip.extractEntryTo("op.sig", "./lib", false, true);
     })
-    .then(() => chmod("./bin/op", 0755));
+    .then(() => chmod("./lib/op", 0755))
+    .catch(err => {
+      console.error(err);
+      process.exit(-1);
+    });
+});
+
+req.on("error", err => {
+  console.error(err);
+  process.exit(-1);
 });
 
 req.on("socket", socket => {

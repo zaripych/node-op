@@ -1,16 +1,24 @@
 {
   "name": "@zaripych/node-op",
-  "version": "0.0.1-rc.2",
+  "version": "0.0.1-rc.17",
   "op_version": "0.5.4",
   "description": "One password installer",
   "main": "index.js",
+  "files": [
+    "lib/op",
+    "index.js",
+    "install-op.js",
+    "package.json",
+    "README.md"
+  ],
   "scripts": {
     "test": "node index.js",
+    "prepublishOnly": "rimraf ./lib && mkdir ./lib && cp op ./lib/op",
     "postinstall": "node install-op.js",
     "obtain-fingerprint": "echo -n | openssl s_client -connect cache.agilebits.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > cert.pem && openssl x509 -noout -in cert.pem -fingerprint"
   },
   "bin": {
-    "op": "./bin/op"
+    "op": "./lib/op"
   },
   "repository": {
     "type": "git",
@@ -27,5 +35,8 @@
   "homepage": "https://github.com/zaripych/node-op#readme",
   "dependencies": {
     "adm-zip": "0.4.13"
+  },
+  "devDependencies": {
+    "rimraf": "^2.6.2"
   }
 }

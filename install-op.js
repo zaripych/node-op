@@ -2,14 +2,24 @@ const https = require("https");
 const fs = require("fs");
 const path = require("path");
 const { spawnSync } = require("child_process");
-const stream = require("stream");
+const pump = require("pump");
 const AdmZip = require("adm-zip");
 const { promisify } = require("util");
 
 const { url, entry, version, fingerprint, contributeUrl } = require("./index");
 
 const mkdir = promisify(fs.mkdir);
-const pipeline = promisify(stream.pipeline);
+const pipeline = (req, file) => {
+  return new Promise((res, rej) => {
+    pump(req, file, err => {
+      if (err) {
+        rej(err);
+      } else {
+        res();
+      }
+    });
+  });
+};
 const chmod = promisify(fs.chmod);
 
 const libDir = "./lib/";

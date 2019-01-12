@@ -39,7 +39,8 @@
   },
   "homepage": "https://github.com/zaripych/node-op#readme",
   "dependencies": {
-    "adm-zip": "0.4.13"
+    "adm-zip": "0.4.13",
+    "pump": "3.0.0"
   },
   "devDependencies": {
     "@commitlint/cli": "7.3.1",

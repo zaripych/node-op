@@ -13,14 +13,19 @@ const config = {
   },
   linux: {
     x64: `https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_linux_386_v${version}.zip`
+  },
+  win32: {
+    x64: `https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_windows_amd64_v${version}.zip`
   }
 };
 
-const currentConfig = config[os.platform()];
+const platform = os.platform();
+const arch = os.arch();
+const currentConfig = config[platform];
 
 if (!currentConfig) {
   throw new Error(
-    `Cannot find config for your platform. Contribute: ${contributeUrl}`
+    `Cannot find config for your platform (${platform}). Contribute: ${contributeUrl}`
   );
 }
 
@@ -28,13 +33,11 @@ if (!currentConfig) {
  * @type {string}
  */
 const url =
-  "universal" in currentConfig
-    ? currentConfig.universal
-    : currentConfig[os.arch()];
+  "universal" in currentConfig ? currentConfig.universal : currentConfig[arch];
 
 if (!url) {
   throw new Error(
-    `Cannot find config for your arch. Contribute: ${contributeUrl}`
+    `Cannot find config for your arch (${arch}). Contribute: ${contributeUrl}`
   );
 }
 
@@ -45,5 +48,7 @@ if (!url.startsWith("https://cache.agilebits.com")) {
 module.exports = {
   contributeUrl,
   fingerprint,
-  url
+  url,
+  entry: platform === "win32" ? "op.exe" : "op",
+  version
 };

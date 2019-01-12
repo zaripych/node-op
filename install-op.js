@@ -1,27 +1,58 @@
 const https = require("https");
 const fs = require("fs");
+const path = require("path");
+const { spawnSync } = require("child_process");
 const stream = require("stream");
 const AdmZip = require("adm-zip");
 const { promisify } = require("util");
 
-const { url, fingerprint, contributeUrl } = require("./index");
+const { url, entry, version, fingerprint, contributeUrl } = require("./index");
 
 const mkdir = promisify(fs.mkdir);
 const pipeline = promisify(stream.pipeline);
 const chmod = promisify(fs.chmod);
 
-if (
-  fs.existsSync("./lib/package.zip") &&
-  fs.existsSync("./lib/op") &&
-  fs.existsSync("./lib/op.sig")
-) {
-  console.log(
-    "node-op: Binary already downloaded and unpacked, skipping installation ... "
-  );
-  return;
+const libDir = "./lib/";
+const packagePath = path.join(libDir, "package.zip");
+const opPath = path.join(libDir, entry);
+
+function getOpVersion() {
+  const result = spawnSync(opPath, ["--version"], { encoding: "utf8" });
+  if (result.error) {
+    throw new Error(`Cannot check version of op ${result.error}`);
+  }
+  const output = result.stdout.trim();
+  const regex = /\d+\.\d+\.\d+/g;
+  const firstMatch = regex.exec(output);
+  const nextMatch = regex.exec(output);
+  if (!firstMatch) {
+    throw new Error(`No version string found in the op output: ${output}`);
+  }
+  if (firstMatch && nextMatch) {
+    throw new Error(
+      `Found one or more version strings in op output: ${output}; Which one is correct? ${contributeUrl}`
+    );
+  }
+  return firstMatch[0];
 }
 
-console.log("node-op: Will download the library ... ");
+if (
+  fs.existsSync(packagePath) &&
+  fs.existsSync(opPath) &&
+  fs.existsSync(opPath + ".sig")
+) {
+  console.log(
+    "node-op: The binary already downloaded and unpacked, checking version ... "
+  );
+  const currentVersion = getOpVersion();
+  if (currentVersion === version) {
+    console.log("node-op: Version matches", version);
+    console.log("");
+    return 0;
+  }
+}
+
+console.log("node-op: Will download the binary ... ");
 
 const req = https.get(url, res => {
   if (res.statusCode !== 200) {
@@ -31,22 +62,36 @@ const req = https.get(url, res => {
   mkdir("./lib")
     .catch(() => Promise.resolve())
     .then(() => {
-      const outFile = fs.createWriteStream("./lib/package.zip");
+      const outFile = fs.createWriteStream(packagePath);
       return pipeline(res, outFile).catch(err => {
         res.destroy();
         outFile.destroy();
 
         throw new Error(
-          `Cannot download the package from url '${url}'. ${err.message}`
+          `Cannot download and save the package from url '${url}' to file '${packagePath}'. ${
+            err.message
+          }`
         );
       });
     })
     .then(() => {
-      const zip = new AdmZip("./lib/package.zip");
-      zip.extractEntryTo("op", "./lib", false, true);
-      zip.extractEntryTo("op.sig", "./lib", false, true);
+      const zip = new AdmZip(packagePath);
+      zip.extractEntryTo(entry, libDir, false, true);
+      zip.extractEntryTo(entry + ".sig", libDir, false, true);
     })
-    .then(() => chmod("./lib/op", 0755))
+    .then(() => chmod(opPath, 0755))
+    .then(() => {
+      const currentVersion = getOpVersion();
+      if (currentVersion !== version) {
+        throw new Error(
+          `The downloaded version ${currentVersion} doesn\'t match ${version}`
+        );
+      }
+      console.log("node-op: Downloaded version", version);
+    })
+    .then(() => {
+      console.log("");
+    })
     .catch(err => {
       console.error(err);
       process.exit(-1);

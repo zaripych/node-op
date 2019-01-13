@@ -1,5 +1,4 @@
-#!/usr/bin/env bash
 # This is a placeholder, the real op will be downloaded upon install;
 # when not successfull this file will remain to output an error message
 echo '#node-op: ERROR - Not installed, did you skip scripts during npm install?'
-exit -1
+exit 1

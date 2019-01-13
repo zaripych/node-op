@@ -6,6 +6,7 @@
   "main": "index.js",
   "files": [
     "lib/op",
+    "lib/op.cmd",
     "index.js",
     "install-op.js",
     "package.json",
@@ -13,7 +14,7 @@
   ],
   "scripts": {
     "test": "node index.js",
-    "prepublishOnly": "rimraf \"./lib\" && mkdir \"./lib\" && cp op \"./lib/op\"",
+    "prepublishOnly": "rimraf \"./lib\" && mkdir \"./lib\" && cp op \"./lib/op\" && cp op.cmd \"./lib/op.cmd\"",
     "postinstall": "node install-op.js",
     "obtain-fingerprint": "echo -n | openssl s_client -connect cache.agilebits.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > cert.pem && openssl x509 -noout -in cert.pem -fingerprint",
     "semantic-release": "semantic-release",

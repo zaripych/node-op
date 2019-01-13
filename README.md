@@ -22,6 +22,30 @@ or
 yarn add node-op --dev
 ```
 
+## Usage
+
+```
+{
+  "scripts": {
+    "op": "op"
+  }
+}
+```
+
+then
+
+```
+npm run op --help
+```
+
+or
+
+```
+# Inside bash script:
+export PATH=./node_modules/.bin:$PATH
+op --help
+```
+
 ## CLI Installation Process
 
 During `npm install` a script is executed which downloads and unpacks `op` into your `node_modules/node-op/lib` folder.

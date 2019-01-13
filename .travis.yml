@@ -7,6 +7,13 @@ branches:
     - /^v\d+\.\d+\.\d+$/
 jobs:
   include:
+    - stage: check for updates
+      script:
+        - node ./op-update-watcher/checkVersionAndPush.js
+      on:
+        branch:
+          - feature/automatic-updates
+          - master
     - stage: publish
       script: false
       deploy:

@@ -1,7 +1,7 @@
 {
   "name": "node-op",
   "version": "0.1.0",
-  "op_version": "0.5.5",
+  "op_version": "0.5.4",
   "description": "One password CLI installer",
   "main": "index.js",
   "files": [
@@ -16,7 +16,8 @@
     "prepublishOnly": "rimraf \"./lib\" && mkdir \"./lib\" && cp op \"./lib/op\"",
     "postinstall": "node install-op.js",
     "obtain-fingerprint": "echo -n | openssl s_client -connect cache.agilebits.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > cert.pem && openssl x509 -noout -in cert.pem -fingerprint",
-    "semantic-release": "semantic-release"
+    "semantic-release": "semantic-release",
+    "print-current-version": "node ./op-update-watcher/index"
   },
   "bin": {
     "op": "./lib/op"
@@ -45,10 +46,16 @@
   "devDependencies": {
     "@commitlint/cli": "7.3.1",
     "@commitlint/config-conventional": "7.3.1",
+    "@octokit/rest": "16.8.1",
     "@semantic-release/git": "7.0.7",
+    "chromedriver": "2.45.0",
+    "fs-extra": "7.0.1",
     "husky": "1.3.1",
     "rimraf": "2.6.3",
-    "semantic-release": "15.13.3"
+    "selenium-webdriver": "3.6.0",
+    "semantic-release": "15.13.3",
+    "semver": "5.6.0",
+    "webdriver-query": "1.0.1"
   },
   "husky": {
     "hooks": {

@@ -14,6 +14,16 @@ Supported platforms:
 
 ## Installation
 
+```
+npm install node-op --save-dev
+```
+or
+```
+yarn add node-op --dev
+```
+
+## CLI Installation Process
+
 During `npm install` a script is executed which downloads and unpacks `op` into your `node_modules/node-op/lib` folder.
 
 The `op` executable becomes available to be used through `npm run` or `yarn run`.

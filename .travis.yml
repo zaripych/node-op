@@ -1,5 +1,8 @@
 language: node_js
-cache: npm
+cache:
+  npm: true
+  directories:
+    - /tmp/chromedriver/
 node_js:
   - "8"
 addons:

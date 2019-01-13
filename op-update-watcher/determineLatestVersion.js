@@ -68,5 +68,6 @@ function determineLatestVersion() {
 }
 
 module.exports = {
+  checkPage,
   determineLatestVersion
 };

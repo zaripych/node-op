@@ -3,7 +3,11 @@ const { writeFileSync, readFileSync, existsSync } = require("fs");
 const path = require("path");
 const os = require("os");
 const { gt, gte } = require("semver");
-const { determineLatestVersion } = require("./determineLatestVersion");
+const octokit = require("@octokit/rest");
+const {
+  determineLatestVersion,
+  checkPage
+} = require("./determineLatestVersion");
 const rimraf = require("rimraf");
 
 const pack = require("../package.json");
@@ -142,30 +146,74 @@ function gitCommit() {
 }
 
 function gitPush() {
-  spawnOutput("git", ["push", "--dry-run", url, `HEAD:${pushBranch}`]);
+  spawnOutput("git", ["push", url, `HEAD:${pushBranch}`]);
 }
 
-determineLatestVersion().then(version => {
-  if (!gt(version, packageOpVersion)) {
-    console.log("No updates");
-    return;
-  }
+determineLatestVersion()
+  .then(version => {
+    if (!gt(version, packageOpVersion)) {
+      console.log("No updates");
+      return;
+    }
 
-  gitClone();
+    gitClone();
 
-  gitCheckout();
+    gitCheckout();
 
-  if (!updatePackageJsonIfRequired(version)) {
-    return;
-  }
+    if (!updatePackageJsonIfRequired(version)) {
+      return;
+    }
 
-  gitAdd();
+    gitAdd();
 
-  if (/nothing to commit, working tree clean/.test(gitStatus())) {
-    return;
-  }
+    if (/nothing to commit, working tree clean/.test(gitStatus())) {
+      return;
+    }
 
-  gitCommit();
+    gitCommit();
 
-  gitPush();
-});
+    gitPush();
+
+    const kit = new octokit();
+    kit.authenticate({
+      type: "oauth",
+      token: process.env.GH_TOKEN
+    });
+
+    return kit.pulls
+      .list({
+        owner: "zaripych",
+        repo: "node-op",
+        state: "open",
+        base: "master",
+        head: "fix/upgrade-op-version"
+      })
+      .then(pulls => {
+        if (pulls.data.length !== 0) {
+          console.log("Pull request already open");
+          return;
+        }
+
+        return kit.pulls
+          .create({
+            owner: "zaripych",
+            repo: "node-op",
+            base: "master",
+            head: "fix/upgrade-op-version",
+            title: "fix/upgrade-op-version",
+            body: `Hi there @zaripych, according to ${checkPage}, it seems there is new version of \`op\` CLI available, please merge this pull request to make it available to users`
+          })
+          .then(result =>
+            kit.pulls.createReviewRequest({
+              owner: "zaripych",
+              repo: "node-op",
+              number: result.data.number,
+              reviewers: ["zaripych"]
+            })
+          );
+      });
+  })
+  .catch(err => {
+    console.error("Error happened", err);
+    process.exit(-1);
+  });

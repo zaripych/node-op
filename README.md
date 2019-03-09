@@ -1,5 +1,7 @@
 # node-op
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/zaripych/node-op.svg)](https://greenkeeper.io/)
+
 Adds `op` - One Password CLI into your `node_modules/.bin`
 
 NOTE: This is not the official 1 Password CLI tool repo, this is just an installer

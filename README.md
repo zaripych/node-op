@@ -1,6 +1,14 @@
 # node-op
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/zaripych/node-op.svg)](https://greenkeeper.io/)
+<a href="https://www.npmjs.com/package/node-op">
+<img src="https://img.shields.io/npm/v/node-op.svg" >
+</a>
+<a href="https://travis-ci.com/zaripych/node-op">
+<img src="https://travis-ci.com/zaripych/node-op.svg?branch=master" >
+</a>
+<a href="https://greenkeeper.io/">
+<img src="https://badges.greenkeeper.io/zaripych/node-op.svg" >
+</a>
 
 Adds `op` - One Password CLI into your `node_modules/.bin`
 
@@ -16,28 +24,24 @@ Supported platforms:
 
 ## Installation
 
+As dev dependency:
+
 ```
 npm install node-op --save-dev
 ```
+
 or
+
 ```
 yarn add node-op --dev
 ```
 
 ## Usage
 
-```
-{
-  "scripts": {
-    "op": "op"
-  }
-}
-```
-
-then
+Using `npx`:
 
 ```
-npm run op --help
+npx node-op op --help
 ```
 
 or

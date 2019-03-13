@@ -1,6 +1,6 @@
 {
   "name": "node-op",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "op_version": "0.5.5",
   "description": "One password CLI installer",
   "main": "index.js",
@@ -42,6 +42,7 @@
   "homepage": "https://github.com/zaripych/node-op#readme",
   "dependencies": {
     "adm-zip": "0.4.13",
+    "chromedriver": "2.46.0",
     "pump": "3.0.0"
   },
   "devDependencies": {

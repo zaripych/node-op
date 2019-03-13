@@ -10,6 +10,8 @@ addons:
 branches:
   except:
     - /^v\d+\.\d+\.\d+$/
+before_script:
+  npm install chromedriver@2.46.0
 jobs:
   include:
     - stage: check for updates

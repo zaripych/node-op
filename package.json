@@ -47,7 +47,7 @@
   "devDependencies": {
     "@commitlint/cli": "7.5.2",
     "@commitlint/config-conventional": "7.5.0",
-    "@octokit/rest": "16.17.0",
+    "@octokit/rest": "16.17.1",
     "@semantic-release/git": "7.0.8",
     "chromedriver": "2.46.0",
     "fs-extra": "7.0.1",

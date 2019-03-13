@@ -12,7 +12,8 @@ const config = {
     universal: `https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_darwin_amd64_v${version}.zip`
   },
   linux: {
-    x64: `https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_linux_386_v${version}.zip`
+    x64: `https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_linux_386_v${version}.zip`,
+    arm: `https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_linux_arm_v${version}.zip`
   },
   win32: {
     x64: `https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_windows_amd64_v${version}.zip`

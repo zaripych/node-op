@@ -42,7 +42,6 @@
   "homepage": "https://github.com/zaripych/node-op#readme",
   "dependencies": {
     "adm-zip": "0.4.13",
-    "chromedriver": "2.46.0",
     "pump": "3.0.0"
   },
   "devDependencies": {

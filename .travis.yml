@@ -11,7 +11,7 @@ branches:
   except:
     - /^v\d+\.\d+\.\d+$/
 before_script:
-  npm install chromedriver@2.46.0
+  - npm install chromedriver@2.46.0 --no-save
 jobs:
   include:
     - stage: check for updates

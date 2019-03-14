@@ -25,7 +25,7 @@ jobs:
       deploy:
         provider: script
         script:
-          - npm run semantic-release --dry-run
+          - npm run semantic-release
         skip_cleanup: true
         on:
           branch:

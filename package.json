@@ -46,7 +46,7 @@
   },
   "devDependencies": {
     "@commitlint/cli": "7.5.2",
-    "@commitlint/config-conventional": "7.5.0",
+    "@commitlint/config-conventional": "7.6.0",
     "@octokit/rest": "16.18.0",
     "@semantic-release/git": "7.0.8",
     "fs-extra": "7.0.1",

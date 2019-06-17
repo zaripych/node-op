@@ -2,7 +2,7 @@ const os = require("os");
 const pack = require("./package.json");
 
 const fingerprint =
-  "57:49:78:F8:DB:81:3C:09:39:B9:0D:3D:E8:BA:96:2C:13:A2:77:B3";
+  "11:83:B0:F0:F1:BD:77:DA:99:CE:E4:7B:0E:E2:5F:C9:5B:A7:93:01";
 
 const contributeUrl = pack.homepage;
 const version = pack.op_version;

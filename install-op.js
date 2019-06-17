@@ -91,8 +91,9 @@ const req = https.get(url, res => {
     })
     .then(() => chmod(opPath, 0755))
     .then(() => {
+      const semVer = /\d+\.\d+\.\d+/.exec(version)[0];
       const currentVersion = getOpVersion();
-      if (currentVersion !== version) {
+      if (currentVersion !== semVer) {
         throw new Error(
           `The downloaded version ${currentVersion} doesn\'t match ${version}`
         );

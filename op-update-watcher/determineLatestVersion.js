@@ -32,7 +32,7 @@ function determineLatestVersion() {
 
   const query = new Query(headlessChrome);
 
-  const versionRegex = /\d+\.\d+\.\d+/;
+  const versionRegex = /\d+\.\d+\.\d+(-\d+)/;
 
   const versionNumber = query
     .get(checkPage)

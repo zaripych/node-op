@@ -6,6 +6,7 @@ const { gt, gte } = require("semver");
 const octokit = require("@octokit/rest");
 const {
   determineLatestVersion,
+  semVerFromOpVersion,
   checkPage
 } = require("./determineLatestVersion");
 const rimraf = require("rimraf");
@@ -151,7 +152,7 @@ function gitPush() {
 
 determineLatestVersion()
   .then(version => {
-    if (!gt(version, packageOpVersion)) {
+    if (!gt(version.semVer, semVerFromOpVersion(packageOpVersion))) {
       console.log("No updates");
       return;
     }

@@ -6,6 +6,9 @@ require("./prepareChromedriver");
 
 const checkPage = "https://app-updates.agilebits.com/product_history/CLI";
 
+const versionRegex = /\d+\.\d+\.\d+(\-\d+)?/;
+const semVerRegex = /\d+\.\d+\.\d+/;
+
 /**
  * @template T
  * @param {Promise<T>} promise
@@ -32,8 +35,6 @@ function determineLatestVersion() {
 
   const query = new Query(headlessChrome);
 
-  const versionRegex = /\d+\.\d+\.\d+(-\d+)/;
-
   const versionNumber = query
     .get(checkPage)
     .then(() =>
@@ -45,29 +46,45 @@ function determineLatestVersion() {
     .then(headers => {
       const versions = headers
         .map(text => {
-          const result = versionRegex.exec(text);
-          return result && result[0];
+          const versionResult = versionRegex.exec(text);
+          const semVerResult = semVerRegex.exec(text);
+          return {
+            version: versionResult && versionResult[0],
+            semVer: semVerResult && semVerResult[0]
+          };
         })
-        .filter(item => !!item)
-        .map(item => parse(item));
+        .filter(item => item.version && item.semVer)
+        .map(item => {
+          const parsed = parse(item.semVer);
+          return {
+            semVer: parsed,
+            version: item.version
+          };
+        });
 
       versions.sort((a, b) => {
-        if (eq(a, b)) {
+        if (eq(a.semVer, b.semVer)) {
           return 0;
-        } else if (gt(a, b)) {
+        } else if (gt(a.semVer, b.semVer)) {
           return -1;
         } else {
           return 1;
         }
       });
 
-      return Promise.resolve(versions[0].version);
+      return Promise.resolve(versions[0]);
     });
 
   return withFinally(versionNumber, () => headlessChrome.quit());
 }
 
+function semVerFromOpVersion(text) {
+  const semVerResult = semVerRegex.exec(text);
+  return (semVerResult && semVerResult[0]) || null;
+}
+
 module.exports = {
   checkPage,
-  determineLatestVersion
+  determineLatestVersion,
+  semVerFromOpVersion
 };

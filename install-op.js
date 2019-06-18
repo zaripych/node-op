@@ -6,7 +6,7 @@ const pump = require("pump");
 const AdmZip = require("adm-zip");
 const { promisify } = require("util");
 
-const { url, entry, version, fingerprint, contributeUrl } = require("./index");
+const { url, entry, version, fingerprints, contributeUrl } = require("./index");
 
 const mkdir = promisify(fs.mkdir);
 const pipeline = (req, file) => {
@@ -124,7 +124,7 @@ req.on("socket", socket => {
       return;
     }
 
-    if (serverFingerprint !== fingerprint) {
+    if (fingerprints.indexOf(serverFingerprint) === -1) {
       req.emit(
         "error",
         new Error(

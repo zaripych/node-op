@@ -1,8 +1,10 @@
 const os = require("os");
 const pack = require("./package.json");
 
-const fingerprint =
-  "11:83:B0:F0:F1:BD:77:DA:99:CE:E4:7B:0E:E2:5F:C9:5B:A7:93:01";
+const fingerprints = [
+  "11:83:B0:F0:F1:BD:77:DA:99:CE:E4:7B:0E:E2:5F:C9:5B:A7:93:01",
+  "EF:0A:E0:7A:95:07:93:BA:44:3A:79:C4:89:BF:D0:5A:65:55:09:EC"
+];
 
 const contributeUrl = pack.homepage;
 const version = pack.op_version;
@@ -48,7 +50,7 @@ if (!url.startsWith("https://cache.agilebits.com")) {
 
 module.exports = {
   contributeUrl,
-  fingerprint,
+  fingerprints,
   url,
   entry: platform === "win32" ? "op.exe" : "op",
   version

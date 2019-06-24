@@ -50,7 +50,7 @@
     "@octokit/rest": "16.28.1",
     "@semantic-release/git": "7.0.12",
     "fs-extra": "8.0.1",
-    "husky": "2.4.1",
+    "husky": "2.5.0",
     "rimraf": "2.6.3",
     "selenium-webdriver": "3.6.0",
     "semantic-release": "15.13.16",

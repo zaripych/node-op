@@ -3,7 +3,8 @@ const pack = require("./package.json");
 
 const fingerprints = [
   "11:83:B0:F0:F1:BD:77:DA:99:CE:E4:7B:0E:E2:5F:C9:5B:A7:93:01",
-  "EF:0A:E0:7A:95:07:93:BA:44:3A:79:C4:89:BF:D0:5A:65:55:09:EC"
+  "EF:0A:E0:7A:95:07:93:BA:44:3A:79:C4:89:BF:D0:5A:65:55:09:EC",
+  "83:8A:68:D8:B3:6E:1F:6A:13:2F:71:41:C0:E6:C9:EE:97:18:18:F4"
 ];
 
 const contributeUrl = pack.homepage;

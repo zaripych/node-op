@@ -32,7 +32,7 @@ function updatePackageJsonIfRequired(version) {
 
   const packageJson = JSON.parse(contents);
 
-  const oldVersion = packageJson["op_version"];
+  const oldVersion = semVerFromOpVersion(packageJson["op_version"]);
 
   if (gte(oldVersion, version)) {
     console.log(
@@ -161,7 +161,7 @@ determineLatestVersion()
 
     gitCheckout();
 
-    if (!updatePackageJsonIfRequired(version)) {
+    if (!updatePackageJsonIfRequired(version.semVer)) {
       return;
     }
 

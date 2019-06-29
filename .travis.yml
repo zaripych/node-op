@@ -15,13 +15,12 @@ before_script:
 jobs:
   include:
     - stage: check for updates
+      if: branch IN (master) AND type = push AND fork = false
       script:
         - node ./op-update-watcher/checkVersionAndPush.js
-      on:
-        branch:
-          - master
     - stage: publish
       script: false
+      if: branch IN (master) AND type = push AND fork = false
       deploy:
         provider: script
         script:

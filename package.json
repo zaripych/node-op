@@ -1,7 +1,7 @@
 {
   "name": "node-op",
   "version": "0.1.8",
-  "op_version": "0.5.6-003",
+  "op_version": "0.5.7",
   "description": "One password CLI installer",
   "main": "index.js",
   "files": [

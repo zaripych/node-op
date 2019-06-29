@@ -26,13 +26,22 @@ const branch = "master";
 const pushBranch = "fix/upgrade-op-version";
 
 function updatePackageJsonIfRequired(version) {
+  if (typeof version !== "string") {
+    throw new Error("Expected semver version string");
+  }
   const packageJsonPath = path.join(cloneDir, "package.json");
 
   const contents = readFileSync(packageJsonPath, { encoding: "utf8" });
 
   const packageJson = JSON.parse(contents);
 
-  const oldVersion = semVerFromOpVersion(packageJson["op_version"]);
+  const packageJsonOpVersion = packageJson["op_version"];
+
+  if (typeof packageJsonOpVersion !== "string") {
+    throw new Error("Expected semver version string in the package json");
+  }
+
+  const oldVersion = semVerFromOpVersion(packageJsonOpVersion);
 
   if (gte(oldVersion, version)) {
     console.log(
@@ -161,7 +170,7 @@ determineLatestVersion()
 
     gitCheckout();
 
-    if (!updatePackageJsonIfRequired(version.semVer)) {
+    if (!updatePackageJsonIfRequired(version.semVer.version)) {
       return;
     }
 
@@ -175,10 +184,8 @@ determineLatestVersion()
 
     gitPush();
 
-    const kit = new octokit();
-    kit.authenticate({
-      type: "oauth",
-      token: process.env.GH_TOKEN
+    const kit = new octokit({
+      auth: process.env.GH_TOKEN
     });
 
     return kit.pulls
@@ -187,7 +194,7 @@ determineLatestVersion()
         repo: "node-op",
         state: "open",
         base: "master",
-        head: "fix/upgrade-op-version"
+        head: "zaripych:fix/upgrade-op-version"
       })
       .then(pulls => {
         if (pulls.data.length !== 0) {
@@ -208,7 +215,7 @@ determineLatestVersion()
             kit.pulls.createReviewRequest({
               owner: "zaripych",
               repo: "node-op",
-              number: result.data.number,
+              pull_number: result.data.number,
               reviewers: ["zaripych"]
             })
           );

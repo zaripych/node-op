@@ -14,6 +14,7 @@ before_script:
   - npm install chromedriver@2.46.0 --no-save
 jobs:
   include:
+    - stage: build
     - stage: check for updates
       if: branch IN (master) AND type = push AND fork = false
       script:

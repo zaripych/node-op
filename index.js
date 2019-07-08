@@ -1,11 +1,29 @@
 const os = require("os");
 const pack = require("./package.json");
 
-const fingerprints = [
-  "11:83:B0:F0:F1:BD:77:DA:99:CE:E4:7B:0E:E2:5F:C9:5B:A7:93:01",
-  "EF:0A:E0:7A:95:07:93:BA:44:3A:79:C4:89:BF:D0:5A:65:55:09:EC",
-  "83:8A:68:D8:B3:6E:1F:6A:13:2F:71:41:C0:E6:C9:EE:97:18:18:F4"
-];
+function validateCertificate(certificate) {
+  console.log("node-op: Certificate information follows", {
+    subject: certificate.subject,
+    subjectaltname: certificate.subjectaltname,
+    fingerprint: certificate.fingerprint
+  });
+
+  if (certificate.subject.CN === "*.cachefly.net") {
+    if (certificate.subjectaltname.indexOf("DNS:cache.agilebits.com") === -1) {
+      return {
+        isValid: false,
+        message: "Certificate doesn't have the cache.agilebits.com domain in it"
+      };
+    }
+    return {
+      isValid: true
+    };
+  }
+  return {
+    isValid: false,
+    message: "Certificate is not from *.cachefly.net or *.agilebits.com."
+  };
+}
 
 const contributeUrl = pack.homepage;
 const version = pack.op_version;
@@ -51,7 +69,7 @@ if (!url.startsWith("https://cache.agilebits.com")) {
 
 module.exports = {
   contributeUrl,
-  fingerprints,
+  validateCertificate,
   url,
   entry: platform === "win32" ? "op.exe" : "op",
   version

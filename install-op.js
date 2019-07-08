@@ -6,7 +6,13 @@ const pump = require("pump");
 const AdmZip = require("adm-zip");
 const { promisify } = require("util");
 
-const { url, entry, version, fingerprints, contributeUrl } = require("./index");
+const {
+  url,
+  entry,
+  version,
+  validateCertificate,
+  contributeUrl
+} = require("./index");
 
 const mkdir = promisify(fs.mkdir);
 const pipeline = (req, file) => {
@@ -116,19 +122,27 @@ req.on("error", err => {
 
 req.on("socket", socket => {
   socket.on("secureConnect", () => {
-    const serverFingerprint = socket.getPeerCertificate().fingerprint;
-
     if (!socket.authorized) {
       req.emit("error", new Error("Unauthorized"));
       req.abort();
       return;
     }
 
-    if (fingerprints.indexOf(serverFingerprint) === -1) {
+    const certificate = socket.getPeerCertificate();
+
+    const result = validateCertificate(certificate);
+
+    if (!result.isValid) {
       req.emit(
         "error",
         new Error(
-          `Fingerprint doesn\'t match. This is probably due to One Password Download website reissuing certificate. Contribute by updating it: ${contributeUrl}`
+          [
+            "Certificate is not valid.",
+            result.message,
+            `Contribute by updating validation logic for it: ${contributeUrl}`
+          ]
+            .filter(Boolean)
+            .join(" ")
         )
       );
       req.abort();

@@ -53,7 +53,7 @@
     "husky": "2.4.1",
     "rimraf": "2.6.3",
     "selenium-webdriver": "3.6.0",
-    "semantic-release": "15.13.16",
+    "semantic-release": "15.13.19",
     "semver": "6.1.1",
     "webdriver-query": "1.0.1"
   },

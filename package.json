@@ -51,7 +51,7 @@
     "@semantic-release/git": "7.0.12",
     "fs-extra": "8.0.1",
     "husky": "2.4.1",
-    "rimraf": "2.6.3",
+    "rimraf": "2.7.0",
     "selenium-webdriver": "3.6.0",
     "semantic-release": "15.13.16",
     "semver": "6.1.1",

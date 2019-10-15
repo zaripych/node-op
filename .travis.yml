@@ -10,14 +10,13 @@ addons:
 branches:
   except:
     - /^v\d+\.\d+\.\d+$/
-before_script:
-  - npm install chromedriver@76.0.1 --no-save
 jobs:
   include:
     - stage: build
     - stage: check for updates
-      if: branch IN (master) AND type IN (push, api) AND fork = false
+      if: branch IN (master) AND type IN (cron) AND fork = false
       script:
+        - npm install chromedriver@76.0.1 --no-save
         - node ./op-update-watcher/checkVersionAndPush.js
     - stage: publish
       script: false

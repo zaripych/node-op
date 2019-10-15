@@ -13,7 +13,7 @@
     "README.md"
   ],
   "scripts": {
-    "test": "node index.js",
+    "test": "node index.js && node install-op.js",
     "prepublishOnly": "rimraf \"./lib\" && mkdir \"./lib\" && cp op \"./lib/op\" && cp op.cmd \"./lib/op.cmd\"",
     "postinstall": "node install-op.js",
     "obtain-fingerprint": "echo -n | openssl s_client -connect cache.agilebits.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > cert.pem && openssl x509 -noout -in cert.pem -fingerprint",
@@ -45,12 +45,12 @@
     "pump": "3.0.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "8.1.0",
-    "@commitlint/config-conventional": "8.1.0",
-    "@octokit/rest": "16.28.7",
+    "@commitlint/cli": "8.2.0",
+    "@commitlint/config-conventional": "8.2.0",
+    "@octokit/rest": "16.33.1",
     "@semantic-release/git": "7.0.16",
     "fs-extra": "8.1.0",
-    "husky": "3.0.4",
+    "husky": "3.0.9",
     "rimraf": "3.0.0",
     "selenium-webdriver": "3.6.0",
     "semantic-release": "15.13.24",

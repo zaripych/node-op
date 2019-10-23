@@ -47,7 +47,7 @@
   "devDependencies": {
     "@commitlint/cli": "8.2.0",
     "@commitlint/config-conventional": "8.2.0",
-    "@octokit/rest": "16.33.1",
+    "@octokit/rest": "16.34.0",
     "@semantic-release/git": "7.0.16",
     "fs-extra": "8.1.0",
     "husky": "3.0.9",

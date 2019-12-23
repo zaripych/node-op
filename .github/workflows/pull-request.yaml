@@ -1,0 +1,27 @@
+name: Check node-op Downloads
+
+on: [pull_request]
+
+jobs:
+  test:
+    runs-on: [ubuntu-latest]
+
+    strategy:
+      matrix:
+        node: ["10"]
+
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+
+      - name: Setup Node
+        uses: actions/setup-node@v1.1.0
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Install
+        run: npm install 
+
+      - name: Unit Tests
+        run: npm test 

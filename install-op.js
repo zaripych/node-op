@@ -3,11 +3,14 @@ const fs = require("fs");
 const path = require("path");
 const { spawnSync } = require("child_process");
 const pump = require("pump");
+const os = require("os");
 const AdmZip = require("adm-zip");
+const crypto = require("crypto");
 const { promisify } = require("util");
 
 const {
   url,
+  package,
   entry,
   version,
   validateCertificate,
@@ -29,7 +32,7 @@ const pipeline = (req, file) => {
 const chmod = promisify(fs.chmod);
 
 const libDir = "./lib/";
-const packagePath = path.join(libDir, "package.zip");
+const packagePath = path.join(libDir, package);
 const opPath = path.join(libDir, entry);
 
 function getOpVersion() {
@@ -52,19 +55,85 @@ function getOpVersion() {
   return firstMatch[0];
 }
 
-if (
-  fs.existsSync(packagePath) &&
-  fs.existsSync(opPath) &&
-  fs.existsSync(opPath + ".sig")
-) {
+if (fs.existsSync(packagePath) && fs.existsSync(opPath)) {
   console.log(
     "node-op: The binary already downloaded and unpacked, checking version ... "
   );
+
   const currentVersion = getOpVersion();
   if (currentVersion === version) {
     console.log("node-op: Version matches", version);
     console.log("");
     return 0;
+  }
+}
+
+function unpackPkgOnMacOS(pkgPath) {
+  // reduce possibility we delete something on users system by generating random dir name
+  const OUT_DIR = `op-pkgutil-output-${crypto.randomBytes(4).toString("hex")}`;
+  const unpackDir = path.join(process.cwd(), libDir, OUT_DIR);
+  const rimraf = require("rimraf");
+  try {
+    rimraf.sync(unpackDir);
+
+    const result = spawnSync("pkgutil", ["--expand", pkgPath, unpackDir], {
+      encoding: "utf8",
+      env: process.env
+    });
+
+    const logPkgUtilOutput = () => {
+      console.log(
+        "node-op: pkgutil output follows",
+        os.EOL,
+        result.output.join("")
+      );
+    };
+
+    if (result.error) {
+      throw new Error(`Cannot unpack .pkg file. ${result.error}`);
+    }
+
+    if (result.status !== 0) {
+      logPkgUtilOutput();
+      throw new Error(
+        `Cannot unpack .pkg file. pkgutil quit with status ${result.status}`
+      );
+    }
+
+    const tarResult = spawnSync(
+      "tar",
+      ["xzvf", path.join(OUT_DIR, "Payload")],
+      {
+        encoding: "utf8",
+        env: process.env,
+        cwd: libDir
+      }
+    );
+
+    const logTarOutput = () => {
+      console.log(
+        "node-op: tar output follows",
+        os.EOL,
+        tarResult.output.join("")
+      );
+    };
+
+    if (tarResult.error) {
+      throw new Error(`Cannot unpack .pkg file. ${tarResult.error}`);
+    }
+
+    if (tarResult.status !== 0) {
+      logTarOutput();
+      throw new Error(
+        `Cannot unpack .pkg file. tar quit with status ${result.status}`
+      );
+    }
+
+    if (!fs.existsSync(opPath)) {
+      throw new Error(`op binary not found after extracting from .pkg`);
+    }
+  } finally {
+    rimraf.sync(unpackDir);
   }
 }
 
@@ -84,16 +153,21 @@ const req = https.get(url, res => {
         outFile.destroy();
 
         throw new Error(
-          `Cannot download and save the package from url '${url}' to file '${packagePath}'. ${
-            err.message
-          }`
+          `Cannot download and save the package from url '${url}' to file '${packagePath}'. ${err.message}`
         );
       });
     })
     .then(() => {
-      const zip = new AdmZip(packagePath);
-      zip.extractEntryTo(entry, libDir, false, true);
-      zip.extractEntryTo(entry + ".sig", libDir, false, true);
+      const extension = path.extname(packagePath);
+      if (extension === ".zip") {
+        const zip = new AdmZip(packagePath);
+        zip.extractEntryTo(entry, libDir, false, true);
+        zip.extractEntryTo(entry + ".sig", libDir, false, true);
+      } else if (extension === ".pkg") {
+        unpackPkgOnMacOS(packagePath);
+      } else {
+        throw new Error(`Unexpected extension ${extension}`);
+      }
     })
     .then(() => chmod(opPath, 0755))
     .then(() => {

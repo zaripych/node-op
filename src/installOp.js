@@ -18,9 +18,9 @@ const {
 } = require('./settings');
 
 const mkdir = promisify(fs.mkdir);
-const pipeline = (req, file) => {
+const pipeline = (request, file) => {
   return new Promise((res, rej) => {
-    pump(req, file, err => {
+    pump(request, file, err => {
       if (err) {
         rej(err);
       } else {

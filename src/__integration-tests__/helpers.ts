@@ -35,7 +35,7 @@ export const packageJsonVersions = async () => {
 
   return {
     version: pkg.version,
-    opVersion: pkg['op_version'],
+    opVersion: pkg.op_version,
   };
 };
 

@@ -26,8 +26,8 @@ jobs:
       - name: Install
         run: npm install
 
-      - name: Unit Tests
-        run: npm run integration -- --coverage
+      - name: Integration Tests
+        run: npm run integration
 
       - name: Release
         env:

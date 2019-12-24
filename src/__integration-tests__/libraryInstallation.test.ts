@@ -8,6 +8,8 @@ import {
 import { join } from 'path';
 import { mkdirp, emptyDir, readJSON, writeJSON } from 'fs-extra';
 
+jest.setTimeout(60000);
+
 describe('given built and packaged library', () => {
   const TEST_DIR = join(ROOT, 'integration-test-installation');
   const UNTAR_DIR = join(ROOT, 'integration-test-package-untar');

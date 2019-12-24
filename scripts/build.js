@@ -3,4 +3,6 @@
 
 const { babelBuild } = require('ts-deps');
 
-babelBuild();
+babelBuild({
+  copyAdditional: ['binaries/op', 'binaries/op.cmd'],
+});

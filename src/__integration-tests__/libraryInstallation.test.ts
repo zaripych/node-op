@@ -74,10 +74,12 @@ describe('given built and packaged library', () => {
       await spawnAndCheck('npm', ['init', '-y'], {
         stdio: 'inherit',
         cwd: TEST_DIR,
+        shell: process.platform === 'win32',
       });
       await spawnAndCheck('npm', ['add', 'file:' + pkgInfo.packageLocation], {
         stdio: 'inherit',
         cwd: TEST_DIR,
+        shell: process.platform === 'win32',
       });
 
       const pkgJson = await readJSON(join(TEST_DIR, 'package.json'));
@@ -96,6 +98,7 @@ describe('given built and packaged library', () => {
         ['run', '-s', 'op', '--', '--version'],
         {
           cwd: TEST_DIR,
+          shell: process.platform === 'win32',
         }
       );
       expect(versionOutput.trim()).toBe(pkgInfo.opVersion);

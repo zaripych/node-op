@@ -1,4 +1,4 @@
-name: Release node-op
+name: Release
 
 on:
   push:
@@ -24,10 +24,10 @@ jobs:
           node-version: ${{ matrix.node }}
 
       - name: Install
-        run: npm install 
+        run: npm install
 
       - name: Unit Tests
-        run: npm test 
+        run: npm test
 
       - name: Release
         env:

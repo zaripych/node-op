@@ -6,13 +6,14 @@
   "main": "index.js",
   "files": [
     "lib",
+    "installOp.js",
     "package.json",
     "README.md"
   ],
   "scripts": {
     "test": "jest --color",
     "prepublishOnly": "rimraf \"./lib\" && mkdir \"./lib\" && cp op \"./lib/op\" && cp op.cmd \"./lib/op.cmd\"",
-    "postinstall": "node lib/installOp.js",
+    "postinstall": "node installOp.js",
     "obtain-fingerprint": "echo -n | openssl s_client -connect cache.agilebits.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > cert.pem && openssl x509 -noout -in cert.pem -fingerprint",
     "semantic-release": "semantic-release",
     "print-current-version": "node ./op-update-watcher/index",

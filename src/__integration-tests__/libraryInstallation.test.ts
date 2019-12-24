@@ -50,6 +50,7 @@ describe('given built and packaged library', () => {
     expect(contents).toMatchInlineSnapshot(`
       Array [
         "README.md",
+        "installOp.js",
         "lib/",
         "lib/binaries/",
         "lib/binaries/op",

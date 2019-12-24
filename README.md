@@ -3,6 +3,9 @@
 <a href="https://www.npmjs.com/package/node-op">
 <img src="https://img.shields.io/npm/v/node-op.svg" >
 </a>
+<a href="https://github.com/zaripych/node-op/actions?query=workflow%3A%22Verify+Downloads%22">
+<img src="https://github.com/zaripych/node-op/workflows/Verify%20Downloads/badge.svg" >
+</a>
 <a href="https://github.com/zaripych/node-op/actions?query=workflow%3A%22Check+Latest+Version%22">
 <img src="https://github.com/zaripych/node-op/workflows/Check%20Latest%20Version/badge.svg" >
 </a>

@@ -5,3 +5,10 @@ zaripych-node-op*
 node-op*
 .log
 .DS_Store
+
+coverage
+coverage-*
+.jest-cache
+yarn-error.log
+package
+.pnp

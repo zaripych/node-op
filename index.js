@@ -30,7 +30,7 @@ const version = pack.op_version;
 
 const config = {
   darwin: {
-    universal: `https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_darwin_amd64_v${version}.zip`
+    universal: `https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_darwin_amd64_v${version}.pkg`
   },
   linux: {
     x64: `https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_linux_386_v${version}.zip`,
@@ -72,5 +72,6 @@ module.exports = {
   validateCertificate,
   url,
   entry: platform === "win32" ? "op.exe" : "op",
+  package: platform === "darwin" ? "package.pkg" : "package.zip",
   version
 };

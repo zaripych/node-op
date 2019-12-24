@@ -3,8 +3,11 @@
 <a href="https://www.npmjs.com/package/node-op">
 <img src="https://img.shields.io/npm/v/node-op.svg" >
 </a>
-<a href="https://travis-ci.com/zaripych/node-op">
-<img src="https://travis-ci.com/zaripych/node-op.svg?branch=master" >
+<a href="https://github.com/zaripych/node-op/actions?query=workflow%3A%22Check+Latest+Version%22">
+<img src="https://github.com/zaripych/node-op/workflows/Check%20Latest%20Version/badge.svg" >
+</a>
+<a href="https://github.com/zaripych/node-op/actions?query=workflow%3ARelease">
+<img src="https://github.com/zaripych/node-op/workflows/Release/badge.svg" >
 </a>
 <a href="https://greenkeeper.io/">
 <img src="https://badges.greenkeeper.io/zaripych/node-op.svg" >

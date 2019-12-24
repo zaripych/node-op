@@ -48,7 +48,7 @@
   "devDependencies": {
     "@commitlint/cli": "8.2.0",
     "@commitlint/config-conventional": "8.2.0",
-    "@octokit/rest": "16.35.2",
+    "@octokit/rest": "16.36.0",
     "fs-extra": "8.1.0",
     "husky": "3.1.0",
     "selenium-webdriver": "3.6.0",

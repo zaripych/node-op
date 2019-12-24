@@ -7,10 +7,10 @@
 <img src="https://github.com/zaripych/node-op/workflows/Verify%20Downloads/badge.svg" >
 </a>
 <a href="https://github.com/zaripych/node-op/actions?query=workflow%3A%22Check+Latest+Version%22">
-<img src="https://github.com/zaripych/node-op/workflows/Check%20Latest%20Version/badge.svg" >
+<img src="https://github.com/zaripych/node-op/workflows/Check%20Latest%20Version/badge.svg?branch=master" >
 </a>
 <a href="https://github.com/zaripych/node-op/actions?query=workflow%3ARelease">
-<img src="https://github.com/zaripych/node-op/workflows/Release/badge.svg" >
+<img src="https://github.com/zaripych/node-op/workflows/Release/badge.svg?branch=master" >
 </a>
 <a href="https://greenkeeper.io/">
 <img src="https://badges.greenkeeper.io/zaripych/node-op.svg" >
@@ -60,9 +60,13 @@ op --help
 
 ## CLI Installation Process
 
-During `npm install` a script is executed which downloads and unpacks `op` into your `node_modules/node-op/lib` folder.
+During `npm install` a script is executed which downloads and unpacks [pinned](https://github.com/zaripych/node-op/blob/master/package.json#L4) version of `op` into your `node_modules/node-op/lib` folder.
 
 The `op` executable becomes available to be used through `npm run` or `yarn run`.
+
+## Auto-updates
+
+A GitHub Actions [job](https://github.com/zaripych/node-op/actions?query=workflow%3A%22Check+Latest+Version%22) checks for updates on official web sites and creates a PR to the GitHub repo to update the pinned version number, so new versions should be available to users in a reasonable time.
 
 ## Docker Alternative
 
@@ -85,7 +89,3 @@ After the CLI is installed it is your responsobility what happens with it.
 Read `op` documentation. Make sure to logout after using the CLI and make sure the login credentials are not exposed outside your scripts. This can be achieved by wrapping your scripts into a bash shell script that retains environment variables inside, rather than exporting it outside.
 
 Make sure to only use trusted code within your bash shell script that does not depend on outside `node_modules` which could take advantage of having access to environment variables with credentials.
-
-## Auto-updates
-
-A travis job checks for updates on official web sites and creates a PR to the GitHub repo, so new versions should be available to users in a reasonable time.

@@ -1,7 +1,5 @@
-if (
-  process.env.INIT_CWD === process.env.PWD ||
-  process.env.INIT_CWD.indexOf(process.env.PWD) === 0
-) {
+const cwd = process.cwd();
+if (process.env.INIT_CWD === cwd || process.env.INIT_CWD.indexOf(cwd) === 0) {
   // ignore
 } else {
   require('./lib/installOp');

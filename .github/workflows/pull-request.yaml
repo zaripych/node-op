@@ -9,7 +9,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        node: ["10"]
+        node: ['10']
 
     steps:
       - uses: actions/checkout@v1
@@ -24,5 +24,11 @@ jobs:
       - name: Install
         run: npm install
 
-      - name: Unit Tests
-        run: npm test
+      - name: Checks
+        run: npm run check
+
+      - name: Integration Tests
+        run: npm run test
+
+      - name: Integration Tests
+        run: npm run integration

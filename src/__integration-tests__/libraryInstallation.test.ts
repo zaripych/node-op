@@ -46,6 +46,8 @@ describe('given built and packaged library', () => {
         "api/ensureError.js.map",
         "api/getDocument.js",
         "api/getDocument.js.map",
+        "api/gitDiffFiles.js",
+        "api/gitDiffFiles.js.map",
         "api/index.js",
         "api/index.js.map",
         "api/item.js",
@@ -68,6 +70,8 @@ describe('given built and packaged library', () => {
         "commands/vaultCheckin.js.map",
         "commands/vaultCheckout.js",
         "commands/vaultCheckout.js.map",
+        "commands/vaultDiff.js",
+        "commands/vaultDiff.js.map",
         "installOp.js",
         "installOp.js.map",
         "settings.js",
@@ -76,6 +80,8 @@ describe('given built and packaged library', () => {
         "vaultCheckin.js.map",
         "vaultCheckout.js",
         "vaultCheckout.js.map",
+        "vaultDiff.js",
+        "vaultDiff.js.map",
       ]
     `);
   });
@@ -103,6 +109,8 @@ describe('given built and packaged library', () => {
         "lib/api/ensureError.js.map",
         "lib/api/getDocument.js",
         "lib/api/getDocument.js.map",
+        "lib/api/gitDiffFiles.js",
+        "lib/api/gitDiffFiles.js.map",
         "lib/api/index.js",
         "lib/api/index.js.map",
         "lib/api/item.js",
@@ -125,6 +133,8 @@ describe('given built and packaged library', () => {
         "lib/commands/vaultCheckin.js.map",
         "lib/commands/vaultCheckout.js",
         "lib/commands/vaultCheckout.js.map",
+        "lib/commands/vaultDiff.js",
+        "lib/commands/vaultDiff.js.map",
         "lib/installOp.js",
         "lib/installOp.js.map",
         "lib/settings.js",
@@ -133,6 +143,8 @@ describe('given built and packaged library', () => {
         "lib/vaultCheckin.js.map",
         "lib/vaultCheckout.js",
         "lib/vaultCheckout.js.map",
+        "lib/vaultDiff.js",
+        "lib/vaultDiff.js.map",
         "package.json",
       ]
     `);

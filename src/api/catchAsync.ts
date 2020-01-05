@@ -34,13 +34,18 @@ export const catchAsync = async <O>(
   }
 };
 
-type SyncFn<O> = () => O
+type SyncFn<O> = () => O;
 
 export const catchSync = <O>(fn: SyncFn<O>): Optional<O> => {
   try {
     return {
       error: null,
-      result: 
-    }
+      result: fn(),
+    };
+  } catch (err) {
+    return {
+      error: ensureError(err),
+      result: null,
+    };
   }
-}
+};

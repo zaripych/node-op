@@ -7,6 +7,9 @@
   "files": [
     "lib",
     "installOp.js",
+    "vaultCheckin.js",
+    "vaultCheckout.js",
+    "vaultDiff.js",
     "package.json",
     "README.md"
   ],
@@ -32,7 +35,10 @@
     "release": "node ./scripts/release.js"
   },
   "bin": {
-    "op": "./lib/binaries/op"
+    "op": "./lib/binaries/op",
+    "vault-checkout": "./vaultCheckout.js",
+    "vault-checkin": "./vaultCheckin.js",
+    "vault-diff": "./vaultDiff.js"
   },
   "repository": {
     "type": "git",
@@ -54,20 +60,12 @@
   "dependencies": {
     "adm-zip": "0.4.13",
     "commander": "4.0.1",
-    "ink": "2.6.0",
-    "ink-spinner": "3.0.1",
-    "ink-text-input": "3.2.1",
     "pump": "3.0.0",
-    "react": "16.12.0",
-    "rimraf": "3.0.0",
-    "rxjs": "6.5.4"
+    "rimraf": "3.0.0"
   },
   "devDependencies": {
-    "@babel/preset-react": "7.7.4",
     "@octokit/rest": "16.35.2",
-    "@types/ink-spinner": "2.0.3",
     "@types/node": "10",
-    "@types/react": "16.9.17",
     "@types/tar-fs": "1.16.1",
     "fast-glob": "3.1.1",
     "fs-extra": "8.1.0",

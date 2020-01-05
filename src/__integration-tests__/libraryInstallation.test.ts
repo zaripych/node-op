@@ -146,6 +146,9 @@ describe('given built and packaged library', () => {
         "lib/vaultDiff.js",
         "lib/vaultDiff.js.map",
         "package.json",
+        "vaultCheckin.js",
+        "vaultCheckout.js",
+        "vaultDiff.js",
       ]
     `);
   });

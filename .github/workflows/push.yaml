@@ -26,6 +26,12 @@ jobs:
       - name: Install
         run: npm install
 
+      - name: Checks
+        run: npm run check
+
+      - name: Integration Tests
+        run: npm run test
+
       - name: Integration Tests
         run: npm run integration
 

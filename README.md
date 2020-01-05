@@ -100,6 +100,23 @@ For example, we could upload `.prod.env` and `service-account.json` files specif
 npx -p node-op vault-checkin -f .prod.env -f service-account.json -v service1
 ```
 
+### vault-diff
+
+```
+$> npx -p node-op vault-diff --help
+Usage: vault-diff [options]
+
+Compare one or more local checked-out files with their original 1-Password versions
+
+Options:
+  -v --vault <vault-name>  vault to use
+  -f --files <title>       list of files to compare
+  --verbosity <0|1|2>      verbosity of stdout
+  -h, --help               output usage information
+```
+
+The command uses `git diff` to compare local changes to the versions in the 1-Password vault allowing you to verify/review changes before checkin.
+
 ## Installation
 
 To pin particular version of op:

@@ -24,5 +24,6 @@ export async function listItems(props?: IListItemsProps) {
       appendOutputToError: true,
     }
   );
+
   return JSON.parse(result) as IItem[];
 }

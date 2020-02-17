@@ -9,3 +9,5 @@ export * from './catchAsync';
 export * from './createDocument';
 export * from './deleteItem';
 export * from './gitDiffFiles';
+export * from './getItem';
+export * from './copyToClipboard';

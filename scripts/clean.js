@@ -3,4 +3,6 @@
 
 const { clean } = require('ts-deps');
 
-clean();
+clean({
+  dirs: ['./lib', './dist'],
+});

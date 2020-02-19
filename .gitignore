@@ -13,3 +13,7 @@ yarn-error.log
 package
 .pnp
 integration-test-*
+items*.json
+item-*.json
+log.txt
+dist

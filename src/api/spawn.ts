@@ -1,4 +1,4 @@
-import { spawnSync, spawn, SpawnOptions } from 'child_process';
+import { spawnSync, spawn, SpawnOptions, ChildProcess } from 'child_process';
 import { EOL } from 'os';
 
 export function spawnSyncAndCheck(
@@ -32,6 +32,7 @@ export function spawnAndCheck(
     verbosity: number;
     expectedExitCodes?: number[];
     appendOutputToError?: boolean;
+    created?: (cp: ChildProcess) => void;
   }
 ): Promise<string> {
   const expectedExitCodes = options?.expectedExitCodes ?? [0];
@@ -42,6 +43,10 @@ export function spawnAndCheck(
   }
 
   const proc = spawn(command, args ?? [], options ?? {});
+
+  if (options.created) {
+    options.created(proc);
+  }
 
   const output: string[] = [];
 

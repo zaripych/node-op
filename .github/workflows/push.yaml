@@ -39,12 +39,12 @@ jobs:
             ${{ runner.os }}-yarn-
 
       - name: Install
-        run: yarn install
+        run: yarn install --frozen-lockfile
 
       - name: Checks
         run: yarn run check
 
-      - name: Integration Tests
+      - name: Unit Tests
         run: yarn run test
 
       - name: Integration Tests

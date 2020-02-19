@@ -76,6 +76,11 @@ export const buildAndPack = async () => {
 
   console.log('version', version);
 
+  await spawnAndCheck('npm', ['run', 'before-release'], {
+    cwd: ROOT,
+    shell: process.platform === 'win32',
+  });
+
   await spawnAndCheck('npm', ['run', 'build'], {
     cwd: ROOT,
     shell: process.platform === 'win32',

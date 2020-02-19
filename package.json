@@ -55,7 +55,8 @@
     "semantic-release": "semantic-release",
     "test": "jest --color",
     "ts-deps": "ts-deps",
-    "type-check": "tsc"
+    "type-check": "tsc",
+    "before-release": "patch-package && npm run build"
   },
   "husky": {
     "hooks": {

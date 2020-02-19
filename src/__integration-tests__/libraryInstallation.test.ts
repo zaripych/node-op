@@ -32,19 +32,12 @@ describe('given built and packaged library', () => {
 
   it('should have build output in correct directory', async () => {
     const contents = await sortedDirectoryContents(join(ROOT, BUILD_DIR));
-    expect(contents).toMatchInlineSnapshot(`
+    expect(contents.filter(chunk => !chunk.startsWith('chunk-')))
+      .toMatchInlineSnapshot(`
       Array [
         "binaries/",
         "binaries/op",
         "binaries/op.cmd",
-        "chunk-06815002.js",
-        "chunk-06815002.js.map",
-        "chunk-6f284617.js",
-        "chunk-6f284617.js.map",
-        "chunk-753be599.js",
-        "chunk-753be599.js.map",
-        "chunk-b062adee.js",
-        "chunk-b062adee.js.map",
         "installOp.js",
         "installOp.js.map",
         "interactive.js",
@@ -64,7 +57,8 @@ describe('given built and packaged library', () => {
     await unarchiveTarGz(pkgInfo.packageLocation, UNTAR_DIR);
 
     const contents = await sortedDirectoryContents(join(UNTAR_DIR, 'package'));
-    expect(contents).toMatchInlineSnapshot(`
+    expect(contents.filter(chunk => !chunk.startsWith('chunk-')))
+      .toMatchInlineSnapshot(`
       Array [
         "README.md",
         "dist/",

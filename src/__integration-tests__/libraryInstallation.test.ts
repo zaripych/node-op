@@ -90,6 +90,7 @@ describe('given built and packaged library', () => {
         "dist/vaultDiff.js",
         "dist/vaultDiff.js.map",
         "installOp.js",
+        "interactive.js",
         "package.json",
         "vaultCheckin.js",
         "vaultCheckout.js",

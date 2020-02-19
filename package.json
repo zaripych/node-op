@@ -25,12 +25,14 @@
     "vaultCheckin.js",
     "vaultCheckout.js",
     "vaultDiff.js",
+    "interactive.js",
     "package.json",
     "README.md"
   ],
   "main": "index.js",
   "bin": {
     "op": "./dist/binaries/op",
+    "node-op": "./interactive.js",
     "vault-checkin": "./vaultCheckin.js",
     "vault-checkout": "./vaultCheckout.js",
     "vault-diff": "./vaultDiff.js"

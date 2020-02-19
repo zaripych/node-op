@@ -85,7 +85,7 @@
     "husky": "4.2.3",
     "ink": "2.7.0",
     "ink-spinner": "3.0.1",
-    "ink-text-input": "3.2.1",
+    "ink-text-input": "3.2.2",
     "patch-package": "6.2.0",
     "pump": "3.0.0",
     "react": "16.12.0",

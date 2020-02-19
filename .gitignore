@@ -16,3 +16,4 @@ integration-test-*
 items*.json
 item-*.json
 log.txt
+dist

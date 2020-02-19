@@ -1,5 +1,5 @@
 const https = require('https');
-const fs = require('fs');
+const fs = require('fs-extra');
 const path = require('path');
 const { spawnSync } = require('child_process');
 const pump = require('pump');
@@ -7,6 +7,7 @@ const os = require('os');
 const AdmZip = require('adm-zip');
 const crypto = require('crypto');
 const { promisify } = require('util');
+const rimraf = require('rimraf');
 
 const {
   url,
@@ -31,9 +32,9 @@ const pipeline = (request, file) => {
 };
 const chmod = promisify(fs.chmod);
 
-const libDir = './lib/binaries';
-const packagePath = path.join(libDir, packageFileName);
-const opPath = path.join(libDir, entry);
+const distDir = './dist/binaries';
+const packagePath = path.join(distDir, packageFileName);
+const opPath = path.join(distDir, entry);
 
 function getOpVersion() {
   const result = spawnSync(opPath, ['--version'], { encoding: 'utf8' });
@@ -70,8 +71,7 @@ if (fs.existsSync(packagePath) && fs.existsSync(opPath)) {
 function unpackPkgOnMacOS(pkgPath) {
   // reduce possibility we delete something on users system by generating random dir name
   const OUT_DIR = `op-pkgutil-output-${crypto.randomBytes(4).toString('hex')}`;
-  const unpackDir = path.join(process.cwd(), libDir, OUT_DIR);
-  const rimraf = require('rimraf');
+  const unpackDir = path.join(process.cwd(), distDir, OUT_DIR);
   try {
     rimraf.sync(unpackDir);
 
@@ -105,7 +105,7 @@ function unpackPkgOnMacOS(pkgPath) {
       {
         encoding: 'utf8',
         env: process.env,
-        cwd: libDir,
+        cwd: distDir,
       }
     );
 
@@ -143,7 +143,7 @@ const req = https.get(url, res => {
     throw new Error(`HTTP ${res.statusCode}: ${res.statusMessage}`);
   }
 
-  mkdir('./lib')
+  mkdir(distDir)
     .catch(() => Promise.resolve())
     .then(() => {
       const outFile = fs.createWriteStream(packagePath);
@@ -160,8 +160,8 @@ const req = https.get(url, res => {
       const extension = path.extname(packagePath);
       if (extension === '.zip') {
         const zip = new AdmZip(packagePath);
-        zip.extractEntryTo(entry, libDir, false, true);
-        zip.extractEntryTo(entry + '.sig', libDir, false, true);
+        zip.extractEntryTo(entry, distDir, false, true);
+        zip.extractEntryTo(entry + '.sig', distDir, false, true);
       } else if (extension === '.pkg') {
         unpackPkgOnMacOS(packagePath);
       } else {

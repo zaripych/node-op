@@ -5,5 +5,5 @@ if (
 ) {
   // ignore
 } else {
-  require('./lib/installOp');
+  require('./dist/installOp');
 }

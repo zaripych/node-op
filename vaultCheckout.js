@@ -1,4 +1,4 @@
 #!/usr/bin/env node
 'use strict';
 
-require('./lib/vaultCheckout');
+require('./dist/vaultCheckout');

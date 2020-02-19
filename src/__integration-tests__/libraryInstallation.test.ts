@@ -57,7 +57,7 @@ describe('given built and packaged library', () => {
     await unarchiveTarGz(pkgInfo.packageLocation, UNTAR_DIR);
 
     const contents = await sortedDirectoryContents(join(UNTAR_DIR, 'package'));
-    expect(contents.filter(chunk => !chunk.startsWith('chunk-')))
+    expect(contents.filter(chunk => !chunk.startsWith('dist/chunk-')))
       .toMatchInlineSnapshot(`
       Array [
         "README.md",
@@ -65,14 +65,6 @@ describe('given built and packaged library', () => {
         "dist/binaries/",
         "dist/binaries/op",
         "dist/binaries/op.cmd",
-        "dist/chunk-06815002.js",
-        "dist/chunk-06815002.js.map",
-        "dist/chunk-6f284617.js",
-        "dist/chunk-6f284617.js.map",
-        "dist/chunk-753be599.js",
-        "dist/chunk-753be599.js.map",
-        "dist/chunk-b062adee.js",
-        "dist/chunk-b062adee.js.map",
         "dist/installOp.js",
         "dist/installOp.js.map",
         "dist/interactive.js",

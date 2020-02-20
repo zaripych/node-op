@@ -1366,23 +1366,13 @@
     "@types/minimatch" "*"
     "@types/node" "*"
 
-"@types/ink-spinner@2.0.3":
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/@types/ink-spinner/-/ink-spinner-2.0.3.tgz#bd431cc4eb3e851ed8369f3bbbc0882f915b83ea"
-  integrity sha512-iUxB3lCn3l7DgBu+LMQJXLF75CGHlHlwhceHqb1cnTylz8YiDfpG2zZfyidRIf5eWlRc1hh52iUJ5uHQKlKoSA==
+"@types/ink-spinner@3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@types/ink-spinner/-/ink-spinner-3.0.0.tgz#04c04c55d20f1a62ea34b62d1ea14c37ebfc1431"
+  integrity sha512-BN9gCxGfgkgvjbXatL2PjhnUlLuWMDOQLJUUkvH+5bKKWI9qm0Mb56WfMXejNrYOsiHgsz7Dc47x0nWKbXqbOg==
   dependencies:
     "@types/cli-spinners" "*"
-    "@types/ink" "^0.5.2"
     "@types/react" "*"
-    chalk "^2.1.0"
-
-"@types/ink@^0.5.2":
-  version "0.5.2"
-  resolved "https://registry.yarnpkg.com/@types/ink/-/ink-0.5.2.tgz#5e51b233d14639ee95df4d3c8b7f7845c51d094c"
-  integrity sha512-yEuhWTRMXJkIWiaM58c5kuRot5HFccv9kjjgy0fBZG0+tYb+sMBaxHNPVqyZXspGGlmwDOQ1d3BsygWpWlW17w==
-  dependencies:
-    "@types/node" "*"
-    "@types/prop-types" "*"
 
 "@types/inquirer@6.5.0":
   version "6.5.0"
@@ -2090,7 +2080,7 @@ caseless@~0.12.0:
   resolved "https://registry.yarnpkg.com/caseless/-/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
   integrity sha1-G2gcIf+EAzyCZUMJBolCDRhxUdw=
 
-chalk@2.4.2, chalk@^2.0.0, chalk@^2.0.1, chalk@^2.1.0, chalk@^2.3.0, chalk@^2.4.2:
+chalk@2.4.2, chalk@^2.0.0, chalk@^2.0.1, chalk@^2.3.0, chalk@^2.4.2:
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-2.4.2.tgz#cd42541677a54333cf541a49108c1432b44c9424"
   integrity sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==

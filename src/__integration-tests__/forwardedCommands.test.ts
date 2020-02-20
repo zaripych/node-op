@@ -9,7 +9,7 @@ describe('after op is installed', () => {
   describe('listing op commands', () => {
     let commands: ICommand[] = [];
     beforeAll(async () => {
-      commands = await listForwardedCommands();
+      commands = await listForwardedCommands('./dist/binaries/op');
     });
 
     it('should match current constants', async () => {

@@ -6,8 +6,10 @@ export interface ICommand {
   description: string;
 }
 
-export async function listForwardedCommands(): Promise<ICommand[]> {
-  const result = await spawnAndCheck('op', ['--help'], {
+export async function listForwardedCommands(
+  opPath = 'op'
+): Promise<ICommand[]> {
+  const result = await spawnAndCheck(opPath, ['--help'], {
     env: process.env,
     verbosity: 0,
     stdio: ['ignore', 'pipe', 'pipe'],

@@ -70,7 +70,7 @@
     "yoga-layout-prebuilt": "1.9.3"
   },
   "devDependencies": {
-    "@babel/preset-react": "7.7.4",
+    "@babel/preset-react": "7.8.3",
     "@types/rimraf": "2.0.3",
     "@octokit/rest": "16.35.2",
     "@rollup/plugin-commonjs": "11.0.2",

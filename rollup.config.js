@@ -2,6 +2,8 @@ import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import babel from 'rollup-plugin-babel';
 import json from '@rollup/plugin-json';
+import { readdirSync } from 'fs-extra';
+import { basename } from 'path';
 
 const babelConfig = require('./babel.config.rollup');
 
@@ -18,13 +20,14 @@ function resolveOriginalFs() {
   };
 }
 
-export default {
+const mainInput = {
   input: {
-    installOp: './src/installOp.js',
-    vaultCheckin: './src/vaultCheckin.ts',
-    vaultCheckout: './src/vaultCheckout.ts',
-    vaultDiff: './src/vaultDiff.ts',
-    interactive: './src/interactive.ts',
+    cli: './src/cli',
+    installOp: './src/installOp',
+    vaultCheckin: './src/vaultCheckin',
+    vaultCheckout: './src/vaultCheckout',
+    vaultDiff: './src/vaultDiff',
+    interactive: './src/interactive',
   },
   external: ['yoga-layout-prebuilt'],
   output: {
@@ -56,6 +59,11 @@ export default {
           'unlink',
           'createFile',
           'writeFile',
+          'existsSync',
+          'createWriteStream',
+          'chmod',
+          'mkdir',
+          'removeSync',
         ],
       },
     }),
@@ -66,3 +74,19 @@ export default {
     }),
   ],
 };
+
+const forwards = readdirSync('./src/forwards/')
+  .map(file => basename(file.replace('.ts', '')))
+  .filter(item => !['helper'].includes(item));
+
+const forwardsConfig = forwards.map(item => ({
+  ...mainInput,
+  input: ['./src/forwards/', item].join(''),
+  output: {
+    file: ['./dist/forwards/', item, '.js'].join(''),
+    format: 'cjs',
+    sourcemap: true,
+  },
+}));
+
+export default [mainInput, ...forwardsConfig];

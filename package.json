@@ -100,7 +100,7 @@
     "rxjs-marbles": "5.0.4",
     "rxjs-spy": "7.5.1",
     "selenium-webdriver": "3.6.0",
-    "semver": "7.1.1",
+    "semver": "7.1.3",
     "source-map-support": "0.5.16",
     "tar-fs": "2.0.0",
     "ts-deps": "0.12.13",

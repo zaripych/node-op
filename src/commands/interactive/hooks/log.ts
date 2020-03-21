@@ -3,6 +3,7 @@ import { formatWithOptions } from 'util';
 import { BehaviorSubject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { writeFile } from 'fs-extra';
+import { EOL } from 'os';
 
 const logs = new BehaviorSubject<string[]>([]);
 
@@ -10,7 +11,7 @@ export function log(arg: unknown, ...rest: unknown[]) {
   const text = formatWithOptions({ colors: true }, arg as string, ...rest);
   const next = [...text.split('\n'), ...logs.value];
   logs.next(next);
-  writeFile('./log.txt', text + '\n' + '\n', { flag: 'a' }).catch(() => {
+  writeFile('./log.txt', [text, EOL, EOL].join(''), { flag: 'a' }).catch(() => {
     return;
   });
 }

@@ -158,7 +158,7 @@ export async function installOnePassword() {
   const downloadedVersion = getOpVersion();
   if (downloadedVersion !== requestedVersion) {
     throw new Error(
-      `The downloaded version ${downloadedVersion} doesn\'t match ${version}`
+      `The downloaded version ${downloadedVersion} doesn't match ${version}`
     );
   }
 

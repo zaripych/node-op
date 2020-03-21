@@ -265,7 +265,7 @@ describe(vaultCheckin.name, () => {
 
     it('should work', async () => {
       await expect(vaultCheckin(...params)).rejects.toThrowError(
-        `Cannot delete local file at \"file1\" after successfull 1-Password vault upload`
+        `Cannot delete local file at "file1" after successfull 1-Password vault upload`
       );
       expect(params[1]?.listItems).toBeCalledWith({
         verbosity: 0,

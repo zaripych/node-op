@@ -1,12 +1,12 @@
-const chrome = require("selenium-webdriver/chrome");
-const { Builder } = require("selenium-webdriver");
-const { Query } = require("webdriver-query");
-const { gt, eq, parse } = require("semver");
-require("./prepareChromedriver");
+const chrome = require('selenium-webdriver/chrome');
+const { Builder } = require('selenium-webdriver');
+const { Query } = require('webdriver-query');
+const { gt, eq, parse } = require('semver');
+require('./prepareChromedriver');
 
-const checkPage = "https://app-updates.agilebits.com/product_history/CLI";
+const checkPage = 'https://app-updates.agilebits.com/product_history/CLI';
 
-const versionRegex = /\d+\.\d+\.\d+(\-\d+)?/;
+const versionRegex = /\d+\.\d+\.\d+(-\d+)?/;
 const semVerRegex = /\d+\.\d+\.\d+/;
 
 /**
@@ -24,12 +24,12 @@ function withFinally(promise, cb) {
 function determineLatestVersion() {
   const options = new chrome.Options()
     .detachDriver(false)
-    .excludeSwitches("enable-logging")
-    .addArguments("--silent")
+    .excludeSwitches('enable-logging')
+    .addArguments('--silent')
     .headless();
 
   const headlessChrome = new Builder()
-    .forBrowser("chrome")
+    .forBrowser('chrome')
     .setChromeOptions(options)
     .build();
 
@@ -39,7 +39,7 @@ function determineLatestVersion() {
     .get(checkPage)
     .then(() =>
       query
-        .findElements("article > h3")
+        .findElements('article > h3')
         .map(header => header.getText())
         .perform()
     )
@@ -50,7 +50,7 @@ function determineLatestVersion() {
           const semVerResult = semVerRegex.exec(text);
           return {
             version: versionResult && versionResult[0],
-            semVer: semVerResult && semVerResult[0]
+            semVer: semVerResult && semVerResult[0],
           };
         })
         .filter(item => item.version && item.semVer)
@@ -58,7 +58,7 @@ function determineLatestVersion() {
           const parsed = parse(item.semVer);
           return {
             semVer: parsed,
-            version: item.version
+            version: item.version,
           };
         });
 
@@ -86,5 +86,5 @@ function semVerFromOpVersion(text) {
 module.exports = {
   checkPage,
   determineLatestVersion,
-  semVerFromOpVersion
+  semVerFromOpVersion,
 };

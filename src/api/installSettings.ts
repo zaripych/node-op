@@ -1,4 +1,5 @@
 import { platform, arch } from 'os';
+// eslint-disable-next-line @typescript-eslint/camelcase
 import { homepage, op_version } from '../../package.json';
 import { PeerCertificate } from 'tls';
 
@@ -10,7 +11,7 @@ export function validateCertificate(certificate: PeerCertificate) {
   });
 
   if (certificate.subject.CN === '*.cachefly.net') {
-    if (certificate.subjectaltname.indexOf('DNS:cache.agilebits.com') === -1) {
+    if (!certificate.subjectaltname.includes('DNS:cache.agilebits.com')) {
       return {
         isValid: false,
         message:
@@ -29,6 +30,7 @@ export function validateCertificate(certificate: PeerCertificate) {
 
 export function settings() {
   const contributeUrl = homepage;
+  // eslint-disable-next-line @typescript-eslint/camelcase
   const version = op_version;
 
   const config: {

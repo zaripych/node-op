@@ -30,8 +30,10 @@ export const LogItems: React.FC<IProps> = props => {
           ]);
           return (
             <React.Fragment>
-              {items.map(item => (
-                <Box flexShrink={0}>{item}</Box>
+              {items.map((item, i) => (
+                <Box key={i} flexShrink={0}>
+                  {item}
+                </Box>
               ))}
             </React.Fragment>
           );

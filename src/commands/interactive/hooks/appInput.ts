@@ -76,10 +76,10 @@ export function useAppInput(inputHandler?: (input: string, key: IKey) => void) {
         meta: false,
       };
 
-      if (/\u001b\[1;2/u.test(input)) {
+      if (input.includes('\u001b[1;2')) {
         key.shift = true;
       }
-      if (/\u001b\[1;5/u.test(input)) {
+      if (input.includes('\u001b[1;5')) {
         key.ctrl = true;
       }
 
@@ -93,7 +93,7 @@ export function useAppInput(inputHandler?: (input: string, key: IKey) => void) {
         key.meta = true;
       }
 
-      if (input[0] === '\u001B') {
+      if (input.startsWith('\u001B')) {
         input = input.slice(1);
         key.meta = true;
       }

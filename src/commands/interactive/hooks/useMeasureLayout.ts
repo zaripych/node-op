@@ -44,9 +44,10 @@ export function useMeasureLayout<K extends string | number | symbol>(
 ) {
   const layoutRef = React.useRef<{ [P in K]?: ILayout }>({});
   const nodeRef = React.useRef<{ [P in K]?: INode }>({});
-  const getNodeRefCb = (key: K, parentIndex: number = 0) =>
+  const getNodeRefCb = (key: K, parentIndex = 0) =>
     React.useCallback(
       (instance: React.Component<BoxProps> | null) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const anyInstance = instance as any;
         const node = parentAtIndex(
           anyInstance?.nodeRef?.current?.yogaNode,

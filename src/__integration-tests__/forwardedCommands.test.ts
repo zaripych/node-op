@@ -17,7 +17,7 @@ describe('after op is installed', () => {
         Array [
           Object {
             "command": "add",
-            "description": "Grant a user access to a vault or group.",
+            "description": "Add access for users or groups to groups or vaults.",
           },
           Object {
             "command": "confirm",
@@ -41,11 +41,15 @@ describe('after op is installed', () => {
           },
           Object {
             "command": "forget",
-            "description": "Remove a 1Password account.",
+            "description": "Remove a 1Password account from this device.",
           },
           Object {
             "command": "get",
             "description": "Get details about an object.",
+          },
+          Object {
+            "command": "help",
+            "description": "Help about any command",
           },
           Object {
             "command": "list",
@@ -57,7 +61,7 @@ describe('after op is installed', () => {
           },
           Object {
             "command": "remove",
-            "description": "Revoke a user's access to a vault or group.",
+            "description": "Revoke access for users or groups to groups or vaults.",
           },
           Object {
             "command": "signin",

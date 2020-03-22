@@ -15,15 +15,30 @@ export async function listForwardedCommands(
     stdio: ['ignore', 'pipe', 'pipe'],
   });
 
-  const searchString = 'Available commands are:';
+  const searchStrings = ['Available commands are:', 'Available Commands:'];
+  const searchStringIndex = searchStrings
+    .map(str => result.indexOf(str))
+    .findIndex(item => item >= 0);
+
+  if (searchStringIndex === -1) {
+    return [];
+  }
+
+  const searchString = searchStrings[searchStringIndex];
   const index = result.indexOf(searchString);
+
+  const stopString = 'Flags:';
+  const endIndex = result.indexOf(stopString);
 
   if (index === -1) {
     return [];
   }
 
   const list = result
-    .substring(index + searchString.length)
+    .substring(
+      index + searchString.length,
+      endIndex >= 0 ? endIndex : undefined
+    )
     .trim()
     .split('\n')
     .map(entry => entry.trim());

@@ -1,8 +1,12 @@
 import commander from 'commander';
 import { ICommand } from './api';
+import chalk from 'chalk';
 
 const forwarded: ICommand[] = [
-  { command: 'add', description: 'Grant a user access to a vault or group.' },
+  {
+    command: 'add',
+    description: 'Add access for users or groups to groups or vaults.',
+  },
   { command: 'confirm', description: 'Confirm a user.' },
   { command: 'create', description: 'Create an object.' },
   { command: 'delete', description: 'Remove an object.' },
@@ -11,13 +15,16 @@ const forwarded: ICommand[] = [
     command: 'encode',
     description: 'Encode the JSON needed to create an item.',
   },
-  { command: 'forget', description: 'Remove a 1Password account.' },
+  {
+    command: 'forget',
+    description: 'Remove a 1Password account from this device.',
+  },
   { command: 'get', description: 'Get details about an object.' },
   { command: 'list', description: 'List objects and events.' },
   { command: 'reactivate', description: 'Reactivate a suspended user.' },
   {
     command: 'remove',
-    description: "Revoke a user's access to a vault or group.",
+    description: 'Revoke access for users or groups to groups or vaults.',
   },
   { command: 'signin', description: 'Sign in to your 1Password account.' },
   { command: 'signout', description: 'Sign out of your 1Password account.' },
@@ -39,7 +46,7 @@ function run() {
   next
     .command(
       'interactive',
-      'node-op: Lookup for passwords in interactive terminal',
+      chalk.gray('node-op:') + ' Lookup for passwords in interactive terminal',
       {
         isDefault: true,
         executableFile: './interactive',
@@ -47,21 +54,24 @@ function run() {
     )
     .command(
       'vault-checkout',
-      'node-op: Download one or more files from 1-Password vault to current directory',
+      chalk.gray('node-op:') +
+        ' Download one or more files from 1-Password vault to current directory',
       {
         executableFile: './vaultCheckout',
       }
     )
     .command(
       'vault-checkin',
-      'node-op: Upload one or more files to 1-Password vault from current directory and trash old files with same name',
+      chalk.gray('node-op:') +
+        ' Upload one or more files to 1-Password vault from current directory and trash old files with same name',
       {
         executableFile: './vaultCheckin',
       }
     )
     .command(
       'vault-diff',
-      'node-op: Compare one or more local checked-out files with their original 1-Password versions',
+      chalk.gray('node-op:') +
+        ' Compare one or more local checked-out files with their original 1-Password versions',
       {
         executableFile: './vaultDiff',
       }

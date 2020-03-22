@@ -93,6 +93,7 @@
     "@types/rimraf": "3.0.0",
     "@types/tar-fs": "1.16.3",
     "adm-zip": "0.4.14",
+    "chalk": "3.0.0",
     "commander": "5.0.0",
     "husky": "4.2.3",
     "ink": "2.7.1",
@@ -104,7 +105,7 @@
     "react": "16.13.1",
     "rimraf": "3.0.2",
     "rollup": "2.1.0",
-    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-babel": "4.4.0",
     "rxjs": "6.5.4",
     "rxjs-marbles": "5.0.5",
     "rxjs-spy": "7.5.1",
@@ -113,5 +114,5 @@
     "ts-deps": "0.15.7",
     "webdriver-query": "1.0.1"
   },
-  "op_version": "0.8.0"
+  "op_version": "0.9.3"
 }

@@ -3083,10 +3083,10 @@ escodegen@^1.11.1:
   optionalDependencies:
     source-map "~0.6.1"
 
-eslint-config-prettier@6.10.0:
-  version "6.10.0"
-  resolved "https://registry.yarnpkg.com/eslint-config-prettier/-/eslint-config-prettier-6.10.0.tgz#7b15e303bf9c956875c948f6b21500e48ded6a7f"
-  integrity sha512-AtndijGte1rPILInUdHjvKEGbIV06NuvPrqlIEaEaWtbtvJh464mDeyGMdZEQMsGvC0ZVkiex1fSNcC4HAbRGg==
+eslint-config-prettier@6.10.1:
+  version "6.10.1"
+  resolved "https://registry.yarnpkg.com/eslint-config-prettier/-/eslint-config-prettier-6.10.1.tgz#129ef9ec575d5ddc0e269667bf09defcd898642a"
+  integrity sha512-svTy6zh1ecQojvpbJSgH3aei/Rt7C6i090l5f2WQ4aB05lYHeZIR1qL4wZyyILTbtmnbHP5Yn8MrsOJMGa8RkQ==
   dependencies:
     get-stdin "^6.0.0"
 
@@ -5962,10 +5962,10 @@ prelude-ls@~1.1.2:
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.1.2.tgz#21932a549f5e52ffd9a827f570e04be62a97da54"
   integrity sha1-IZMqVJ9eUv/ZqCf1cOBL5iqX2lQ=
 
-prettier@1.19.1:
-  version "1.19.1"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.19.1.tgz#f7d7f5ff8a9cd872a7be4ca142095956a60797cb"
-  integrity sha512-s7PoyDv/II1ObgQunCbB9PdLmUcBZcnWOcxDh7O0N/UwDEsHyqkW+Qh28jW+mVuCdx7gLB0BotYI1Y6uI9iyew==
+prettier@2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.0.1.tgz#3f00ac71263be34684b2b2c8d7e7f63737592dac"
+  integrity sha512-piXGBcY1zoFOG0MvHpNE5reAGseLmaCRifQ/fmfF49BcYkInEs/naD/unxGNAeOKFA5+JxVrPyMvMlpzcd20UA==
 
 pretty-format@^25.1.0:
   version "25.1.0"
@@ -7290,10 +7290,10 @@ trim-off-newlines@^1.0.0:
   resolved "https://registry.yarnpkg.com/trim-off-newlines/-/trim-off-newlines-1.0.1.tgz#9f9ba9d9efa8764c387698bcbfeb2c848f11adb3"
   integrity sha1-n5up2e+odkw4dpi8v+sshI8RrbM=
 
-ts-deps@0.15.7:
-  version "0.15.7"
-  resolved "https://registry.yarnpkg.com/ts-deps/-/ts-deps-0.15.7.tgz#862330c9f74a1e49418016b605384f117afd88a9"
-  integrity sha512-PxaFvTyZ52kqJDy7OkhetVlUef42Fdh/bEDh3PN0EBssPLKyIz0dT+0AmL1WJb8LH/QUsoua4r91+1toJkQ/eg==
+ts-deps@0.15.8:
+  version "0.15.8"
+  resolved "https://registry.yarnpkg.com/ts-deps/-/ts-deps-0.15.8.tgz#5c3b8e689e3b9abfa71deb071f49ac53b2898501"
+  integrity sha512-le0W8C3+GRKstCB7L3DNqeilR+/Me4nYZSoLW3AAVKJzGSf20H6JxYCcMsl/AGy2CptOpyg5ciHYJJOvMwgY8g==
   dependencies:
     "@babel/cli" "7.8.4"
     "@babel/core" "7.9.0"
@@ -7319,7 +7319,7 @@ ts-deps@0.15.7:
     confusing-browser-globals "1.0.9"
     deepmerge "4.2.2"
     eslint "6.8.0"
-    eslint-config-prettier "6.10.0"
+    eslint-config-prettier "6.10.1"
     eslint-formatter-pretty "3.0.1"
     eslint-plugin-import "2.20.1"
     eslint-plugin-react "7.19.0"
@@ -7328,7 +7328,7 @@ ts-deps@0.15.7:
     inquirer "7.1.0"
     istanbul-api "2.1.6"
     jest "25.1.0"
-    prettier "1.19.1"
+    prettier "2.0.1"
     sort-package-json "1.40.0"
     source-map-support "0.5.16"
     tar-fs "2.0.0"

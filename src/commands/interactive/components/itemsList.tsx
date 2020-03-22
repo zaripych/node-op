@@ -41,7 +41,11 @@ export const ItemStatus = (props: { item: IUiItem }) => {
 
   return (
     <React.Fragment>
-      {status === 'started' && <Spinner type={'dots'} green />}
+      {status === 'started' && (
+        <Color green>
+          <Spinner type={'dots'} />
+        </Color>
+      )}
       {status === 'failed' && <Color red>✗</Color>}
       {status === 'success' && <Color green>✓</Color>}
     </React.Fragment>

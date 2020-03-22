@@ -74,7 +74,11 @@ export const FieldStatus = (
 
   return (
     <Box width={1} {...rest}>
-      {status === 'started' && <Spinner type={'dots'} green />}
+      {status === 'started' && (
+        <Color green>
+          <Spinner type={'dots'} />
+        </Color>
+      )}
       {status === 'failed' && <Color red>✗</Color>}
       {status === 'success' && <Color green>✓</Color>}
     </Box>

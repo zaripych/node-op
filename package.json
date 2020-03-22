@@ -41,7 +41,7 @@
   "scripts": {
     "before-release": "patch-package && npm run build",
     "prebuild": "node ./scripts/clean.js",
-    "build": "node ./scripts/build.js -s",
+    "build": "node ./scripts/rollup.js -c",
     "build:dev": "node ./scripts/build.js -s",
     "build:watch": "node ./scripts/build.js --watch",
     "check": "concurrently --raw -c \"node ./scripts/build.js\" \"tsc\" \"eslint . --ext .js,.jsx,.ts,.tsx -f pretty\"",
@@ -111,7 +111,7 @@
     "rxjs-spy": "7.5.1",
     "selenium-webdriver": "3.6.0",
     "semver": "7.1.1",
-    "ts-deps": "0.15.5",
+    "ts-deps": "0.15.7",
     "webdriver-query": "1.0.1"
   },
   "op_version": "0.8.0"

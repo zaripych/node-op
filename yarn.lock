@@ -7532,10 +7532,10 @@ trim-off-newlines@^1.0.0:
   resolved "https://registry.yarnpkg.com/trim-off-newlines/-/trim-off-newlines-1.0.1.tgz#9f9ba9d9efa8764c387698bcbfeb2c848f11adb3"
   integrity sha1-n5up2e+odkw4dpi8v+sshI8RrbM=
 
-ts-deps@0.15.5:
-  version "0.15.5"
-  resolved "https://registry.yarnpkg.com/ts-deps/-/ts-deps-0.15.5.tgz#967ca1c2c517c76032a889470a6ac4af5b94e577"
-  integrity sha512-uSQnHpQ9xZPjoc2xnjHsCLcRrT/CEn5pOLxfg/lqID4ueCgyOE7F898O+iA7ph4Y3/RzZMtsWTr0DZGKf86UlA==
+ts-deps@0.15.7:
+  version "0.15.7"
+  resolved "https://registry.yarnpkg.com/ts-deps/-/ts-deps-0.15.7.tgz#862330c9f74a1e49418016b605384f117afd88a9"
+  integrity sha512-PxaFvTyZ52kqJDy7OkhetVlUef42Fdh/bEDh3PN0EBssPLKyIz0dT+0AmL1WJb8LH/QUsoua4r91+1toJkQ/eg==
   dependencies:
     "@babel/cli" "7.8.4"
     "@babel/core" "7.9.0"

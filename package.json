@@ -93,7 +93,7 @@
     "@types/rimraf": "3.0.0",
     "@types/tar-fs": "1.16.3",
     "adm-zip": "0.4.14",
-    "chalk": "3.0.0",
+    "chalk": "4.0.0",
     "commander": "5.0.0",
     "husky": "4.2.3",
     "ink": "2.7.1",

@@ -100,7 +100,7 @@
     "ink-spinner": "3.0.1",
     "ink-text-input": "3.2.2",
     "lint-staged": "10.0.8",
-    "patch-package": "6.2.1",
+    "patch-package": "6.2.2",
     "pump": "3.0.0",
     "react": "16.13.1",
     "rimraf": "3.0.2",

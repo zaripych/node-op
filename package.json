@@ -99,7 +99,7 @@
     "ink": "2.7.1",
     "ink-spinner": "3.0.1",
     "ink-text-input": "3.2.2",
-    "lint-staged": "10.0.8",
+    "lint-staged": "10.2.6",
     "patch-package": "6.2.1",
     "pump": "3.0.0",
     "react": "16.13.1",

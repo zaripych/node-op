@@ -80,7 +80,7 @@
     "yoga-layout-prebuilt": "1.9.5"
   },
   "devDependencies": {
-    "@babel/preset-react": "7.9.1",
+    "@babel/preset-react": "7.10.4",
     "@octokit/rest": "17.1.1",
     "@rollup/plugin-commonjs": "11.0.2",
     "@rollup/plugin-json": "4.0.2",

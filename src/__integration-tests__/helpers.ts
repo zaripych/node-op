@@ -76,7 +76,12 @@ export const buildAndPack = async () => {
 
   console.log('version', version);
 
-  await spawnAndCheck('npm', ['run', 'build'], {
+  await spawnAndCheck('yarn', ['run', 'before-release'], {
+    cwd: ROOT,
+    shell: process.platform === 'win32',
+  });
+
+  await spawnAndCheck('yarn', ['run', 'build'], {
     cwd: ROOT,
     shell: process.platform === 'win32',
   });
@@ -111,7 +116,7 @@ export const unarchiveTarGz = async (tar: string, out: string) => {
     stream.once('finish', () => {
       res();
     });
-    stream.once('error', err => {
+    stream.once('error', (err) => {
       rej(err);
     });
   });
@@ -184,7 +189,7 @@ export function spawnAndCheck(
   }
 
   return new Promise((res, rej) => {
-    proc.once('error', err => {
+    proc.once('error', (err) => {
       rej(err);
     });
     proc.once('exit', (code, signal) => {

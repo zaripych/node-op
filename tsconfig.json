@@ -1,5 +1,10 @@
 {
   "extends": "./node_modules/ts-deps/lib/config/tsconfig.default.json",
-  "compilerOptions": { "baseUrl": ".", "outDir": "lib", "jsx": "react" },
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "lib",
+    "jsx": "preserve",
+    "resolveJsonModule": true
+  },
   "include": ["src"]
 }

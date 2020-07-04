@@ -22,7 +22,7 @@ interface ICheckinProps {
 
 function findSingleFile(file: string, items: IItem[]) {
   const title = basename(file);
-  const filtered = items.filter(item => title === item?.overview?.title);
+  const filtered = items.filter((item) => title === item?.overview?.title);
 
   if (filtered.length === 0) {
     return null;
@@ -31,7 +31,7 @@ function findSingleFile(file: string, items: IItem[]) {
   if (filtered.length > 1) {
     throw new Error(
       `More than one document with title '${title}' found: [${filtered
-        .map(item => `"${item.uuid}"`)
+        .map((item) => `"${item.uuid}"`)
         .join(', ')}]`
     );
   }
@@ -66,7 +66,7 @@ async function processFile(
         file,
         ...(props.vault && { vault: props.vault }),
       }),
-    errInfo =>
+    (errInfo) =>
       errInfo.withMessage(
         `Cannot create new document in 1-Password vault from file "${file}"`
       )
@@ -85,7 +85,7 @@ async function processFile(
           uuid: trashUuid,
           ...(props.vault && { vault: props.vault }),
         }),
-      errInfo =>
+      (errInfo) =>
         errInfo.withMessage(
           `Cannot delete previous version of the document from 1-Password vault, with new document id "${newUuid}" and old document id "${trashUuid}"`
         )
@@ -106,7 +106,7 @@ async function processFile(
         }
         await deps.unlink(file);
       },
-      errInfo =>
+      (errInfo) =>
         errInfo.withMessage(
           `Cannot delete local file at "${file}" after successfull 1-Password vault upload`
         )
@@ -160,14 +160,14 @@ export async function vaultCheckin(
         verbosity,
         ...(props.vault && { vault: props.vault }),
       }),
-    errInfo => errInfo.withMessage('Cannot list items in 1-Password vault')
+    (errInfo) => errInfo.withMessage('Cannot list items in 1-Password vault')
   );
 
   const filesAndItems = await Promise.all(
-    props.files.map(file =>
+    props.files.map((file) =>
       validateFile(file, items, {
         stat: deps.stat,
-      }).then(item => ({
+      }).then((item) => ({
         file,
         uuid: item?.uuid,
       }))
@@ -177,9 +177,9 @@ export async function vaultCheckin(
   if (verbosity > 0) {
     console.log(
       'Will upload files',
-      filesAndItems.map(item => item.file)
+      filesAndItems.map((item) => item.file)
     );
-    const toTrash = filesAndItems.filter(item => !!item.uuid);
+    const toTrash = filesAndItems.filter((item) => !!item.uuid);
     console.log('Following 1-Password items going to be trashed', toTrash);
   }
 
@@ -188,7 +188,7 @@ export async function vaultCheckin(
   }
 
   const results = await Promise.all(
-    filesAndItems.map(pair =>
+    filesAndItems.map((pair) =>
       catchAsync(() =>
         processFile(props, pair.file, pair.uuid, {
           createDocument: deps.createDocument,
@@ -199,7 +199,7 @@ export async function vaultCheckin(
     )
   );
 
-  const errorResults = results.map(item => item.error).filter(isError);
+  const errorResults = results.map((item) => item.error).filter(isError);
 
   if (errorResults.length > 0) {
     if (errorResults.length > 1) {

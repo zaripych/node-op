@@ -7,7 +7,7 @@ const parsed = program
   .description(
     'Upload one or more files to 1-Password vault from current directory and trash old files with same name'
   )
-  .exitOverride(err => {
+  .exitOverride((err) => {
     if (err.message === '(outputHelp)') {
       return;
     }

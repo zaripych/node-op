@@ -7,7 +7,7 @@ const parsed = program
   .description(
     'Compare one or more local checked-out files with their original 1-Password versions'
   )
-  .exitOverride(err => {
+  .exitOverride((err) => {
     if (err.message === '(outputHelp)') {
       return;
     }

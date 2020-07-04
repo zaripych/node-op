@@ -17,70 +17,74 @@ describe('after op is installed', () => {
         Array [
           Object {
             "command": "add",
-            "description": "Add access for users or groups to groups or vaults.",
+            "description": "Grant access to groups or vaults",
+          },
+          Object {
+            "command": "completion",
+            "description": "Generate shell completion information",
           },
           Object {
             "command": "confirm",
-            "description": "Confirm a user.",
+            "description": "Confirm a user",
           },
           Object {
             "command": "create",
-            "description": "Create an object.",
+            "description": "Create an object",
           },
           Object {
             "command": "delete",
-            "description": "Remove an object.",
+            "description": "Remove an object",
           },
           Object {
             "command": "edit",
-            "description": "Edit an object.",
+            "description": "Edit an object",
           },
           Object {
             "command": "encode",
-            "description": "Encode the JSON needed to create an item.",
+            "description": "Encode the JSON needed to create an item",
           },
           Object {
             "command": "forget",
-            "description": "Remove a 1Password account from this device.",
+            "description": "Remove a 1Password account from this device",
           },
           Object {
             "command": "get",
-            "description": "Get details about an object.",
+            "description": "Get details about an object",
           },
           Object {
             "command": "help",
-            "description": "Help about any command",
+            "description": "Get help for a command.",
           },
           Object {
             "command": "list",
-            "description": "List objects and events.",
+            "description": "List objects and events",
           },
           Object {
             "command": "reactivate",
-            "description": "Reactivate a suspended user.",
+            "description": "Reactivate a suspended user",
           },
           Object {
             "command": "remove",
-            "description": "Revoke access for users or groups to groups or vaults.",
+            "description": "Revoke access to groups or vaults",
           },
           Object {
             "command": "signin",
-            "description": "Sign in to your 1Password account.",
+            "description": "Sign in to a 1Password account",
           },
           Object {
             "command": "signout",
-            "description": "Sign out of your 1Password account.",
+            "description": "Sign out of a 1Password account",
           },
           Object {
             "command": "suspend",
-            "description": "Suspend a user.",
+            "description": "Suspend a user",
           },
           Object {
             "command": "update",
-            "description": "Check for updates.",
+            "description": "Check for updates",
           },
         ]
-`);
+      `);
       for (const cmd of commands) {
         expect(await pathExists(`../forwards/${cmd.command}.ts`));
       }

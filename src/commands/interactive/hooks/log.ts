@@ -21,10 +21,10 @@ export function useLog() {
 
   React.useEffect(() => {
     const subscription = logs.pipe(debounceTime(1000 / 25)).subscribe({
-      next: value => {
+      next: (value) => {
         setLines(value);
       },
-      error: _err => {
+      error: (_err) => {
         return;
       },
     });

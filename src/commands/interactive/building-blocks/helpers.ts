@@ -11,7 +11,7 @@ export function isOfType<T extends ActionCreator>(
 
 export function ofType<T extends ActionCreator>(type: T) {
   return (observable: Observable<IAction>) =>
-    observable.pipe(filter(action => action.type === type)) as Observable<
+    observable.pipe(filter((action) => action.type === type)) as Observable<
       ActionOf<T>
     >;
 }

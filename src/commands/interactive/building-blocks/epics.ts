@@ -26,7 +26,7 @@ export function runEpic<T extends IAction>(epic: Epic<T>) {
         tag(epic.name || 'unknownEpic')
       )
       .subscribe({
-        next: result => {
+        next: (result) => {
           actions.next(result);
         },
       })

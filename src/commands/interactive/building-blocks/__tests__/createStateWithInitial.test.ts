@@ -6,12 +6,12 @@ import { take } from 'rxjs/operators';
 describe(createStateWithInitial.name, () => {
   it(
     'created state registers subscription in sharedSubscriptions for later cleanup',
-    marbles(m => {
+    marbles((m) => {
       const actions = m.hot<IAction>('--a--');
       const sharedSubscriptions = new WeakMap();
 
       const result = createStateWithInitial(
-        a => a,
+        (a) => a,
         ('b' as unknown) as IAction,
         {
           actions,
@@ -27,13 +27,14 @@ describe(createStateWithInitial.name, () => {
     })
   );
 
+  // eslint-disable-next-line jest/expect-expect
   it(
     'created state never unsubscribes from actions',
-    marbles(m => {
+    marbles((m) => {
       const actions = m.hot<IAction>('--a--');
 
       const result = createStateWithInitial(
-        a => a,
+        (a) => a,
         ('b' as unknown) as IAction,
         {
           actions,
@@ -46,12 +47,13 @@ describe(createStateWithInitial.name, () => {
     })
   );
 
+  // eslint-disable-next-line jest/expect-expect
   it(
     'created state unsubscribes from actions complete, which is never',
-    marbles(m => {
+    marbles((m) => {
       const actions = m.hot<IAction>('--a--|');
       const result = createStateWithInitial(
-        a => a,
+        (a) => a,
         ('b' as unknown) as IAction,
         {
           actions,
@@ -64,12 +66,13 @@ describe(createStateWithInitial.name, () => {
     })
   );
 
+  // eslint-disable-next-line jest/expect-expect
   it(
     'created state unsubscribes when we complete subscription in selector',
-    marbles(m => {
+    marbles((m) => {
       const actions = m.hot<IAction>('--a--|');
       const result = createStateWithInitial(
-        a => a.pipe(take(1)),
+        (a) => a.pipe(take(1)),
         ('b' as unknown) as IAction,
         {
           actions,

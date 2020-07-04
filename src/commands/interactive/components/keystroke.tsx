@@ -5,7 +5,7 @@ interface IProps {
   value: string;
 }
 
-export const Keystroke: React.FC<IProps> = props => {
+export const Keystroke: React.FC<IProps> = (props) => {
   return (
     <Color red bold>
       {props.value}

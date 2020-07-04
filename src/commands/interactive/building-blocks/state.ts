@@ -87,7 +87,7 @@ export function sharedState<T>(
     sharedSubscriptions,
   }
 ) {
-  const finalizingSelector: Selector<T> = a =>
+  const finalizingSelector: Selector<T> = (a) =>
     selector(a).pipe(
       finalize(() => {
         const instance = deps.sharedSelects.get(selector);

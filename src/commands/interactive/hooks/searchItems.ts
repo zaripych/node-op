@@ -39,10 +39,10 @@ function cursorFromSelectedItem(item: IUiItem | undefined, items: IUiItem[]) {
 
 function useLoadItemDetailsOnEnter() {
   useEpicWhenMounted(
-    actions =>
+    (actions) =>
       actions.pipe(
         ofType(keyInput),
-        filter(action => action.key.return),
+        filter((action) => action.key.return),
         withLatestFrom(appState.itemDetails, appState.selectedItem),
         switchMap(([_, details, selected]) => {
           if (!selected) {
@@ -56,13 +56,13 @@ function useLoadItemDetailsOnEnter() {
             // navigate unless we moved on:
             actions.pipe(
               ofType(loadItemDetailsSuccess),
-              map(item => navigateToItemDetails(item.uuid)),
+              map((item) => navigateToItemDetails(item.uuid)),
               takeUntil(
                 merge(
                   actions.pipe(ofType(loadItemDetailsFailed)),
                   actions
                     .pipe(ofType(setSelectedItem))
-                    .pipe(filter(item => item.item !== selected))
+                    .pipe(filter((item) => item.item !== selected))
                 )
               )
             )
@@ -75,7 +75,7 @@ function useLoadItemDetailsOnEnter() {
 
 function useTextInputToModifyFilterText() {
   useEpicWhenMounted(
-    actions =>
+    (actions) =>
       actions.pipe(
         ofType(keyInput),
         withLatestFrom(appState.filter),
@@ -103,7 +103,7 @@ function useTextInputToModifyFilterText() {
 export function useSearchItems() {
   const [offset] = useSelect(appState.offset);
 
-  const setOffset = useStateActionBinding(appState.offset, next =>
+  const setOffset = useStateActionBinding(appState.offset, (next) =>
     of(setOffsetAction(next))
   );
 
@@ -114,7 +114,7 @@ export function useSearchItems() {
 
   const cursor = cursorFromSelectedItem(selectedItem, filteredItems);
   const setCursor = useActionTrigger<React.SetStateAction<number>>(
-    triggers =>
+    (triggers) =>
       triggers.pipe(
         withLatestFrom(appState.selectedItem, appState.filteredItems),
         switchMap(([offsetOrCallback, item, currentFilteredItems]) => {

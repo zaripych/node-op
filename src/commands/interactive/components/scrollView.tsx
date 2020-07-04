@@ -8,7 +8,7 @@ interface ILimitViewProps {
   viewportWidth: number;
 }
 
-export const VerticalScrollView: React.FC<ILimitViewProps> = props => {
+export const VerticalScrollView: React.FC<ILimitViewProps> = (props) => {
   const totalHeight = props.contentHeight;
   const viewportHeight = props.viewportHeight;
   const maxOffset = totalHeight - viewportHeight - 1;
@@ -44,7 +44,7 @@ export const VerticalScrollView: React.FC<ILimitViewProps> = props => {
       if (typeof changer === 'number') {
         setOffsetCore(limit(changer));
       } else {
-        setOffsetCore(value => limit(changer(value)));
+        setOffsetCore((value) => limit(changer(value)));
       }
     },
     [setOffsetCore, maxOffset]
@@ -58,16 +58,16 @@ export const VerticalScrollView: React.FC<ILimitViewProps> = props => {
       setOffset(maxOffset);
     }
     if (key.pageUp) {
-      setOffset(value => value - viewportHeight);
+      setOffset((value) => value - viewportHeight);
     }
     if (key.pageDown) {
-      setOffset(value => value + viewportHeight);
+      setOffset((value) => value + viewportHeight);
     }
     if (key.upArrow) {
-      setOffset(value => value - 1);
+      setOffset((value) => value - 1);
     }
     if (key.downArrow) {
-      setOffset(value => value + 1);
+      setOffset((value) => value + 1);
     }
   });
 

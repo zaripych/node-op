@@ -32,7 +32,7 @@ describe('given built and packaged library', () => {
 
   it('should have build output in correct directory', async () => {
     const contents = await sortedDirectoryContents(join(ROOT, BUILD_DIR));
-    expect(contents.filter(chunk => !chunk.startsWith('chunk-')))
+    expect(contents.filter((chunk) => !chunk.startsWith('chunk-')))
       .toMatchInlineSnapshot(`
       Array [
         "binaries/",
@@ -43,6 +43,8 @@ describe('given built and packaged library', () => {
         "forwards/",
         "forwards/add.js",
         "forwards/add.js.map",
+        "forwards/completion.js",
+        "forwards/completion.js.map",
         "forwards/confirm.js",
         "forwards/confirm.js.map",
         "forwards/create.js",
@@ -90,7 +92,7 @@ describe('given built and packaged library', () => {
     await unarchiveTarGz(pkgInfo.packageLocation, UNTAR_DIR);
 
     const contents = await sortedDirectoryContents(join(UNTAR_DIR, 'package'));
-    expect(contents.filter(chunk => !chunk.startsWith('dist/chunk-')))
+    expect(contents.filter((chunk) => !chunk.startsWith('dist/chunk-')))
       .toMatchInlineSnapshot(`
       Array [
         "README.md",
@@ -104,6 +106,8 @@ describe('given built and packaged library', () => {
         "dist/forwards/",
         "dist/forwards/add.js",
         "dist/forwards/add.js.map",
+        "dist/forwards/completion.js",
+        "dist/forwards/completion.js.map",
         "dist/forwards/confirm.js",
         "dist/forwards/confirm.js.map",
         "dist/forwards/create.js",
@@ -168,7 +172,9 @@ describe('given built and packaged library', () => {
         shell: process.platform === 'win32',
       });
 
-      const pkgJson = await readJSON(join(TEST_DIR, 'package.json'));
+      const pkgJson = (await readJSON(join(TEST_DIR, 'package.json'))) as {
+        scripts?: Record<string, string>;
+      };
       const modifiedPkgJson = {
         ...pkgJson,
         scripts: { ...(pkgJson.scripts || {}), op: 'op' },

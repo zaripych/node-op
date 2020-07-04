@@ -17,8 +17,8 @@ const semVerRegex = /\d+\.\d+\.\d+/;
  */
 function withFinally(promise, cb) {
   return promise
-    .catch(err => cb().then(() => Promise.reject(err)))
-    .then(value => cb().then(() => Promise.resolve(value)));
+    .catch((err) => cb().then(() => Promise.reject(err)))
+    .then((value) => cb().then(() => Promise.resolve(value)));
 }
 
 function determineLatestVersion() {
@@ -40,12 +40,12 @@ function determineLatestVersion() {
     .then(() =>
       query
         .findElements('article > h3')
-        .map(header => header.getText())
+        .map((header) => header.getText())
         .perform()
     )
-    .then(headers => {
+    .then((headers) => {
       const versions = headers
-        .map(text => {
+        .map((text) => {
           const versionResult = versionRegex.exec(text);
           const semVerResult = semVerRegex.exec(text);
           return {
@@ -53,8 +53,8 @@ function determineLatestVersion() {
             semVer: semVerResult && semVerResult[0],
           };
         })
-        .filter(item => item.version && item.semVer)
-        .map(item => {
+        .filter((item) => item.version && item.semVer)
+        .map((item) => {
           const parsed = parse(item.semVer);
           return {
             semVer: parsed,

@@ -1,5 +1,4 @@
 import { platform, arch } from 'os';
-// eslint-disable-next-line @typescript-eslint/camelcase
 import { homepage, op_version } from '../../package.json';
 import { PeerCertificate } from 'tls';
 
@@ -30,7 +29,6 @@ export function validateCertificate(certificate: PeerCertificate) {
 
 export function settings() {
   const contributeUrl = homepage;
-  // eslint-disable-next-line @typescript-eslint/camelcase
   const version = op_version;
 
   const config: {

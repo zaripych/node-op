@@ -29,7 +29,23 @@ const mainInput = {
     vaultDiff: './src/vaultDiff',
     interactive: './src/interactive',
   },
-  external: ['yoga-layout-prebuilt'],
+  external: [
+    'yoga-layout-prebuilt',
+    'path',
+    'child_process',
+    'crypto',
+    'util',
+    'fs',
+    'events',
+    'os',
+    'https',
+    'tty',
+    'assert',
+    'zlib',
+    'stream',
+    'constants',
+    'url',
+  ],
   output: {
     chunkFileNames: 'chunk-[hash].js',
     dir: './dist',
@@ -76,10 +92,10 @@ const mainInput = {
 };
 
 const forwards = readdirSync('./src/forwards/')
-  .map(file => basename(file.replace('.ts', '')))
-  .filter(item => !['helper'].includes(item));
+  .map((file) => basename(file.replace('.ts', '')))
+  .filter((item) => !['helper'].includes(item));
 
-const forwardsConfig = forwards.map(item => ({
+const forwardsConfig = forwards.map((item) => ({
   ...mainInput,
   input: ['./src/forwards/', item].join(''),
   output: {

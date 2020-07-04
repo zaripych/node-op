@@ -9,17 +9,17 @@ import {
 } from '../../actions';
 import { runEpic, sharedState, ofType, Epic } from '../../building-blocks';
 
-const copyToClipboardEpic: Epic = actions =>
+const copyToClipboardEpic: Epic = (actions) =>
   actions.pipe(
     ofType(copyToClipboard),
-    switchMap(action =>
+    switchMap((action) =>
       from(
         clipboardCopy({
           value: action.field.value,
         })
       ).pipe(
         map(() => copyToClipboardSuccess(action.field)),
-        catchError(err => of(copyToClipboardFailed(action.field, err)))
+        catchError((err) => of(copyToClipboardFailed(action.field, err)))
       )
     )
   );
@@ -27,7 +27,7 @@ const copyToClipboardEpic: Epic = actions =>
 runEpic(copyToClipboardEpic);
 
 export const copyToClipboardRequest = sharedState(
-  actions =>
+  (actions) =>
     merge(
       actions.pipe(ofType(copyToClipboard)),
       actions.pipe(ofType(copyToClipboardReset)),

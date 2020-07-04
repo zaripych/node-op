@@ -3,10 +3,10 @@ import { sharedState, ofType } from '../../building-blocks';
 import { setOffset } from '../../actions';
 
 export const offset = sharedState(
-  actions =>
+  (actions) =>
     actions.pipe(
       ofType(setOffset),
-      map(action => action.offset)
+      map((action) => action.offset)
     ),
   {
     initial: 0,

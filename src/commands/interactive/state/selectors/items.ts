@@ -6,7 +6,7 @@ import { loadItems, loadItemsSuccess, loadItemsFailed } from '../../actions';
 import { runEpic, sharedState, ofType, Epic } from '../../building-blocks';
 import { vault } from './vault';
 
-const loadItemsEpic: Epic = actions =>
+const loadItemsEpic: Epic = (actions) =>
   actions.pipe(
     ofType(loadItems),
     withLatestFrom(vault),
@@ -17,8 +17,8 @@ const loadItemsEpic: Epic = actions =>
           verbosity: 0,
         })
       ).pipe(
-        map(next => loadItemsSuccess(mapItems(next))),
-        catchError(err => of(loadItemsFailed(err)))
+        map((next) => loadItemsSuccess(mapItems(next))),
+        catchError((err) => of(loadItemsFailed(err)))
       )
     )
   );
@@ -26,7 +26,7 @@ const loadItemsEpic: Epic = actions =>
 runEpic(loadItemsEpic);
 
 export const itemsRequest = sharedState<IRequest<IUiItem[]>>(
-  actions =>
+  (actions) =>
     merge(
       actions.pipe(ofType(loadItems)),
       actions.pipe(ofType(loadItemsSuccess)),
@@ -38,10 +38,10 @@ export const itemsRequest = sharedState<IRequest<IUiItem[]>>(
 );
 
 export const items = sharedState(
-  actions =>
+  (actions) =>
     actions.pipe(
       ofType(loadItemsSuccess),
-      map(action => action.data)
+      map((action) => action.data)
     ),
   {
     initial: [],

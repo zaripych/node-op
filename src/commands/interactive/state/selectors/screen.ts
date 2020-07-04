@@ -9,7 +9,7 @@ import {
 } from '../../actions';
 
 export const screen = sharedState(
-  actions =>
+  (actions) =>
     merge(
       actions.pipe(ofType(navigateToLog), mapTo('log' as const)),
       actions.pipe(ofType(navigateToSearch), mapTo('search' as const)),
@@ -20,7 +20,7 @@ export const screen = sharedState(
   }
 );
 
-const navigationEpic: Epic = actions =>
+const navigationEpic: Epic = (actions) =>
   actions.pipe(
     ofType(keyInput),
     withLatestFrom(screen),

@@ -5,10 +5,10 @@ import { take } from 'rxjs/operators';
 describe(sharedState.name, () => {
   it(
     'shared state returns same observable for same selector as long as it is not complete',
-    marbles(m => {
+    marbles((m) => {
       const actions = m.hot('--a--');
 
-      const selector = a => a;
+      const selector = (a) => a;
 
       const deps = {
         actions,
@@ -31,10 +31,10 @@ describe(sharedState.name, () => {
 
   it(
     'shared state unsubscribes and unregisters observable on completion',
-    marbles(m => {
+    marbles((m) => {
       const actions = m.hot('--a--');
 
-      const selector = a => a.pipe(take(1));
+      const selector = (a) => a.pipe(take(1));
 
       const deps = {
         actions,

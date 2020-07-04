@@ -12,7 +12,7 @@ interface IProps {
 const HEADER_HEIGHT = 3;
 const FOOTER_HEIGHT = 3;
 
-export const SearchItems: React.FC<IProps> = props => {
+export const SearchItems: React.FC<IProps> = (props) => {
   const { isRawModeSupported } = useAppInput();
   const {
     items,
@@ -67,7 +67,7 @@ export const SearchItems: React.FC<IProps> = props => {
           setOffset={setOffset}
           cursor={cursor}
           setCursor={setCursor}
-          renderCursor={currentlyAt => {
+          renderCursor={(currentlyAt) => {
             if (
               itemDetailsRequest.status === 'failed' &&
               filteredItems[currentlyAt]?.uuid === itemDetailsRequest.uuid

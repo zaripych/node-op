@@ -26,7 +26,7 @@ function useCopyToClipboardOnEnter(props: { fields: IUiItemDetailsFields[] }) {
   const [cursor, setCursor, cursors] = useStateWithActions(0);
 
   useEpicWhenMounted(
-    actions =>
+    (actions) =>
       actions.pipe(
         ofType(keyInput),
         withLatestFrom(cursors),
@@ -108,7 +108,7 @@ function useItemDetailsState() {
   };
 }
 
-export const ItemDetails: React.FC<IProps> = props => {
+export const ItemDetails: React.FC<IProps> = (props) => {
   const {
     title,
     fields,

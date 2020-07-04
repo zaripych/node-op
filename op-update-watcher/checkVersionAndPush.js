@@ -1,62 +1,62 @@
-const { spawnSync } = require("child_process");
-const { writeFileSync, readFileSync, existsSync } = require("fs");
-const path = require("path");
-const os = require("os");
-const { gt, gte } = require("semver");
-const octokit = require("@octokit/rest");
+const { spawnSync } = require('child_process');
+const { writeFileSync, readFileSync, existsSync } = require('fs');
+const path = require('path');
+const os = require('os');
+const { gt, gte } = require('semver');
+const octokit = require('@octokit/rest');
 const {
   determineLatestVersion,
   semVerFromOpVersion,
-  checkPage
-} = require("./determineLatestVersion");
-const rimraf = require("rimraf");
+  checkPage,
+} = require('./determineLatestVersion');
+const rimraf = require('rimraf');
 
-const pack = require("../package.json");
-const packageOpVersion = pack["op_version"];
+const pack = require('../package.json');
+const packageOpVersion = pack['op_version'];
 
-const rootDir = path.join(__dirname, "../");
-const cloneDirName = "node-op-temp";
-const cloneDir = path.join(rootDir, "node-op-temp");
+const rootDir = path.join(__dirname, '../');
+const cloneDirName = 'node-op-temp';
+const cloneDir = path.join(rootDir, 'node-op-temp');
 
-const gitUrl = repoCreds =>
-  `https://${repoCreds ? repoCreds + "@" : ""}github.com/zaripych/node-op.git`;
+const gitUrl = (repoCreds) =>
+  `https://${repoCreds ? repoCreds + '@' : ''}github.com/zaripych/node-op.git`;
 
 const url = gitUrl(process.env.GH_TOKEN);
-const branch = "master";
-const pushBranch = "fix/upgrade-op-version";
+const branch = 'master';
+const pushBranch = 'fix/upgrade-op-version';
 
 function updatePackageJsonIfRequired(version) {
-  if (typeof version !== "string") {
-    throw new Error("Expected semver version string");
+  if (typeof version !== 'string') {
+    throw new Error('Expected semver version string');
   }
-  const packageJsonPath = path.join(cloneDir, "package.json");
+  const packageJsonPath = path.join(cloneDir, 'package.json');
 
-  const contents = readFileSync(packageJsonPath, { encoding: "utf8" });
+  const contents = readFileSync(packageJsonPath, { encoding: 'utf8' });
 
   const packageJson = JSON.parse(contents);
 
-  const packageJsonOpVersion = packageJson["op_version"];
+  const packageJsonOpVersion = packageJson['op_version'];
 
-  if (typeof packageJsonOpVersion !== "string") {
-    throw new Error("Expected semver version string in the package json");
+  if (typeof packageJsonOpVersion !== 'string') {
+    throw new Error('Expected semver version string in the package json');
   }
 
   const oldVersion = semVerFromOpVersion(packageJsonOpVersion);
 
   if (gte(oldVersion, version)) {
     console.log(
-      "The version in the checked out code is already higher or equal",
+      'The version in the checked out code is already higher or equal',
       oldVersion
     );
     return false;
   }
 
-  packageJson["op_version"] = version;
+  packageJson['op_version'] = version;
 
   writeFileSync(
     packageJsonPath,
-    JSON.stringify(packageJson, undefined, "  ") + os.EOL,
-    { encoding: "utf8" }
+    JSON.stringify(packageJson, undefined, '  ') + os.EOL,
+    { encoding: 'utf8' }
   );
 
   return true;
@@ -69,17 +69,19 @@ function updatePackageJsonIfRequired(version) {
  * @param {import('child_process').SpawnSyncOptionsWithStringEncoding} options
  */
 function spawn(command, args, options) {
-  console.log(`${command} ${args.join(" ")}`);
+  console.log(`${command} ${args.join(' ')}`);
 
   const child = spawnSync(command, args, {
-    encoding: "utf8",
+    encoding: 'utf8',
     cwd: cloneDir, // <-- most of the commands below work in this directory, except gitClone
     env: process.env,
-    ...options
+    ...options,
   });
 
   if (child.output) {
-    console.log(child.output.filter(item => typeof item === "string").join(""));
+    console.log(
+      child.output.filter((item) => typeof item === 'string').join('')
+    );
   }
 
   if (child.error) {
@@ -121,48 +123,48 @@ function spawnStatus(command, args, options) {
 
 function gitClone() {
   if (existsSync(cloneDir)) {
-    console.log("Deleting", cloneDir);
+    console.log('Deleting', cloneDir);
     rimraf.sync(cloneDir);
   }
-  spawnOutput("git", ["clone", "-b", branch, url, cloneDirName], {
-    cwd: rootDir
+  spawnOutput('git', ['clone', '-b', branch, url, cloneDirName], {
+    cwd: rootDir,
   });
 }
 
 function gitBranchExists(b) {
-  const status = spawnStatus("git", ["show-branch", `origin/${b}`]);
+  const status = spawnStatus('git', ['show-branch', `origin/${b}`]);
   return status === 0;
 }
 
 function gitCheckout() {
   const branchExists = gitBranchExists(pushBranch);
   if (branchExists) {
-    spawnOutput("git", ["checkout", pushBranch]);
+    spawnOutput('git', ['checkout', pushBranch]);
   } else {
-    spawnOutput("git", ["checkout", "-b", pushBranch]);
+    spawnOutput('git', ['checkout', '-b', pushBranch]);
   }
 }
 
 function gitAdd() {
-  spawnOutput("git", ["add", "package.json"]);
+  spawnOutput('git', ['add', 'package.json']);
 }
 
 function gitStatus() {
-  return spawnOutput("git", ["status"]);
+  return spawnOutput('git', ['status']);
 }
 
 function gitCommit() {
-  spawnOutput("git", ["commit", "-m", "fix: upgrade op cli version"]);
+  spawnOutput('git', ['commit', '-m', 'fix: upgrade op cli version']);
 }
 
 function gitPush() {
-  spawnOutput("git", ["push", url, `HEAD:${pushBranch}`]);
+  spawnOutput('git', ['push', url, `HEAD:${pushBranch}`]);
 }
 
 determineLatestVersion()
-  .then(version => {
+  .then((version) => {
     if (!gt(version.semVer, semVerFromOpVersion(packageOpVersion))) {
-      console.log("No updates");
+      console.log('No updates');
       return;
     }
 
@@ -185,43 +187,43 @@ determineLatestVersion()
     gitPush();
 
     const kit = new octokit({
-      auth: process.env.GH_TOKEN
+      auth: process.env.GH_TOKEN,
     });
 
     return kit.pulls
       .list({
-        owner: "zaripych",
-        repo: "node-op",
-        state: "open",
-        base: "master",
-        head: "zaripych:fix/upgrade-op-version"
+        owner: 'zaripych',
+        repo: 'node-op',
+        state: 'open',
+        base: 'master',
+        head: 'zaripych:fix/upgrade-op-version',
       })
-      .then(pulls => {
+      .then((pulls) => {
         if (pulls.data.length !== 0) {
-          console.log("Pull request already open");
+          console.log('Pull request already open');
           return;
         }
 
         return kit.pulls
           .create({
-            owner: "zaripych",
-            repo: "node-op",
-            base: "master",
-            head: "fix/upgrade-op-version",
-            title: "fix/upgrade-op-version",
-            body: `Hi there @zaripych, according to ${checkPage}, it seems there is new version of \`op\` CLI available, please merge this pull request to make it available to users`
+            owner: 'zaripych',
+            repo: 'node-op',
+            base: 'master',
+            head: 'fix/upgrade-op-version',
+            title: 'fix/upgrade-op-version',
+            body: `Hi there @zaripych, according to ${checkPage}, it seems there is new version of \`op\` CLI available, please merge this pull request to make it available to users`,
           })
-          .then(result =>
+          .then((result) =>
             kit.pulls.createReviewRequest({
-              owner: "zaripych",
-              repo: "node-op",
+              owner: 'zaripych',
+              repo: 'node-op',
               pull_number: result.data.number,
-              reviewers: ["zaripych"]
+              reviewers: ['zaripych'],
             })
           );
       });
   })
-  .catch(err => {
-    console.error("Error happened", err);
+  .catch((err) => {
+    console.error('Error happened', err);
     process.exit(-1);
   });

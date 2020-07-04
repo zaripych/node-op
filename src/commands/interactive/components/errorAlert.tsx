@@ -7,7 +7,7 @@ interface IProps {
   retry?: () => void;
 }
 
-export const ErrorAlert: React.FC<IProps> = props => {
+export const ErrorAlert: React.FC<IProps> = (props) => {
   return (
     <Box flexDirection="column">
       <Box flexShrink={0}>
@@ -22,7 +22,7 @@ export const ErrorAlert: React.FC<IProps> = props => {
   );
 };
 
-export const HorizontalErrorAlert: React.FC<IProps> = props => {
+export const HorizontalErrorAlert: React.FC<IProps> = (props) => {
   return (
     <Box flexDirection="row">
       <Box flexShrink={0}>

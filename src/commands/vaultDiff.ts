@@ -17,7 +17,7 @@ interface IDiffProps {
 
 function findSingleFile(file: string, items: IItem[]) {
   const title = basename(file);
-  const filtered = items.filter(item => title === item?.overview?.title);
+  const filtered = items.filter((item) => title === item?.overview?.title);
 
   if (filtered.length === 0) {
     return null;
@@ -26,7 +26,7 @@ function findSingleFile(file: string, items: IItem[]) {
   if (filtered.length > 1) {
     throw new Error(
       `More than one document with title '${title}' found: [${filtered
-        .map(item => `"${item.uuid}"`)
+        .map((item) => `"${item.uuid}"`)
         .join(', ')}]`
     );
   }
@@ -67,7 +67,7 @@ async function diffFile(
             ...(props.vault && { vault: props.vault }),
           })
         : deps.createFile(fileTheirs),
-    errInfo =>
+    (errInfo) =>
       errInfo.withMessage(
         `Cannot download previous version of "${file}" from 1-Password`
       )
@@ -81,7 +81,7 @@ async function diffFile(
 
   await rethrowAsync(
     () => deps.unlink(fileTheirs),
-    errInfo =>
+    (errInfo) =>
       errInfo.withMessage(
         `Cannot delete original version of file "${file}" at "${fileTheirs}". Please delete it manually.`
       )
@@ -134,14 +134,14 @@ export async function vaultDiff(
         verbosity,
         ...(props.vault && { vault: props.vault }),
       }),
-    errInfo => errInfo.withMessage('Cannot list items in 1-Password vault')
+    (errInfo) => errInfo.withMessage('Cannot list items in 1-Password vault')
   );
 
   const filesAndItems = await Promise.all(
-    props.files.map(file =>
+    props.files.map((file) =>
       validateFile(file, items, {
         stat: deps.stat,
-      }).then(item => ({
+      }).then((item) => ({
         file,
         uuid: item?.uuid,
       }))

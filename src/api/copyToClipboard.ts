@@ -24,8 +24,8 @@ export async function clipboardCopy(props: ICopyProps) {
     await clipboardCopyOSC52(props.value);
   } else if (process.platform === 'linux') {
     await spawnAndCheck('xsel', ['--clipboard', '--input'], {
-      created: cp => {
-        cp.stdin.write(props.value, err => {
+      created: (cp) => {
+        cp.stdin.write(props.value, (err) => {
           if (err) {
             cp.emit('error', err);
           }
@@ -39,8 +39,8 @@ export async function clipboardCopy(props: ICopyProps) {
     });
   } else if (process.platform === 'darwin') {
     await spawnAndCheck('pbcopy', [], {
-      created: cp => {
-        cp.stdin.write(props.value, err => {
+      created: (cp) => {
+        cp.stdin.write(props.value, (err) => {
           if (err) {
             cp.emit('error', err);
           }

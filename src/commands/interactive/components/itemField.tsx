@@ -13,7 +13,7 @@ interface IProps {
   forwardRef?: (box: React.Component<BoxProps> | null) => void;
 }
 
-export const ItemField: React.FC<IProps> = props => {
+export const ItemField: React.FC<IProps> = (props) => {
   const newLineIndex = props.field.value.indexOf('\n');
   const firstLine =
     newLineIndex !== -1
@@ -48,13 +48,13 @@ export const FieldStatus = (
     appState.copyToClipboardRequest.pipe(
       skip(1),
       map(
-        request =>
+        (request) =>
           ('field' in request &&
             request.field === props.field &&
             request.status) ||
           ('not-this-item' as const)
       ),
-      switchMap(next => {
+      switchMap((next) => {
         if (next === 'success' || next === 'failed') {
           return concat(
             of(next),

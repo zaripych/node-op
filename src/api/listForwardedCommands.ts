@@ -17,8 +17,8 @@ export async function listForwardedCommands(
 
   const searchStrings = ['Available commands are:', 'Available Commands:'];
   const searchStringIndex = searchStrings
-    .map(str => result.indexOf(str))
-    .findIndex(item => item >= 0);
+    .map((str) => result.indexOf(str))
+    .findIndex((item) => item >= 0);
 
   if (searchStringIndex === -1) {
     return [];
@@ -41,10 +41,10 @@ export async function listForwardedCommands(
     )
     .trim()
     .split('\n')
-    .map(entry => entry.trim());
+    .map((entry) => entry.trim());
 
   return list
-    .map(entry => {
+    .map((entry) => {
       const wsIndex = entry.search(/\s/);
       if (wsIndex === -1) {
         return null;

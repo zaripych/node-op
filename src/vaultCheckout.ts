@@ -7,7 +7,7 @@ const parsed = program
   .description(
     'Download one or more files from 1-Password vault to current directory'
   )
-  .exitOverride(err => {
+  .exitOverride((err) => {
     if (err.message === '(outputHelp)') {
       return;
     }

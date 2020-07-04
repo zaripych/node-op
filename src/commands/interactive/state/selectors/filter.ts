@@ -10,20 +10,20 @@ import { setItemsFilter } from '../../actions';
 import { items } from './items';
 
 export const filter = sharedState(
-  actions =>
+  (actions) =>
     actions.pipe(
       ofType(setItemsFilter),
-      map(action => action.filter)
+      map((action) => action.filter)
     ),
   { initial: '' }
 );
 
 export const filteredItems = sharedState(
-  actions =>
+  (actions) =>
     combineLatest(
       actions.pipe(
         ofType(setItemsFilter),
-        map(action => action.filter.toLowerCase()),
+        map((action) => action.filter.toLowerCase()),
         distinctUntilChanged(),
         debounceTime(250),
         startWith('')
@@ -33,7 +33,7 @@ export const filteredItems = sharedState(
       map(([filterText, lastItems]) =>
         filterText
           ? lastItems.filter(
-              item =>
+              (item) =>
                 item.title.toLowerCase().includes(filterText) ||
                 item.description?.includes(filterText) ||
                 item.urlHost?.includes(filterText)

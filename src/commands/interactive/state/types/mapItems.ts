@@ -25,7 +25,7 @@ const typeByTemplateUuid: Record<string, ItemType> = {
 };
 
 export function mapItems(items: IItem[]): IUiItem[] {
-  const mapped = items.map(item => {
+  const mapped = items.map((item) => {
     const url = catchSync(() => new URL(item.overview.url).host);
     const result: IUiItem = {
       uuid: item.uuid,
@@ -79,7 +79,8 @@ function mapSectionField(
 
 function mapSection(section: IDetailSection): IUiItemDetailsSection | null {
   const fields =
-    section.fields?.map(field => mapSectionField(field)).filter(isTruthy) ?? [];
+    section.fields?.map((field) => mapSectionField(field)).filter(isTruthy) ??
+    [];
   if (fields.length === 0) {
     return null;
   }
@@ -92,11 +93,12 @@ function mapSection(section: IDetailSection): IUiItemDetailsSection | null {
 export function mapItemDetails(item: IItemDetails): IUiItemDetails {
   const url = catchSync(() => new URL(item.overview.url).host);
   const allFields =
-    item.details.fields?.map(field => mapDetailField(field)).filter(isTruthy) ??
-    [];
+    item.details.fields
+      ?.map((field) => mapDetailField(field))
+      .filter(isTruthy) ?? [];
   const allSections =
     item.details.sections
-      ?.map(section => mapSection(section))
+      ?.map((section) => mapSection(section))
       .filter(isTruthy) ?? [];
   const result: IUiItemDetails = {
     uuid: item.uuid,
@@ -113,10 +115,10 @@ export function mapItemDetails(item: IItemDetails): IUiItemDetails {
     fields: [
       ...allFields,
       ...allSections
-        .filter(section => section.title.length === 0)
+        .filter((section) => section.title.length === 0)
         .reduce((acc, section) => [...acc, ...section.fields], []),
     ],
-    sections: allSections.filter(section => section.title.length > 0),
+    sections: allSections.filter((section) => section.title.length > 0),
     notes: item.details.notesPlain,
     original: item,
   };

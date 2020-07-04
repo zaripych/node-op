@@ -5,7 +5,7 @@ const program = new commander.Command();
 
 program
   .description('Lookup for passwords in interactive terminal')
-  .exitOverride(err => {
+  .exitOverride((err) => {
     if (err.message === '(outputHelp)') {
       return;
     }

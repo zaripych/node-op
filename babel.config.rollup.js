@@ -3,7 +3,7 @@
 const { babelConfig } = require('ts-deps');
 
 const config = babelConfig({
-  presetEnvConfig: defConf => ({
+  presetEnvConfig: (defConf) => ({
     ...defConf,
     modules: false,
   }),

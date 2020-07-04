@@ -29,10 +29,10 @@ export async function rethrowAsync<O>(
     const error = ensureError(err);
     const newError = throwError({
       rethrow: () => new AggregateError(error.message, error),
-      withMessage: msg => new AggregateError(msg, error),
+      withMessage: (msg) => new AggregateError(msg, error),
       thrown: error,
       // tslint:disable-next-line:strict-string-expressions
-      toString: () => `${error}`,
+      toString: () => `${String(error)}`,
     }) as Error | undefined;
     if (newError) {
       throw newError;

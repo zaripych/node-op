@@ -34,7 +34,7 @@ function screenSize() {
   };
 }
 
-export const Landing: React.FC<{}> = () => {
+export const Landing: React.FC = () => {
   const state = useLandingState();
   const screenSz = screenSize();
   return (

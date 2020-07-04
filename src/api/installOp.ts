@@ -75,17 +75,19 @@ export async function installOnePassword() {
   console.log('node-op: Will download the binary ... ');
 
   const res = await new Promise<IncomingMessage>((resolve, reject) => {
-    const req = get(url, incoming => {
+    const req = get(url, (incoming) => {
       if (incoming.statusCode !== 200) {
         throw new Error(
-          `HTTP ${incoming.statusCode}: ${incoming.statusMessage}`
+          `HTTP ${String(incoming.statusCode)}: ${String(
+            incoming.statusMessage
+          )}`
         );
       }
 
       resolve(incoming);
     });
 
-    req.on('error', err => {
+    req.on('error', (err) => {
       reject(err);
     });
 
@@ -193,7 +195,9 @@ function unpackPkgOnMacOS(pkgPath: string) {
     if (result.status !== 0) {
       logPkgUtilOutput();
       throw new Error(
-        `Cannot unpack .pkg file. pkgutil quit with status ${result.status}`
+        `Cannot unpack .pkg file. pkgutil quit with status ${String(
+          result.status
+        )}`
       );
     }
 

@@ -8,7 +8,7 @@ interface IProps {
   viewportHeight: number;
 }
 
-export const LogItems: React.FC<IProps> = props => {
+export const LogItems: React.FC<IProps> = (props) => {
   const { lines } = useLog();
 
   return (

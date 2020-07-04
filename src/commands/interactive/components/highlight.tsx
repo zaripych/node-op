@@ -22,7 +22,7 @@ function* allIndexes(text: string, substring: string) {
   }
 }
 
-export const Highlight: React.FC<IProps> = props => {
+export const Highlight: React.FC<IProps> = (props) => {
   if (!props.text) {
     return null;
   }

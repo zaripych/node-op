@@ -116,7 +116,7 @@ export const unarchiveTarGz = async (tar: string, out: string) => {
     stream.once('finish', () => {
       res();
     });
-    stream.once('error', err => {
+    stream.once('error', (err) => {
       rej(err);
     });
   });
@@ -189,7 +189,7 @@ export function spawnAndCheck(
   }
 
   return new Promise((res, rej) => {
-    proc.once('error', err => {
+    proc.once('error', (err) => {
       rej(err);
     });
     proc.once('exit', (code, signal) => {
@@ -197,7 +197,9 @@ export function spawnAndCheck(
         if (typeof code === 'number') {
           rej(new Error(`process ${cmd} quit with non-zero code: ${code}`));
         } else {
-          rej(new Error(`process ${cmd} was terminated with ${signal}`));
+          rej(
+            new Error(`process ${cmd} was terminated with ${String(signal)}`)
+          );
         }
       } else {
         res(output.join(''));

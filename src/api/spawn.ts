@@ -11,7 +11,7 @@ export function spawnSyncAndCheck(
   });
 
   if (proc.error) {
-    throw new Error(`cannot start ${cmd}: ${proc.error.stack}`);
+    throw new Error(`cannot start ${cmd}: ${String(proc.error.stack)}`);
   }
 
   if (proc.signal) {
@@ -19,7 +19,7 @@ export function spawnSyncAndCheck(
   }
 
   if (proc.status !== 0) {
-    throw new Error(`${cmd} quit with non-zero code: ${proc.status}`);
+    throw new Error(`${cmd} quit with non-zero code: ${String(proc.status)}`);
   }
 
   return proc.output.join('');
@@ -85,7 +85,9 @@ export function spawnAndCheck(
         } else {
           rej(
             new Error(
-              `process "${command}" was terminated with ${signal}${additional}`
+              `process "${command}" was terminated with ${String(
+                signal
+              )}${additional}`
             )
           );
         }
@@ -94,7 +96,7 @@ export function spawnAndCheck(
       }
     };
 
-    proc.on('error', err => {
+    proc.on('error', (err) => {
       rej(err);
     });
     proc.on('exit', exitHandler);

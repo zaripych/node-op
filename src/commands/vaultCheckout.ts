@@ -25,7 +25,7 @@ async function processFile(
   }
 ) {
   const title = basename(file);
-  const filtered = items.filter(item => title === item?.overview?.title);
+  const filtered = items.filter((item) => title === item?.overview?.title);
 
   if (filtered.length === 0) {
     throw new Error(`No document with title '${file}' found`);
@@ -46,7 +46,7 @@ async function processFile(
         ...(props.vault && { vault: props.vault }),
         ...(typeof props.force === 'boolean' && { force: props.force }),
       }),
-    errInfo =>
+    (errInfo) =>
       errInfo.withMessage('Cannot download document from 1-Password vault')
   );
 }
@@ -86,11 +86,11 @@ export async function vaultCheckout(
         ...(props.vault && { vault: props.vault }),
         verbosity,
       }),
-    errInfo => errInfo.withMessage('Cannot list items in 1-Password vault')
+    (errInfo) => errInfo.withMessage('Cannot list items in 1-Password vault')
   );
 
   const results = await Promise.all(
-    props.files.map(file =>
+    props.files.map((file) =>
       catchAsync(() =>
         processFile(props, file, items, {
           getDocument: deps.getDocument,
@@ -99,7 +99,7 @@ export async function vaultCheckout(
     )
   );
 
-  const errorResults = results.map(item => item.error).filter(isError);
+  const errorResults = results.map((item) => item.error).filter(isError);
 
   if (errorResults.length > 0) {
     if (errorResults.length > 1) {

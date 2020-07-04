@@ -17,7 +17,7 @@ export const useActionBinding = <P extends unknown[]>(
   deps: React.DependencyList = []
 ) => {
   const callback = useActionTrigger<P>(
-    triggers => triggers.pipe(switchMap(args => bindCb(...args))),
+    (triggers) => triggers.pipe(switchMap((args) => bindCb(...args))),
     deps
   );
   return React.useCallback((...args: P) => callback(args), [callback]);
@@ -29,7 +29,7 @@ export const useStateActionBinding = <T>(
   deps: React.DependencyList = []
 ) => {
   return useActionTrigger<React.SetStateAction<T>>(
-    triggers =>
+    (triggers) =>
       triggers.pipe(
         withLatestFrom(state),
         switchMap(([setStateAction, value]) => {
@@ -41,14 +41,17 @@ export const useStateActionBinding = <T>(
           }
         })
       ),
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     deps.includes(state) ? deps : [...deps, state]
   );
 };
 
 export const useStateWithActions = <T>(initial: T) => {
-  const setStateAction: ActionCreator<IAction & {
-    next: T;
-  }> = React.useCallback(
+  const setStateAction: ActionCreator<
+    IAction & {
+      next: T;
+    }
+  > = React.useCallback(
     (next: T) => ({
       type: setStateAction,
       next,
@@ -57,10 +60,10 @@ export const useStateWithActions = <T>(initial: T) => {
   );
 
   const [state, observable] = useSelect<T>(
-    source =>
+    (source) =>
       source.pipe(
         ofType(setStateAction),
-        map(action => action.next)
+        map((action) => action.next)
       ),
     {
       initial,
@@ -70,7 +73,7 @@ export const useStateWithActions = <T>(initial: T) => {
 
   const setState = useStateActionBinding(
     observable,
-    next => of(setStateAction(next)),
+    (next) => of(setStateAction(next)),
     [setStateAction]
   );
 
@@ -84,9 +87,11 @@ export const useActionTrigger = <P>(
   ) => Observable<IAction>,
   deps: React.DependencyList = []
 ): ((arg: P) => void) => {
-  const actionTrigger: ActionCreator<IAction & {
-    parameter: P;
-  }> = React.useCallback(
+  const actionTrigger: ActionCreator<
+    IAction & {
+      parameter: P;
+    }
+  > = React.useCallback(
     (parameter: P) => ({
       type: actionTrigger,
       parameter,
@@ -95,18 +100,19 @@ export const useActionTrigger = <P>(
   );
 
   useEpicWhenMounted(
-    incoming =>
+    (incoming) =>
       project(
         incoming.pipe(
           ofType(actionTrigger),
-          map(item => item.parameter)
+          map((item) => item.parameter)
         ),
         incoming
       ),
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     [...deps, actionTrigger]
   );
 
-  const callback: (arg: P) => void = React.useCallback(parameter => {
+  const callback: (arg: P) => void = React.useCallback((parameter) => {
     actions.next(actionTrigger(parameter));
   }, []);
 
@@ -158,7 +164,7 @@ export function useSelect<T>(
           ? sharedState(selector, { initial: computedInitial })
           : sharedState(selector)
         : selector.pipe(
-            stream =>
+            (stream) =>
               needsInitial ? stream.pipe(startWith(computedInitial)) : stream,
             distinctUntilChanged()
           ),
@@ -167,7 +173,7 @@ export function useSelect<T>(
 
   React.useEffect(() => {
     const subscription = observable.subscribe({
-      next: result => {
+      next: (result) => {
         setState(result);
       },
     });
@@ -183,11 +189,12 @@ export const useEpicWhenMounted = (
 ) => {
   React.useEffect(() => {
     const subscription = epic(actions.asObservable()).subscribe({
-      next: action => {
+      next: (action) => {
         actions.next(action);
       },
     });
     return () => subscription.unsubscribe();
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   }, [actions, ...deps]);
 };
 

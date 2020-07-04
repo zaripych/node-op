@@ -39,7 +39,7 @@ export const useCursorRef = (props: {
       if (typeof changer === 'number') {
         setCursorCore(clampCursor(changer, props.itemCount));
       } else {
-        setCursorCore(value => clampCursor(changer(value), props.itemCount));
+        setCursorCore((value) => clampCursor(changer(value), props.itemCount));
       }
     },
     [setCursorCore, props.itemCount]
@@ -52,7 +52,7 @@ export const useCursorRef = (props: {
   }, [cursor, props.cursorChanged]);
 
   React.useEffect(() => {
-    setCursorCore(value => {
+    setCursorCore((value) => {
       const next = clampCursor(value, props.itemCount);
       if (next !== value) {
         return next;
@@ -68,7 +68,7 @@ export const useCursorRef = (props: {
   };
 };
 
-export const VerticalLimitView: React.FC<ILimitViewProps> = props => {
+export const VerticalLimitView: React.FC<ILimitViewProps> = (props) => {
   const totalHeight = props.itemHeight * props.itemCount;
   const viewportHeight = props.viewportHeight;
   const maxOffset = totalHeight - viewportHeight - 1;
@@ -112,7 +112,7 @@ export const VerticalLimitView: React.FC<ILimitViewProps> = props => {
       if (typeof changer === 'number') {
         setOffsetCore(limit(changer));
       } else {
-        setOffsetCore(value => limit(changer(value)));
+        setOffsetCore((value) => limit(changer(value)));
       }
     },
     [setOffsetCore, maxOffset]
@@ -130,10 +130,10 @@ export const VerticalLimitView: React.FC<ILimitViewProps> = props => {
       cursor / props.itemHeight >=
       offset / props.itemHeight + viewportHeight
     ) {
-      setOffset(v => v + 5);
+      setOffset((v) => v + 5);
     }
     if (cursor / props.itemHeight <= offset / props.itemHeight) {
-      setOffset(v => v - 5);
+      setOffset((v) => v - 5);
     }
   }, [
     cursor / props.itemHeight >= offset / props.itemHeight + viewportHeight ||
@@ -151,23 +151,23 @@ export const VerticalLimitView: React.FC<ILimitViewProps> = props => {
       setOffset(maxOffset);
     }
     if (key.pageUp) {
-      setOffset(value => value - viewportHeight);
+      setOffset((value) => value - viewportHeight);
     }
     if (key.pageDown) {
-      setOffset(value => value + viewportHeight);
+      setOffset((value) => value + viewportHeight);
     }
     if (key.upArrow) {
       if (props.showCursor) {
-        setCursor(value => value - 1);
+        setCursor((value) => value - 1);
       } else {
-        setOffset(value => value - 1);
+        setOffset((value) => value - 1);
       }
     }
     if (key.downArrow) {
       if (props.showCursor) {
-        setCursor(value => value + 1);
+        setCursor((value) => value + 1);
       } else {
-        setOffset(value => value + 1);
+        setOffset((value) => value + 1);
       }
     }
   });

@@ -11,7 +11,7 @@ import {
 import { runEpic, sharedState, ofType, Epic } from '../../building-blocks';
 import { vault } from './vault';
 
-const loadItemDetailsEpic: Epic = actions =>
+const loadItemDetailsEpic: Epic = (actions) =>
   actions.pipe(
     ofType(loadItemDetails),
     withLatestFrom(vault),
@@ -23,10 +23,10 @@ const loadItemDetailsEpic: Epic = actions =>
           verbosity: 0,
         })
       ).pipe(
-        map(details =>
+        map((details) =>
           loadItemDetailsSuccess(action.uuid, mapItemDetails(details))
         ),
-        catchError(err => of(loadItemDetailsFailed(action.uuid, err)))
+        catchError((err) => of(loadItemDetailsFailed(action.uuid, err)))
       )
     )
   );
@@ -34,7 +34,7 @@ const loadItemDetailsEpic: Epic = actions =>
 runEpic(loadItemDetailsEpic);
 
 export const itemDetailsRequest = sharedState(
-  actions =>
+  (actions) =>
     merge(
       actions.pipe(ofType(loadItemDetailsReset)),
       actions.pipe(ofType(loadItemDetails)),
@@ -47,10 +47,10 @@ export const itemDetailsRequest = sharedState(
 );
 
 export const itemDetails = sharedState(
-  actions =>
+  (actions) =>
     actions.pipe(
       ofType(loadItemDetailsSuccess),
-      map(action => action.data)
+      map((action) => action.data)
     ),
   {
     initial: undefined,

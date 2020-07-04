@@ -17,13 +17,13 @@ export const ItemStatus = (props: { item: IUiItem }) => {
     appState.itemDetailsRequest.pipe(
       skip(1),
       map(
-        request =>
+        (request) =>
           ('uuid' in request &&
             request.uuid === props.item.uuid &&
             request.status) ||
           ('not-this-item' as const)
       ),
-      switchMap(next => {
+      switchMap((next) => {
         if (next === 'success' || next === 'failed') {
           return concat(
             of(next),
@@ -76,10 +76,10 @@ export const ItemRow = (props: { item: IUiItem; highlight: string }) => {
   );
 };
 
-export const ItemsList: React.FC<IProps> = props => {
+export const ItemsList: React.FC<IProps> = (props) => {
   return (
     <React.Fragment>
-      {props.items.map(item => (
+      {props.items.map((item) => (
         <ItemRow key={item.uuid} item={item} highlight={props.highlight} />
       ))}
     </React.Fragment>

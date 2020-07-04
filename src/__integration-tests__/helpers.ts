@@ -197,7 +197,9 @@ export function spawnAndCheck(
         if (typeof code === 'number') {
           rej(new Error(`process ${cmd} quit with non-zero code: ${code}`));
         } else {
-          rej(new Error(`process ${cmd} was terminated with ${signal}`));
+          rej(
+            new Error(`process ${cmd} was terminated with ${String(signal)}`)
+          );
         }
       } else {
         res(output.join(''));

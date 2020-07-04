@@ -172,7 +172,9 @@ describe('given built and packaged library', () => {
         shell: process.platform === 'win32',
       });
 
-      const pkgJson = await readJSON(join(TEST_DIR, 'package.json'));
+      const pkgJson = (await readJSON(join(TEST_DIR, 'package.json'))) as {
+        scripts?: Record<string, string>;
+      };
       const modifiedPkgJson = {
         ...pkgJson,
         scripts: { ...(pkgJson.scripts || {}), op: 'op' },

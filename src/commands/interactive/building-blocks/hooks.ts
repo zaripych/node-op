@@ -41,6 +41,7 @@ export const useStateActionBinding = <T>(
           }
         })
       ),
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     deps.includes(state) ? deps : [...deps, state]
   );
 };
@@ -107,6 +108,7 @@ export const useActionTrigger = <P>(
         ),
         incoming
       ),
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     [...deps, actionTrigger]
   );
 
@@ -192,6 +194,7 @@ export const useEpicWhenMounted = (
       },
     });
     return () => subscription.unsubscribe();
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   }, [actions, ...deps]);
 };
 

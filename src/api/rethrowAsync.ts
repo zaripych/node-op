@@ -32,7 +32,7 @@ export async function rethrowAsync<O>(
       withMessage: (msg) => new AggregateError(msg, error),
       thrown: error,
       // tslint:disable-next-line:strict-string-expressions
-      toString: () => `${error}`,
+      toString: () => `${String(error)}`,
     }) as Error | undefined;
     if (newError) {
       throw newError;

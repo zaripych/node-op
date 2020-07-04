@@ -1,5 +1,6 @@
 import { installOnePassword, listForwardedCommands, ICommand } from '../api';
 import { pathExists } from 'fs-extra';
+import { join } from 'path';
 
 describe('after op is installed', () => {
   beforeAll(async () => {
@@ -85,8 +86,16 @@ describe('after op is installed', () => {
           },
         ]
       `);
-      for (const cmd of commands) {
-        expect(await pathExists(`../forwards/${cmd.command}.ts`));
+
+      for (const cmd of commands.filter(
+        (item) => !['help'].includes(item.command)
+      )) {
+        const exists = await pathExists(
+          join(__dirname, `../forwards/${cmd.command}.ts`)
+        );
+        expect(
+          `pathExists('../forwards/${cmd.command}.ts) = ${String(exists)}`
+        ).toBe(`pathExists('../forwards/${cmd.command}.ts) = true`);
       }
     });
   });

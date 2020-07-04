@@ -78,7 +78,9 @@ export async function installOnePassword() {
     const req = get(url, (incoming) => {
       if (incoming.statusCode !== 200) {
         throw new Error(
-          `HTTP ${incoming.statusCode}: ${incoming.statusMessage}`
+          `HTTP ${String(incoming.statusCode)}: ${String(
+            incoming.statusMessage
+          )}`
         );
       }
 
@@ -193,7 +195,9 @@ function unpackPkgOnMacOS(pkgPath: string) {
     if (result.status !== 0) {
       logPkgUtilOutput();
       throw new Error(
-        `Cannot unpack .pkg file. pkgutil quit with status ${result.status}`
+        `Cannot unpack .pkg file. pkgutil quit with status ${String(
+          result.status
+        )}`
       );
     }
 

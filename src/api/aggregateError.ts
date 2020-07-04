@@ -4,7 +4,9 @@ const innerErrorsToMessage = (pad: string, ...errors: Error[]) => {
   return errors.reduce((acc, val) => {
     const valStr =
       // tslint:disable-next-line:strict-string-expressions
-      val instanceof AggregateError ? val.description.trim() : `${val}`.trim();
+      val instanceof AggregateError
+        ? val.description.trim()
+        : `${String(val)}`.trim();
     return acc + `${pad}${valStr}`.replace('\n', `\n${pad}`) + '\n';
   }, '');
 };

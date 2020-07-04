@@ -55,7 +55,8 @@ describe(vaultCheckout.name, () => {
     const params: Parameters<typeof vaultCheckout> = [
       {
         files: ['file'],
-        force: 1 as any,
+        // @ts-expect-error
+        force: 1,
       },
       {
         listItems: jest.fn(() => Promise.resolve([])),
@@ -73,7 +74,8 @@ describe(vaultCheckout.name, () => {
   describe('given invalid files parameters', () => {
     const params: Parameters<typeof vaultCheckout> = [
       {
-        files: 'xxx' as any,
+        // @ts-expect-error
+        files: 'xxx',
       },
       {
         listItems: jest.fn(() => Promise.resolve([])),
@@ -339,13 +341,13 @@ describe(vaultCheckout.name, () => {
     });
   });
 
-  describe('given single file, with matching item in the vault', () => {
+  describe('given single file, with matching item in the vault and forced checkout', () => {
     const params: Parameters<typeof vaultCheckout> = [
       {
         vault: 'vault',
         files: ['file'],
         force: true,
-      } as any,
+      },
       {
         listItems: jest.fn(() =>
           Promise.resolve([

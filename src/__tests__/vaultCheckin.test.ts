@@ -41,7 +41,8 @@ describe(vaultCheckin.name, () => {
   describe('given invalid files', () => {
     const params: Parameters<typeof vaultCheckin> = [
       {
-        files: 'x' as any,
+        // @ts-expect-error
+        files: 'x',
       },
       anyDeps(),
     ];
@@ -56,8 +57,10 @@ describe(vaultCheckin.name, () => {
   describe('given invalid trash', () => {
     const params: Parameters<typeof vaultCheckin> = [
       {
-        files: 'x' as any,
-        trash: 1 as any,
+        // @ts-expect-error
+        files: 'x',
+        // @ts-expect-error
+        trash: 1,
       },
       anyDeps(),
     ];
@@ -72,8 +75,10 @@ describe(vaultCheckin.name, () => {
   describe('given invalid vault', () => {
     const params: Parameters<typeof vaultCheckin> = [
       {
-        files: 'x' as any,
-        vault: 1 as any,
+        // @ts-expect-error
+        files: 'x',
+        // @ts-expect-error
+        vault: 1,
       },
       anyDeps(),
     ];

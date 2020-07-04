@@ -27,6 +27,7 @@ describe(createStateWithInitial.name, () => {
     })
   );
 
+  // eslint-disable-next-line jest/expect-expect
   it(
     'created state never unsubscribes from actions',
     marbles((m) => {
@@ -46,6 +47,7 @@ describe(createStateWithInitial.name, () => {
     })
   );
 
+  // eslint-disable-next-line jest/expect-expect
   it(
     'created state unsubscribes from actions complete, which is never',
     marbles((m) => {
@@ -64,6 +66,7 @@ describe(createStateWithInitial.name, () => {
     })
   );
 
+  // eslint-disable-next-line jest/expect-expect
   it(
     'created state unsubscribes when we complete subscription in selector',
     marbles((m) => {

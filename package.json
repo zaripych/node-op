@@ -82,7 +82,7 @@
   "devDependencies": {
     "@babel/preset-react": "7.10.4",
     "@octokit/rest": "18.0.0",
-    "@rollup/plugin-commonjs": "11.0.2",
+    "@rollup/plugin-commonjs": "13.0.0",
     "@rollup/plugin-json": "4.1.0",
     "@rollup/plugin-node-resolve": "8.1.0",
     "@types/adm-zip": "0.4.33",

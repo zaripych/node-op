@@ -108,7 +108,7 @@
     "rollup-plugin-babel": "4.4.0",
     "rxjs": "6.6.0",
     "rxjs-marbles": "6.0.1",
-    "rxjs-spy": "7.5.2",
+    "rxjs-spy": "7.5.3",
     "selenium-webdriver": "3.6.0",
     "semver": "7.3.2",
     "ts-deps": "0.15.9",

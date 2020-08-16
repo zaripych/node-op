@@ -1,8 +1,9 @@
 {
   "name": "node-op",
   "version": "0.0.0-development",
-  "description": "One password CLI installer",
+  "description": "Interactive 1Password CLI and installer",
   "keywords": [
+    "1password",
     "1-password",
     "one-password",
     "cli",

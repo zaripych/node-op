@@ -1,5 +1,5 @@
 import React from 'react';
-import { StdinContext } from 'ink';
+import { useStdin } from 'ink';
 import { IKey, keyInput } from '../actions';
 import { useActionBinding } from '../building-blocks';
 import { of } from 'rxjs';
@@ -9,9 +9,7 @@ export function dispatchAppInput() {
 }
 
 export function useAppInput(inputHandler?: (input: string, key: IKey) => void) {
-  const { stdin, setRawMode, isRawModeSupported } = React.useContext(
-    StdinContext
-  );
+  const { stdin, setRawMode, isRawModeSupported } = useStdin();
 
   if (!inputHandler) {
     return { isRawModeSupported };
@@ -108,9 +106,13 @@ export function useAppInput(inputHandler?: (input: string, key: IKey) => void) {
       inputHandler(input, key);
     };
 
-    stdin.on('data', handleData);
+    if (stdin) {
+      stdin.on('data', handleData);
+    }
     return () => {
-      stdin.off('data', handleData);
+      if (stdin) {
+        stdin.off('data', handleData);
+      }
     };
   }, [stdin, inputHandler]);
 

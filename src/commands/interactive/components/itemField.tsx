@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Color, BoxProps } from 'ink';
+import { Box, Text, BoxProps, DOMElement } from 'ink';
 import { IUiItemDetailsFields, appState } from '../state';
 import { useSelect } from '../building-blocks';
 import { skip, map, switchMap } from 'rxjs/operators';
@@ -10,7 +10,7 @@ interface IProps {
   titleColumnWidth: number;
   valueColumnWidth: number;
   field: IUiItemDetailsFields;
-  forwardRef?: (box: React.Component<BoxProps> | null) => void;
+  forwardRef?: (box: DOMElement | null) => void;
 }
 
 export const ItemField: React.FC<IProps> = (props) => {
@@ -28,14 +28,14 @@ export const ItemField: React.FC<IProps> = (props) => {
   return (
     <Box flexDirection="row" ref={props.forwardRef}>
       <Box width={props.titleColumnWidth}>
-        <Color gray>{props.field.title}</Color>
+        <Text color="gray">{props.field.title}</Text>
       </Box>
-      <Box marginLeft={1} textWrap="truncate" height={1}>
-        <Color green>
+      <Box marginLeft={1} height={1}>
+        <Text color="green" wrap="truncate">
           {props.field.concealed
             ? '*'.repeat(Math.min(5, Math.max(3, props.field.value.length)))
             : firstLine}
-        </Color>
+        </Text>
       </Box>
     </Box>
   );
@@ -75,12 +75,12 @@ export const FieldStatus = (
   return (
     <Box width={1} {...rest}>
       {status === 'started' && (
-        <Color green>
+        <Text color="green">
           <Spinner type={'dots'} />
-        </Color>
+        </Text>
       )}
-      {status === 'failed' && <Color red>✗</Color>}
-      {status === 'success' && <Color green>✓</Color>}
+      {status === 'failed' && <Text color="red">✗</Text>}
+      {status === 'success' && <Text color="green">✓</Text>}
     </Box>
   );
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Color, Box } from 'ink';
+import { Text, Box } from 'ink';
 import { ItemsList } from './itemsList';
 import { VerticalLimitView } from './limitView';
 import { useAppInput, useSearchItems } from '../hooks';
@@ -31,26 +31,26 @@ export const SearchItems: React.FC<IProps> = (props) => {
     <React.Fragment>
       <Box flexShrink={0} marginBottom={1} flexDirection="column">
         <Box flexShrink={0}>
-          <Color>
-            Loaded <Color green>{items.length}</Color> items
+          <Text>
+            Loaded <Text color="green">{items.length}</Text> items
             {filterText && (
-              <Box>
-                , <Color green>{filteredItems.length}</Color> items match the
-                search string
-              </Box>
+              <React.Fragment>
+                , <Text color="green">{filteredItems.length}</Text> items match
+                the search string
+              </React.Fragment>
             )}
-          </Color>
+          </Text>
         </Box>
         {isRawModeSupported && (
           <Box flexDirection="row">
-            <Color white>Filter: </Color>[
-            <React.Fragment>
-              {filterText && <Color white>{filterText}</Color>}
+            <Text color="white">Filter: </Text>
+            <Text>
+              [{filterText && <Text color="white">{filterText}</Text>}
               {!filterText && (
-                <Color gray>Start typing or copy-paste to filter</Color>
+                <Text color="gray">Start typing or copy-paste to filter</Text>
               )}
-            </React.Fragment>
-            ]
+              ]
+            </Text>
           </Box>
         )}
       </Box>
@@ -72,9 +72,9 @@ export const SearchItems: React.FC<IProps> = (props) => {
               itemDetailsRequest.status === 'failed' &&
               filteredItems[currentlyAt]?.uuid === itemDetailsRequest.uuid
             ) {
-              return <Color red>{'>'}</Color>;
+              return <Text color="red">{'>'}</Text>;
             }
-            return <Color green>{'>'}</Color>;
+            return <Text color="green">{'>'}</Text>;
           }}
           render={(start, end) => {
             const currentItems = React.useMemo(

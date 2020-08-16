@@ -1,5 +1,5 @@
 import React from 'react';
-import { Color } from 'ink';
+import { Text } from 'ink';
 
 interface IProps {
   value: string;
@@ -7,8 +7,8 @@ interface IProps {
 
 export const Keystroke: React.FC<IProps> = (props) => {
   return (
-    <Color red bold>
+    <Text color="red" bold>
       {props.value}
-    </Color>
+    </Text>
   );
 };

@@ -1,0 +1,41 @@
+diff --git a/node_modules/ink/build/output.js b/node_modules/ink/build/output.js
+index e8179ec..025349e 100644
+--- a/node_modules/ink/build/output.js
++++ b/node_modules/ink/build/output.js
+@@ -3,8 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
+     return (mod && mod.__esModule) ? mod : { "default": mod };
+ };
+ Object.defineProperty(exports, "__esModule", { value: true });
+-const slice_ansi_1 = __importDefault(require("slice-ansi"));
+-const string_length_1 = __importDefault(require("string-length"));
++const _slice_ansi_1 = __importDefault(require("slice-ansi"));
++const _string_length_1 = __importDefault(require("string-length"));
++const _string_width_1 = __importDefault(require("string-width"));
+ class Output {
+     constructor(options) {
+         // Initialize output array with a specific set of rows, so that margin/padding at the bottom is preserved
+@@ -35,14 +36,20 @@ class Output {
+                 if (!currentLine) {
+                     continue;
+                 }
+-                const length = string_length_1.default(line);
+                 for (const transformer of transformers) {
+                     line = transformer(line);
+                 }
++
++                const length = _string_length_1.default(line);
++                const start = _slice_ansi_1.default(currentLine, 0, x);
++                const startLen = _string_length_1.default(start);
++                const startWid = _string_width_1.default(start);
++                const xCorrected = x - (startWid - startLen);
++
+                 output[y + offsetY] =
+-                    slice_ansi_1.default(currentLine, 0, x) +
+-                        line +
+-                        slice_ansi_1.default(currentLine, x + length);
++                  _slice_ansi_1.default(currentLine, 0, xCorrected) +
++                  line +
++                  _slice_ansi_1.default(currentLine, xCorrected + length);
+                 offsetY++;
+             }
+         }

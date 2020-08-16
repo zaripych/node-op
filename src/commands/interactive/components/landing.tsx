@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Color } from 'ink';
+import { Box, Text } from 'ink';
 import Spinner from 'ink-spinner';
 import { ErrorAlert } from './errorAlert';
 import { SearchItems } from './searchItems';
@@ -43,10 +43,12 @@ export const Landing: React.FC = () => {
         <React.Fragment>
           {state.itemsRequest.status === 'started' && (
             <Box>
-              <Color green>
+              <Text color="green">
                 <Spinner type="dots" />
-              </Color>
-              <Box marginLeft={1}>Loading 1-Password items</Box>
+              </Text>
+              <Box marginLeft={1}>
+                <Text>Loading 1-Password items</Text>
+              </Box>
             </Box>
           )}
           {state.itemsRequest.status === 'failed' && (

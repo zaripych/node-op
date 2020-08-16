@@ -9,7 +9,7 @@ import {
 import { appState, IUiItemDetailsFields } from '../state';
 import { filter, switchMap, withLatestFrom } from 'rxjs/operators';
 import { VerticalLimitView } from './limitView';
-import { Box, Color } from 'ink';
+import { Box, Text } from 'ink';
 import { ItemField, FieldStatus } from './itemField';
 import { Keystroke } from './keystroke';
 import { keyInput, copyToClipboard } from '../actions';
@@ -146,20 +146,22 @@ export const ItemDetails: React.FC<IProps> = (props) => {
   return (
     <Box flexDirection="column">
       <Box flexDirection="column" marginBottom={1}>
-        <Color bold>
-          <Box textWrap="wrap">{title}</Box>
-        </Color>
+        <Text color="bold">{title}</Text>
         {!process.stdout.isTTY && (
           <Box>
-            Select item and press <Keystroke value="Enter" /> to print to stdout
-            and exit. Or <Keystroke value="Ctrl+X" /> to copy to clipboard.{' '}
-            <Keystroke value="Backspace" /> to go back.
+            <Text>
+              Select item and press <Keystroke value="Enter" /> to print to
+              stdout and exit. Or <Keystroke value="Ctrl+X" /> to copy to
+              clipboard. <Keystroke value="Backspace" /> to go back.
+            </Text>
           </Box>
         )}
         {process.stdout.isTTY && (
           <Box>
-            Select item and press <Keystroke value="Enter" /> to copy to
-            clipboard. <Keystroke value="Backspace" /> to go back.
+            <Text>
+              Select item and press <Keystroke value="Enter" /> to copy to
+              clipboard. <Keystroke value="Backspace" /> to go back.
+            </Text>
           </Box>
         )}
       </Box>

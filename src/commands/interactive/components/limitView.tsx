@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Color } from 'ink';
+import { Box, Text } from 'ink';
 import { useAppInput } from '../hooks';
 
 interface ILimitViewProps {
@@ -179,7 +179,7 @@ export const VerticalLimitView: React.FC<ILimitViewProps> = (props) => {
           <Box
             marginTop={cursor / props.itemHeight - offset / props.itemHeight}
           >
-            {props.renderCursor?.(cursor) ?? <Color green>{'>'}</Color>}
+            {props.renderCursor?.(cursor) ?? <Text color="green">{'>'}</Text>}
           </Box>
         </Box>
       )}
@@ -192,12 +192,18 @@ export const VerticalLimitView: React.FC<ILimitViewProps> = (props) => {
       </Box>
       {thumbHeight < viewportHeight && (
         <Box width={1} flexShrink={0} flexGrow={0} flexDirection="column">
-          <Box width={1} marginTop={thumbPosition} textWrap={'wrap'}>
-            <React.Fragment>
-              {offset === 0 && ['┬', '│'.repeat(thumbHeight - 1)]}
-              {offset > 0 && offset < maxOffset && '│'.repeat(thumbHeight)}
-              {offset === maxOffset && ['│'.repeat(thumbHeight - 1), '┴']}
-            </React.Fragment>
+          <Box width={1} marginTop={thumbPosition}>
+            <Text>
+              {offset === 0 && (
+                <Text>{['┬', '│'.repeat(thumbHeight - 1)].join('')}</Text>
+              )}
+              {offset > 0 && offset < maxOffset && (
+                <Text>{'│'.repeat(thumbHeight)}</Text>
+              )}
+              {offset === maxOffset && (
+                <Text>{['│'.repeat(thumbHeight - 1), '┴'].join('')}</Text>
+              )}
+            </Text>
           </Box>
         </Box>
       )}

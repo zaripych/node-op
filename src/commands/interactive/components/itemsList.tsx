@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Color } from 'ink';
+import { Box, Text } from 'ink';
 import { Highlight } from './highlight';
 import { IUiItem, appState } from '../state';
 import { useSelect } from '../building-blocks';
@@ -42,12 +42,12 @@ export const ItemStatus = (props: { item: IUiItem }) => {
   return (
     <React.Fragment>
       {status === 'started' && (
-        <Color green>
+        <Text color="green">
           <Spinner type={'dots'} />
-        </Color>
+        </Text>
       )}
-      {status === 'failed' && <Color red>✗</Color>}
-      {status === 'success' && <Color green>✓</Color>}
+      {status === 'failed' && <Text color="red">✗</Text>}
+      {status === 'success' && <Text color="green">✓</Text>}
     </React.Fragment>
   );
 };
@@ -57,20 +57,26 @@ export const ItemRow = (props: { item: IUiItem; highlight: string }) => {
 
   return (
     <Box flexDirection="row" flexShrink={0}>
-      <Box width={2} textWrap="truncate-end">
+      <Box width={2}>
         <ItemStatus item={props.item} />
       </Box>
-      <Box marginLeft={0} width={30} textWrap="truncate-end">
-        <Highlight text={item.title || ''} substring={highlight} />
+      <Box marginLeft={0} width={30}>
+        <Text wrap="truncate-end">
+          <Highlight text={item.title || ''} substring={highlight} />
+        </Text>
       </Box>
-      <Box marginLeft={2} width={10} textWrap="truncate-end">
-        {item.type}
+      <Box marginLeft={2} width={10}>
+        <Text wrap="truncate-end">{item.type}</Text>
       </Box>
-      <Box marginLeft={2} width={30} textWrap="truncate-end">
-        <Highlight text={item.description || ''} substring={highlight} />
+      <Box marginLeft={2} width={30}>
+        <Text wrap="truncate-end">
+          <Highlight text={item.description || ''} substring={highlight} />
+        </Text>
       </Box>
-      <Box marginLeft={2} width={30} textWrap="truncate-end">
-        <Highlight text={item.urlHost || ''} substring={highlight} />
+      <Box marginLeft={2} width={30}>
+        <Text wrap="truncate-end">
+          <Highlight text={item.urlHost || ''} substring={highlight} />
+        </Text>
       </Box>
     </Box>
   );

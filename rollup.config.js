@@ -3,7 +3,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import babel from 'rollup-plugin-babel';
 import json from '@rollup/plugin-json';
 import { readdirSync } from 'fs-extra';
-import { basename } from 'path';
+import { basename, resolve as resolveFilePath } from 'path';
 
 const babelConfig = require('./babel.config.rollup');
 
@@ -14,6 +14,12 @@ function resolveOriginalFs() {
     resolveId(source) {
       if (source === 'original-fs') {
         return { id: 'fs', external: true };
+      }
+      if (source === 'react-devtools-core') {
+        return {
+          id: resolveFilePath(__dirname, './src/empty.ts'),
+          external: false,
+        };
       }
       return null;
     },
@@ -45,6 +51,10 @@ const mainInput = {
     'stream',
     'constants',
     'url',
+    'module',
+    'tls',
+    'net',
+    'http',
   ],
   output: {
     chunkFileNames: 'chunk-[hash].js',
@@ -67,8 +77,8 @@ const mainInput = {
           'Box',
           'Color',
           'Text',
-          'StdinContext',
           'useInput',
+          'useStdin',
         ],
         'node_modules/fs-extra/lib/index.js': [
           'stat',
@@ -82,6 +92,7 @@ const mainInput = {
           'removeSync',
         ],
       },
+      ignore: ['bufferutil', 'utf-8-validate'],
     }),
     babel({
       ...babelConfig,

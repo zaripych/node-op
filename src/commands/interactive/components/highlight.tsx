@@ -1,5 +1,5 @@
 import React from 'react';
-import { Color, Box } from 'ink';
+import { Text } from 'ink';
 
 interface IProps {
   text: string;
@@ -17,6 +17,7 @@ function* allIndexes(text: string, substring: string) {
     yield {
       start: result.index,
       end: result.index + substring.length,
+      text: text.substring(result.index, result.index + substring.length),
     };
     result = regexp.exec(text);
   }
@@ -27,26 +28,31 @@ export const Highlight: React.FC<IProps> = (props) => {
     return null;
   }
   if (!props.substring) {
-    return <React.Fragment>{props.text}</React.Fragment>;
+    return <Text>{props.text}</Text>;
   }
   const indexes = React.useMemo(
     () => [...allIndexes(props.text, props.substring)],
     [props.text, props.substring]
   );
   if (indexes.length === 0) {
-    return <React.Fragment>{props.text}</React.Fragment>;
+    return <Text>{props.text}</Text>;
   }
   return (
     <React.Fragment>
       {indexes.map((index, i) => (
-        <Box key={i}>
-          {props.text.substring(i === 0 ? 0 : indexes[i - 1].end, index.start)}
-          <Color red bgWhiteBright bold>
-            {props.substring}
-          </Color>
-        </Box>
+        <React.Fragment key={i}>
+          <Text>
+            {props.text.substring(
+              i === 0 ? 0 : indexes[i - 1].end,
+              index.start
+            )}
+          </Text>
+          <Text color="red" backgroundColor="whiteBright" bold>
+            {index.text}
+          </Text>
+        </React.Fragment>
       ))}
-      {props.text.substring(indexes[indexes.length - 1].end)}
+      <Text>{props.text.substring(indexes[indexes.length - 1].end)}</Text>
     </React.Fragment>
   );
 };

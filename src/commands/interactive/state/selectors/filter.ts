@@ -25,7 +25,7 @@ export const filteredItems = sharedState(
         ofType(setItemsFilter),
         map((action) => action.filter.toLowerCase()),
         distinctUntilChanged(),
-        debounceTime(250),
+        debounceTime(50),
         startWith('')
       ),
       items

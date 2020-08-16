@@ -84,7 +84,7 @@ export function useAppInput(inputHandler?: (input: string, key: IKey) => void) {
       if (input <= '\u001A' && !key.return && !key.backspace) {
         const next = String.fromCharCode(
           input.charCodeAt(0) + 'a'.charCodeAt(0) - 1
-        );
+        ).toUpperCase();
         input = '^' + next;
         key.ctrl = true;
         key.shift = next >= 'A' && next <= 'Z';

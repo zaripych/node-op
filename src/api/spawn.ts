@@ -25,7 +25,7 @@ export function spawnSyncAndCheck(
   return proc.output.join('');
 }
 
-export function spawnAndCheck(
+export function spawnAndCheck<R = string>(
   command: string,
   args: ReadonlyArray<string>,
   options: SpawnOptions & {
@@ -33,8 +33,9 @@ export function spawnAndCheck(
     expectedExitCodes?: number[];
     appendOutputToError?: boolean;
     created?: (cp: ChildProcess) => void;
+    chooseReturn?: (code?: number, signal?: string, output?: string) => R;
   }
-): Promise<string> {
+): Promise<R> {
   const expectedExitCodes = options?.expectedExitCodes ?? [0];
   const appendOutputToError = options?.appendOutputToError ?? false;
 
@@ -70,6 +71,10 @@ export function spawnAndCheck(
     });
   }
 
+  const chooseReturn =
+    options.chooseReturn ??
+    ((_code?: number, _signal?: string, out?: string) => out);
+
   return new Promise((res, rej) => {
     const exitHandler = (code?: number, signal?: string) => {
       if (typeof code !== 'number' || !expectedExitCodes.includes(code)) {
@@ -92,7 +97,7 @@ export function spawnAndCheck(
           );
         }
       } else {
-        res(output.join(''));
+        res(chooseReturn(code, signal, output.join('')) as R);
       }
     };
 

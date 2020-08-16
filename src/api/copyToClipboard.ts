@@ -19,24 +19,39 @@ async function clipboardCopyOSC52(value: string) {
   });
 }
 
+const xselExists = async () => {
+  const result = await spawnAndCheck('which', ['xsel'], {
+    stdio: ['pipe', 'pipe', 'pipe'],
+    verbosity: 0,
+    env: process.env,
+    expectedExitCodes: [0, 1],
+    chooseReturn: (code) => code,
+  });
+  return result === 0;
+};
+
 export async function clipboardCopy(props: ICopyProps) {
-  if (process.platform === 'linux' && !process.env.DISPLAY) {
-    await clipboardCopyOSC52(props.value);
-  } else if (process.platform === 'linux') {
-    await spawnAndCheck('xsel', ['--clipboard', '--input'], {
-      created: (cp) => {
-        cp.stdin.write(props.value, (err) => {
-          if (err) {
-            cp.emit('error', err);
-          }
-          cp.stdin.end();
-        });
-      },
-      stdio: ['pipe', 'pipe', 'pipe'],
-      env: process.env,
-      verbosity: 0,
-      appendOutputToError: true,
-    });
+  const xselAvailable =
+    process.platform === 'linux' && process.env.DISPLAY && (await xselExists());
+  if (xselAvailable) {
+    try {
+      await spawnAndCheck('xsel', ['--clipboard', '--input'], {
+        created: (cp) => {
+          cp.stdin.write(props.value, (err) => {
+            if (err) {
+              cp.emit('error', err);
+            }
+            cp.stdin.end();
+          });
+        },
+        stdio: ['pipe', 'pipe', 'pipe'],
+        env: process.env,
+        verbosity: 0,
+        appendOutputToError: true,
+      });
+    } catch (e) {
+      await clipboardCopyOSC52(props.value);
+    }
   } else if (process.platform === 'darwin') {
     await spawnAndCheck('pbcopy', [], {
       created: (cp) => {

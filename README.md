@@ -16,7 +16,7 @@
 <img src="https://badges.greenkeeper.io/zaripych/node-op.svg" >
 </a>
 
-Adds `op` - One Password CLI into your `node_modules/.bin` with additional helper commands
+Adds `op` - One Password CLI into your `node_modules/.bin` with additional helper commands and interactive CLI to copy paste passwords into clipboard
 
 NOTE: This is not the official 1-Password CLI tool repo, this is a wrapper
 
@@ -27,6 +27,8 @@ Supported platforms:
 - darwin
 - linux
 - windows
+
+![](demo.gif)
 
 ## Additional Commands
 
@@ -140,7 +142,7 @@ $> which op
 
 ## CLI Installation Process
 
-During `npm install` a script is executed which downloads and unpacks [pinned](https://github.com/zaripych/node-op/blob/master/package.json#L4) version of `op` into your `node_modules/node-op/lib/binaries` folder.
+During `npm install` a script is executed which downloads and unpacks [pinned](https://github.com/zaripych/node-op/blob/master/package.json#L119) version of `op` into your `node_modules/node-op/lib/binaries` folder.
 
 The `op` executable becomes available to be used through `npm run` or `yarn run`.
 

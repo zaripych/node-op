@@ -85,7 +85,7 @@
     "@octokit/rest": "18.0.3",
     "@rollup/plugin-commonjs": "11.0.2",
     "@rollup/plugin-json": "4.1.0",
-    "@rollup/plugin-node-resolve": "8.1.0",
+    "@rollup/plugin-node-resolve": "9.0.0",
     "@types/adm-zip": "0.4.33",
     "@types/ink-spinner": "3.0.0",
     "@types/node": "10.17.13",

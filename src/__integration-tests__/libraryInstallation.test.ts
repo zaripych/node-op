@@ -39,50 +39,29 @@ describe('given built and packaged library', () => {
         "binaries/op",
         "binaries/op.cmd",
         "cli.js",
-        "cli.js.map",
         "forwards/",
         "forwards/add.js",
-        "forwards/add.js.map",
+        "forwards/chunk-0c9d0175.js",
         "forwards/completion.js",
-        "forwards/completion.js.map",
         "forwards/confirm.js",
-        "forwards/confirm.js.map",
         "forwards/create.js",
-        "forwards/create.js.map",
         "forwards/delete.js",
-        "forwards/delete.js.map",
         "forwards/edit.js",
-        "forwards/edit.js.map",
         "forwards/encode.js",
-        "forwards/encode.js.map",
         "forwards/forget.js",
-        "forwards/forget.js.map",
         "forwards/get.js",
-        "forwards/get.js.map",
         "forwards/list.js",
-        "forwards/list.js.map",
         "forwards/reactivate.js",
-        "forwards/reactivate.js.map",
         "forwards/remove.js",
-        "forwards/remove.js.map",
         "forwards/signin.js",
-        "forwards/signin.js.map",
         "forwards/signout.js",
-        "forwards/signout.js.map",
         "forwards/suspend.js",
-        "forwards/suspend.js.map",
         "forwards/update.js",
-        "forwards/update.js.map",
         "installOp.js",
-        "installOp.js.map",
         "interactive.js",
-        "interactive.js.map",
         "vaultCheckin.js",
-        "vaultCheckin.js.map",
         "vaultCheckout.js",
-        "vaultCheckout.js.map",
         "vaultDiff.js",
-        "vaultDiff.js.map",
       ]
     `);
   });
@@ -102,50 +81,29 @@ describe('given built and packaged library', () => {
         "dist/binaries/op",
         "dist/binaries/op.cmd",
         "dist/cli.js",
-        "dist/cli.js.map",
         "dist/forwards/",
         "dist/forwards/add.js",
-        "dist/forwards/add.js.map",
+        "dist/forwards/chunk-0c9d0175.js",
         "dist/forwards/completion.js",
-        "dist/forwards/completion.js.map",
         "dist/forwards/confirm.js",
-        "dist/forwards/confirm.js.map",
         "dist/forwards/create.js",
-        "dist/forwards/create.js.map",
         "dist/forwards/delete.js",
-        "dist/forwards/delete.js.map",
         "dist/forwards/edit.js",
-        "dist/forwards/edit.js.map",
         "dist/forwards/encode.js",
-        "dist/forwards/encode.js.map",
         "dist/forwards/forget.js",
-        "dist/forwards/forget.js.map",
         "dist/forwards/get.js",
-        "dist/forwards/get.js.map",
         "dist/forwards/list.js",
-        "dist/forwards/list.js.map",
         "dist/forwards/reactivate.js",
-        "dist/forwards/reactivate.js.map",
         "dist/forwards/remove.js",
-        "dist/forwards/remove.js.map",
         "dist/forwards/signin.js",
-        "dist/forwards/signin.js.map",
         "dist/forwards/signout.js",
-        "dist/forwards/signout.js.map",
         "dist/forwards/suspend.js",
-        "dist/forwards/suspend.js.map",
         "dist/forwards/update.js",
-        "dist/forwards/update.js.map",
         "dist/installOp.js",
-        "dist/installOp.js.map",
         "dist/interactive.js",
-        "dist/interactive.js.map",
         "dist/vaultCheckin.js",
-        "dist/vaultCheckin.js.map",
         "dist/vaultCheckout.js",
-        "dist/vaultCheckout.js.map",
         "dist/vaultDiff.js",
-        "dist/vaultDiff.js.map",
         "installOp.js",
         "interactive.js",
         "package.json",
@@ -177,7 +135,7 @@ describe('given built and packaged library', () => {
       };
       const modifiedPkgJson = {
         ...pkgJson,
-        scripts: { ...(pkgJson.scripts || {}), op: 'op' },
+        scripts: { ...(pkgJson.scripts || {}), op: 'op', 'node-op': 'node-op' },
       };
       await writeJSON(join(TEST_DIR, 'package.json'), modifiedPkgJson, {
         spaces: '  ',
@@ -194,6 +152,49 @@ describe('given built and packaged library', () => {
         }
       );
       expect(versionOutput.trim()).toBe(pkgInfo.opVersion);
+    });
+
+    it('should print help', async () => {
+      const output = await spawnAndCheck(
+        'npm',
+        ['run', '-s', 'node-op', '--', '--help'],
+        {
+          cwd: TEST_DIR,
+          shell: process.platform === 'win32',
+        }
+      );
+      expect(output).toMatchInlineSnapshot(`
+        "Usage: node-op [options] [command]
+
+        Options:
+          -h, --help      display help for command
+
+        Commands:
+          add             Add access for users or groups to groups or vaults.
+          confirm         Confirm a user.
+          create          Create an object.
+          delete          Remove an object.
+          edit            Edit an object.
+          encode          Encode the JSON needed to create an item.
+          forget          Remove a 1Password account from this device.
+          get             Get details about an object.
+          list            List objects and events.
+          reactivate      Reactivate a suspended user.
+          remove          Revoke access for users or groups to groups or vaults.
+          signin          Sign in to your 1Password account.
+          signout         Sign out of your 1Password account.
+          suspend         Suspend a user.
+          update          Check for updates.
+          interactive     node-op: Lookup for passwords in interactive terminal
+          vault-checkout  node-op: Download one or more files from 1-Password vault
+                          to current directory
+          vault-checkin   node-op: Upload one or more files to 1-Password vault from
+                          current directory and trash old files with same name
+          vault-diff      node-op: Compare one or more local checked-out files with
+                          their original 1-Password versions
+          help [command]  display help for command
+        "
+      `);
     });
   });
 });

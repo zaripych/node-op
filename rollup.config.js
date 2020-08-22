@@ -26,15 +26,7 @@ function resolveOriginalFs() {
   };
 }
 
-const mainInput = {
-  input: {
-    cli: './src/cli',
-    installOp: './src/installOp',
-    vaultCheckin: './src/vaultCheckin',
-    vaultCheckout: './src/vaultCheckout',
-    vaultDiff: './src/vaultDiff',
-    interactive: './src/interactive',
-  },
+const baseConfig = {
   external: [
     'yoga-layout-prebuilt',
     'path',
@@ -56,12 +48,6 @@ const mainInput = {
     'net',
     'http',
   ],
-  output: {
-    chunkFileNames: 'chunk-[hash].js',
-    dir: './dist',
-    format: 'cjs',
-    sourcemap: true,
-  },
   plugins: [
     resolveOriginalFs(),
     resolve({
@@ -70,28 +56,6 @@ const mainInput = {
     }),
     json(),
     commonjs({
-      namedExports: {
-        'rxjs-spy/operators': ['tag'],
-        'node_modules/ink/build/index.js': [
-          'render',
-          'Box',
-          'Color',
-          'Text',
-          'useInput',
-          'useStdin',
-        ],
-        'node_modules/fs-extra/lib/index.js': [
-          'stat',
-          'unlink',
-          'createFile',
-          'writeFile',
-          'existsSync',
-          'createWriteStream',
-          'chmod',
-          'mkdir',
-          'removeSync',
-        ],
-      },
       ignore: ['bufferutil', 'utf-8-validate'],
     }),
     babel({
@@ -102,18 +66,42 @@ const mainInput = {
   ],
 };
 
+const mainInput = {
+  ...baseConfig,
+  input: {
+    cli: './src/cli',
+    installOp: './src/installOp',
+    vaultCheckin: './src/vaultCheckin',
+    vaultCheckout: './src/vaultCheckout',
+    vaultDiff: './src/vaultDiff',
+    interactive: './src/interactive',
+  },
+  output: {
+    chunkFileNames: 'chunk-[hash].js',
+    dir: './dist',
+    format: 'cjs',
+  },
+};
+
 const forwards = readdirSync('./src/forwards/')
   .map((file) => basename(file.replace('.ts', '')))
   .filter((item) => !['helper'].includes(item));
 
-const forwardsConfig = forwards.map((item) => ({
-  ...mainInput,
-  input: ['./src/forwards/', item].join(''),
-  output: {
-    file: ['./dist/forwards/', item, '.js'].join(''),
-    format: 'cjs',
-    sourcemap: true,
+export default [
+  mainInput,
+  {
+    ...baseConfig,
+    input: forwards.reduce(
+      (acc, forward) => ({
+        ...acc,
+        [forward]: ['./src/forwards/', forward].join(''),
+      }),
+      {}
+    ),
+    output: {
+      chunkFileNames: 'chunk-[hash].js',
+      dir: './dist/forwards',
+      format: 'cjs',
+    },
   },
-}));
-
-export default [mainInput, ...forwardsConfig];
+];

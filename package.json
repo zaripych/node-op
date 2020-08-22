@@ -112,7 +112,7 @@
     "rxjs-spy": "7.5.3",
     "selenium-webdriver": "3.6.0",
     "semver": "7.3.2",
-    "ts-deps": "0.15.9",
+    "ts-deps": "0.16.0",
     "webdriver-query": "1.0.1"
   },
   "op_version": "1.2.0"

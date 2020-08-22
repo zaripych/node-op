@@ -84,6 +84,7 @@
   "devDependencies": {
     "@babel/preset-react": "7.10.4",
     "@octokit/rest": "18.0.3",
+    "@rollup/plugin-babel": "5.2.0",
     "@rollup/plugin-commonjs": "15.0.0",
     "@rollup/plugin-json": "4.1.0",
     "@rollup/plugin-node-resolve": "9.0.0",
@@ -107,7 +108,6 @@
     "react": "16.13.1",
     "rimraf": "3.0.2",
     "rollup": "2.26.5",
-    "rollup-plugin-babel": "4.4.0",
     "rxjs": "6.6.2",
     "rxjs-marbles": "6.0.1",
     "rxjs-spy": "7.5.3",

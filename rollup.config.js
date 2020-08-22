@@ -1,6 +1,6 @@
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
-import babel from 'rollup-plugin-babel';
+import babel from '@rollup/plugin-babel';
 import json from '@rollup/plugin-json';
 import { readdirSync } from 'fs-extra';
 import { basename, resolve as resolveFilePath } from 'path';
@@ -62,6 +62,7 @@ const baseConfig = {
       ...babelConfig,
       exclude: 'node_modules/**',
       extensions,
+      babelHelpers: 'bundled',
     }),
   ],
 };

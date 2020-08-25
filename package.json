@@ -92,7 +92,7 @@
     "@types/ink-spinner": "3.0.0",
     "@types/node": "10.17.13",
     "@types/pump": "1.1.0",
-    "@types/react": "16.9.46",
+    "@types/react": "16.9.47",
     "@types/rimraf": "3.0.0",
     "@types/tar-fs": "2.0.0",
     "adm-zip": "0.4.16",

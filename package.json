@@ -97,7 +97,7 @@
     "@types/tar-fs": "2.0.0",
     "adm-zip": "0.4.16",
     "chalk": "4.1.0",
-    "commander": "6.0.0",
+    "commander": "6.1.0",
     "husky": "4.2.5",
     "ink": "3.0.4",
     "ink-spinner": "4.0.1",

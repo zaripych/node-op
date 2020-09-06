@@ -108,7 +108,7 @@
     "react": "16.13.1",
     "rimraf": "3.0.2",
     "rollup": "2.26.5",
-    "rxjs": "6.6.2",
+    "rxjs": "6.6.3",
     "rxjs-marbles": "6.0.1",
     "rxjs-spy": "7.5.3",
     "selenium-webdriver": "3.6.0",

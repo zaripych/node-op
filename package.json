@@ -98,7 +98,7 @@
     "adm-zip": "0.4.16",
     "chalk": "4.1.0",
     "commander": "6.0.0",
-    "husky": "4.2.5",
+    "husky": "4.3.0",
     "ink": "3.0.4",
     "ink-spinner": "4.0.1",
     "ink-text-input": "4.0.0",

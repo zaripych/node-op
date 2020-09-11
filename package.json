@@ -116,5 +116,5 @@
     "ts-deps": "0.16.0",
     "webdriver-query": "1.0.1"
   },
-  "op_version": "1.2.0"
+  "op_version": "1.6.0"
 }

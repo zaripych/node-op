@@ -54,7 +54,7 @@ describe('after op is installed', () => {
           },
           Object {
             "command": "help",
-            "description": "Get help for a command.",
+            "description": "Get help for a command",
           },
           Object {
             "command": "list",
@@ -82,7 +82,7 @@ describe('after op is installed', () => {
           },
           Object {
             "command": "update",
-            "description": "Check for updates",
+            "description": "Check for and download updates",
           },
         ]
       `);

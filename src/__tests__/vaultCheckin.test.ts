@@ -1,7 +1,7 @@
 import { vaultCheckin } from '../commands/vaultCheckin';
 import { Stats } from 'fs-extra';
 
-describe(vaultCheckin.name, () => {
+describe('vaultCheckin', () => {
   const anyDeps = () => ({
     listItems: jest.fn(() => Promise.resolve([])),
     createDocument: jest.fn(() => Promise.resolve('new-id')),

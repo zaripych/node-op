@@ -3,7 +3,7 @@ import { createStateWithInitial } from '../state';
 import { IAction } from '../types';
 import { take } from 'rxjs/operators';
 
-describe(createStateWithInitial.name, () => {
+describe('createStateWithInitial', () => {
   it(
     'created state registers subscription in sharedSubscriptions for later cleanup',
     marbles((m) => {

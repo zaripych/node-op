@@ -1,6 +1,6 @@
 import { vaultCheckout } from '../commands/vaultCheckout';
 
-describe(vaultCheckout.name, () => {
+describe('vaultCheckout', () => {
   describe('given no props', () => {
     const params: Parameters<typeof vaultCheckout> = [
       undefined as any,

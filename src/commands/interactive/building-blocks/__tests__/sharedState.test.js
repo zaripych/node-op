@@ -2,7 +2,7 @@ import { marbles } from 'rxjs-marbles/jest';
 import { sharedState } from '../state';
 import { take } from 'rxjs/operators';
 
-describe(sharedState.name, () => {
+describe('sharedState', () => {
   it(
     'shared state returns same observable for same selector as long as it is not complete',
     marbles((m) => {

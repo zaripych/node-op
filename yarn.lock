@@ -4043,10 +4043,10 @@ ink-spinner@4.0.1:
   dependencies:
     cli-spinners "^2.3.0"
 
-ink-text-input@4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/ink-text-input/-/ink-text-input-4.0.0.tgz#f1309c6d58ce53ae9ad0bc3de23560294079ffa0"
-  integrity sha512-mzftl3MRUYEi4/lQQzjUGgmPtPIQgGbeedp6G9cDIGTQPMOiaklrCX8zWi9aY5n0OKoJpjmi3TR6eRBNNhCP8Q==
+ink-text-input@4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/ink-text-input/-/ink-text-input-4.0.1.tgz#e3de3f7e7f4247d64018838c57bbbc6120901368"
+  integrity sha512-wiqkrB2tgnCnv51r2LpNLVfgrd/V+UXF3ccry+/Q7on9CBt8LVavX6NDYRMdXljuM+CcFV/sVro0bCr5oxB05w==
   dependencies:
     chalk "^4.1.0"
     type-fest "^0.15.1"

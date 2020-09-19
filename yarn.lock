@@ -4051,10 +4051,10 @@ ink-text-input@4.0.0:
     chalk "^4.1.0"
     type-fest "^0.15.1"
 
-ink@3.0.5:
-  version "3.0.5"
-  resolved "https://registry.yarnpkg.com/ink/-/ink-3.0.5.tgz#9397b21111a7c6c5f5e00cfeb7420f9c09ba044d"
-  integrity sha512-Zc/Yoi3P0cY0DC9ryb3HTwmi4Qgke9332ebOhDRaK9Cw6D+ABAOQPeHG8IdmI1GOkMKRMZwTP/1jRs/b1D1n9Q==
+ink@3.0.6:
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/ink/-/ink-3.0.6.tgz#d40d7a3b84b4521c1a05944a936c284170299ffc"
+  integrity sha512-MOaRUKlDdyzBr6IhiBpBA5+9tv+OlVvQrEErQlN2dfofJ0Q52Xc3gZ5YtgGj0UVD24Ex79WL2QZGJh0emz+jDQ==
   dependencies:
     ansi-escapes "^4.2.1"
     auto-bind "4.0.0"

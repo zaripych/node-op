@@ -85,7 +85,7 @@
     "@babel/preset-react": "7.10.4",
     "@octokit/rest": "18.0.5",
     "@rollup/plugin-babel": "5.2.0",
-    "@rollup/plugin-commonjs": "15.0.0",
+    "@rollup/plugin-commonjs": "15.1.0",
     "@rollup/plugin-json": "4.1.0",
     "@rollup/plugin-node-resolve": "9.0.0",
     "@types/adm-zip": "0.4.33",

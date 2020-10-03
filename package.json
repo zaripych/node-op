@@ -79,7 +79,7 @@
     ]
   },
   "dependencies": {
-    "yoga-layout-prebuilt": "1.9.6"
+    "yoga-layout-prebuilt": "1.10.0"
   },
   "devDependencies": {
     "@babel/preset-react": "7.10.4",

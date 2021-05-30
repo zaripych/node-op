@@ -107,7 +107,7 @@
     "pump": "3.0.0",
     "react": "16.13.1",
     "rimraf": "3.0.2",
-    "rollup": "2.26.5",
+    "rollup": "2.50.5",
     "rxjs": "6.6.3",
     "rxjs-marbles": "6.0.1",
     "rxjs-spy": "7.5.3",

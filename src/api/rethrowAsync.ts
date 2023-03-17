@@ -1,6 +1,6 @@
-import { ensureError } from './ensureError';
 import { AggregateError } from './aggregateError';
-import { IRethrowInfo } from './types';
+import { ensureError } from './ensureError';
+import type { IRethrowInfo } from './types';
 
 type Fn<O> = (() => Promise<O>) | (() => O);
 

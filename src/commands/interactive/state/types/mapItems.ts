@@ -1,20 +1,21 @@
-import {
-  IItem,
-  catchSync,
-  IItemDetails,
+import { URL } from 'url';
+
+import type {
   IDetailField,
-  IDetailSectionField,
   IDetailSection,
+  IDetailSectionField,
+  IItem,
+  IItemDetails,
 } from '../../../../api';
-import {
+import { catchSync } from '../../../../api';
+import { isTruthy } from '../../building-blocks';
+import type {
+  ItemType,
   IUiItem,
   IUiItemDetails,
-  ItemType,
   IUiItemDetailsFields,
   IUiItemDetailsSection,
 } from './items';
-import { URL } from 'url';
-import { isTruthy } from '../../building-blocks';
 
 const typeByTemplateUuid: Record<string, ItemType> = {
   '001': 'login',
@@ -79,7 +80,7 @@ function mapSectionField(
 
 function mapSection(section: IDetailSection): IUiItemDetailsSection | null {
   const fields =
-    section.fields?.map((field) => mapSectionField(field)).filter(isTruthy) ??
+    section.fields.map((field) => mapSectionField(field)).filter(isTruthy) ??
     [];
   if (fields.length === 0) {
     return null;
@@ -116,7 +117,10 @@ export function mapItemDetails(item: IItemDetails): IUiItemDetails {
       ...allFields,
       ...allSections
         .filter((section) => section.title.length === 0)
-        .reduce((acc, section) => [...acc, ...section.fields], []),
+        .reduce<IUiItemDetailsFields[]>(
+          (acc, section) => [...acc, ...section.fields],
+          []
+        ),
     ],
     sections: allSections.filter((section) => section.title.length > 0),
     notes: item.details.notesPlain,

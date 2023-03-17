@@ -1,8 +1,9 @@
-import React from 'react';
 import { Box, Text } from 'ink';
-import { VerticalLimitView } from './limitView';
+import React from 'react';
+
 import { useLog } from '../hooks/log';
 import { Keystroke } from './keystroke';
+import { VerticalLimitView } from './limitView';
 
 interface IProps {
   viewportHeight: number;

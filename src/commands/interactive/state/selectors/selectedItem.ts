@@ -1,6 +1,7 @@
 import { map } from 'rxjs/operators';
-import { sharedState, ofType } from '../../building-blocks';
+
 import { setSelectedItem } from '../../actions';
+import { ofType,sharedState } from '../../building-blocks';
 
 export const selectedItem = sharedState(
   (actions) =>

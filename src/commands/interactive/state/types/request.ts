@@ -1,4 +1,4 @@
-import { IErrorInfo } from './errorInfo';
+import type { IErrorInfo } from './errorInfo';
 
 export interface ISuccessRequest<D> {
   status: 'success';

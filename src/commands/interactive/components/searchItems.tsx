@@ -1,9 +1,10 @@
+import { Box,Text } from 'ink';
 import React from 'react';
-import { Text, Box } from 'ink';
-import { ItemsList } from './itemsList';
-import { VerticalLimitView } from './limitView';
+
 import { useAppInput, useSearchItems } from '../hooks';
 import { ErrorAlert } from './errorAlert';
+import { ItemsList } from './itemsList';
+import { VerticalLimitView } from './limitView';
 
 interface IProps {
   viewportHeight: number;

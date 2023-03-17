@@ -1,4 +1,5 @@
-import { IUiItem, errorInfo } from '../state/types';
+import type { IUiItem} from '../state/types';
+import { errorInfo } from '../state/types';
 
 export function loadItems() {
   return {

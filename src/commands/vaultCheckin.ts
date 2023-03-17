@@ -1,15 +1,16 @@
-import {
-  listItems,
-  IItem,
-  createDocument,
-  trashItem,
-  AggregateError,
-  rethrowAsync,
-  catchAsync,
-} from '../api';
-import { isError } from 'util';
-import { stat, unlink } from 'fs-extra';
+import { stat, unlink } from 'fs/promises';
 import { basename } from 'path';
+import { isError } from 'util';
+
+import type { IItem } from '../api';
+import {
+  AggregateError,
+  catchAsync,
+  createDocument,
+  listItems,
+  rethrowAsync,
+  trashItem,
+} from '../api';
 
 interface ICheckinProps {
   vault?: string;
@@ -22,7 +23,7 @@ interface ICheckinProps {
 
 function findSingleFile(file: string, items: IItem[]) {
   const title = basename(file);
-  const filtered = items.filter((item) => title === item?.overview?.title);
+  const filtered = items.filter((item) => title === item.overview.title);
 
   if (filtered.length === 0) {
     return null;
@@ -39,7 +40,11 @@ function findSingleFile(file: string, items: IItem[]) {
   return filtered[0];
 }
 
-async function validateFile(file: string, items: IItem[], deps = { stat }) {
+async function validateFile(
+  file: string,
+  items: IItem[],
+  deps = { stat: (path: string) => stat(path) }
+) {
   const result = await deps.stat(file);
   if (!result.isFile()) {
     throw new Error(`file at path '${file}' is not a file`);
@@ -57,7 +62,7 @@ async function processFile(
     unlink,
   }
 ) {
-  const verbosity = props?.verbosity ?? 0;
+  const verbosity = props.verbosity ?? 0;
 
   const newUuid = await rethrowAsync(
     () =>
@@ -123,11 +128,10 @@ export async function vaultCheckin(
     listItems,
     createDocument,
     trashItem,
-    stat,
+    stat: (path: string) => stat(path),
     unlink,
   }
 ) {
-  // tslint:disable-next-line: strict-boolean-expressions
   if (!props || typeof props !== 'object') {
     throw new TypeError('no properties passed');
   }
@@ -152,7 +156,7 @@ export async function vaultCheckin(
     throw new TypeError('files should be a non-empty array of strings');
   }
 
-  const verbosity = props?.verbosity ?? 0;
+  const verbosity = props.verbosity ?? 0;
 
   const items = await rethrowAsync(
     () =>
@@ -204,6 +208,9 @@ export async function vaultCheckin(
   if (errorResults.length > 0) {
     if (errorResults.length > 1) {
       const [first, ...rest] = errorResults;
+      if (!first) {
+        throw new Error();
+      }
       throw new AggregateError(first, ...rest);
     } else {
       throw errorResults[0];

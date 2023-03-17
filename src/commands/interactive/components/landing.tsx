@@ -1,15 +1,16 @@
-import React from 'react';
 import { Box, Text } from 'ink';
 import Spinner from 'ink-spinner';
-import { ErrorAlert } from './errorAlert';
-import { SearchItems } from './searchItems';
-import { LogItems } from './logItems';
-import { dispatchAppInput } from '../hooks';
+import React from 'react';
 import { of } from 'rxjs';
+
 import { loadItems } from '../actions';
-import { useSelect, useEpicWhenMounted } from '../building-blocks';
-import { ItemDetails } from './itemDetails';
+import { useEpicWhenMounted,useSelect } from '../building-blocks';
+import { dispatchAppInput } from '../hooks';
 import { appState } from '../state';
+import { ErrorAlert } from './errorAlert';
+import { ItemDetails } from './itemDetails';
+import { LogItems } from './logItems';
+import { SearchItems } from './searchItems';
 
 function useLandingState() {
   dispatchAppInput();

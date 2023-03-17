@@ -1,13 +1,15 @@
-import {
-  listItems,
-  IItem,
-  getDocument,
-  rethrowAsync,
-  gitDiffFiles,
-} from '../api';
-import { stat, unlink, createFile } from 'fs-extra';
-import { basename } from 'path';
 import { randomBytes } from 'crypto';
+import { stat, unlink, writeFile } from 'fs/promises';
+import { basename } from 'path';
+
+import type {
+  IItem} from '../api';
+import {
+  getDocument,
+  gitDiffFiles,
+  listItems,
+  rethrowAsync,
+} from '../api';
 
 interface IDiffProps {
   vault?: string;
@@ -17,7 +19,7 @@ interface IDiffProps {
 
 function findSingleFile(file: string, items: IItem[]) {
   const title = basename(file);
-  const filtered = items.filter((item) => title === item?.overview?.title);
+  const filtered = items.filter((item) => title === item.overview.title);
 
   if (filtered.length === 0) {
     return null;
@@ -48,12 +50,12 @@ async function diffFile(
   compareUuid?: string,
   deps = {
     getDocument,
-    createFile,
+    writeFile,
     unlink,
     gitDiffFiles,
   }
 ) {
-  const verbosity = props?.verbosity ?? 0;
+  const verbosity = props.verbosity ?? 0;
 
   const fileTheirs = `${file}.orig.${randomBytes(8).toString('hex')}`;
 
@@ -66,7 +68,7 @@ async function diffFile(
             uuid: compareUuid,
             ...(props.vault && { vault: props.vault }),
           })
-        : deps.createFile(fileTheirs),
+        : deps.writeFile(fileTheirs, '', { encoding: 'utf-8' }),
     (errInfo) =>
       errInfo.withMessage(
         `Cannot download previous version of "${file}" from 1-Password`
@@ -101,7 +103,7 @@ export async function vaultDiff(
     stat,
     unlink,
     getDocument,
-    createFile,
+    writeFile,
     gitDiffFiles,
   }
 ) {
@@ -126,7 +128,7 @@ export async function vaultDiff(
     throw new TypeError('files should be a non-empty array of strings');
   }
 
-  const verbosity = props?.verbosity ?? 0;
+  const verbosity = props.verbosity ?? 0;
 
   const items = await rethrowAsync(
     () =>
@@ -159,7 +161,7 @@ export async function vaultDiff(
         diffFile(props, next.file, next.uuid, {
           getDocument: deps.getDocument,
           unlink: deps.unlink,
-          createFile: deps.createFile,
+          writeFile: deps.writeFile,
           gitDiffFiles: deps.gitDiffFiles,
         })
       ),

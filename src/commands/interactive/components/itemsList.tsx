@@ -1,11 +1,13 @@
-import React from 'react';
 import { Box, Text } from 'ink';
-import { Highlight } from './highlight';
-import { IUiItem, appState } from '../state';
-import { useSelect } from '../building-blocks';
-import { map, switchMap, skip } from 'rxjs/operators';
 import Spinner from 'ink-spinner';
-import { of, concat, timer } from 'rxjs';
+import React from 'react';
+import { concat, of, timer } from 'rxjs';
+import { map, skip,switchMap } from 'rxjs/operators';
+
+import { useSelect } from '../building-blocks';
+import type {IUiItem } from '../state';
+import { appState } from '../state';
+import { Highlight } from './highlight';
 
 interface IProps {
   items: IUiItem[];

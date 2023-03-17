@@ -1,8 +1,8 @@
-import resolve from '@rollup/plugin-node-resolve';
-import commonjs from '@rollup/plugin-commonjs';
 import babel from '@rollup/plugin-babel';
+import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
-import { readdirSync } from 'fs-extra';
+import resolve from '@rollup/plugin-node-resolve';
+import { readdirSync } from 'fs';
 import { basename, resolve as resolveFilePath } from 'path';
 
 const babelConfig = require('./babel.config.rollup');

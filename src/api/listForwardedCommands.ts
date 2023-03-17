@@ -1,5 +1,5 @@
-import { spawnAndCheck } from './spawn';
 import { isTruthy } from '../commands/interactive/building-blocks/helpers';
+import { spawnAndCheck } from './spawn';
 
 export interface ICommand {
   command: string;
@@ -25,6 +25,9 @@ export async function listForwardedCommands(
   }
 
   const searchString = searchStrings[searchStringIndex];
+  if (!searchString) {
+    return [];
+  }
   const index = result.indexOf(searchString);
 
   const stopString = 'Flags:';

@@ -1,4 +1,5 @@
 import commander from 'commander';
+
 import { vaultCheckout } from './commands/vaultCheckout';
 
 const program = new commander.Command();

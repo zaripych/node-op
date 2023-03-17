@@ -1,13 +1,14 @@
-import {
-  listItems,
-  IItem,
-  getDocument,
-  AggregateError,
-  rethrowAsync,
-  catchAsync,
-} from '../api';
-import { isError } from 'util';
 import { basename } from 'path';
+import { isError } from 'util';
+
+import type { IItem } from '../api';
+import {
+  AggregateError,
+  catchAsync,
+  getDocument,
+  listItems,
+  rethrowAsync,
+} from '../api';
 
 export interface ICheckoutProps {
   vault?: string;
@@ -25,7 +26,7 @@ async function processFile(
   }
 ) {
   const title = basename(file);
-  const filtered = items.filter((item) => title === item?.overview?.title);
+  const filtered = items.filter((item) => title === item.overview.title);
 
   if (filtered.length === 0) {
     throw new Error(`No document with title '${file}' found`);
@@ -35,13 +36,18 @@ async function processFile(
     throw new Error(`More than one document with title '${file}' found`);
   }
 
-  const verbosity = props?.verbosity ?? 0;
+  const firstFiltered = filtered[0];
+  const verbosity = props.verbosity ?? 0;
+
+  if (!firstFiltered) {
+    throw new Error();
+  }
 
   return await rethrowAsync(
     () =>
       deps.getDocument({
         verbosity,
-        uuid: filtered[0].uuid,
+        uuid: firstFiltered.uuid,
         outputFilePath: file,
         ...(props.vault && { vault: props.vault }),
         ...(typeof props.force === 'boolean' && { force: props.force }),
@@ -104,6 +110,9 @@ export async function vaultCheckout(
   if (errorResults.length > 0) {
     if (errorResults.length > 1) {
       const [first, ...rest] = errorResults;
+      if (!first) {
+        throw new Error();
+      }
       throw new AggregateError(first, ...rest);
     } else {
       throw errorResults[0];

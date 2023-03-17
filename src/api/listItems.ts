@@ -1,6 +1,7 @@
-import { spawnAndCheck } from './spawn';
 import { isString } from 'util';
-import { IItem } from './item';
+
+import type { IItem } from './item';
+import { spawnAndCheck } from './spawn';
 
 export interface IListItemsProps {
   vault?: string;

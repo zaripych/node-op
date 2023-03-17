@@ -1,6 +1,7 @@
+import { Box,Text } from 'ink';
 import React from 'react';
-import { Text, Box } from 'ink';
-import { IErrorInfo } from '../state';
+
+import type { IErrorInfo } from '../state';
 
 interface IProps {
   error: IErrorInfo;

@@ -1,4 +1,6 @@
-import { Observable } from 'rxjs';
+import type { Observable } from 'rxjs';
+
+import type { BivariantFn } from './bivariantFn';
 
 export interface IAction {
   type: ActionCreator;
@@ -7,7 +9,7 @@ export interface IAction {
 export type ActionCreator<
   A extends IAction = IAction,
   P extends unknown[] = unknown[]
-> = (...args: P) => A;
+> = BivariantFn<P, A>;
 
 export type ActionOf<T extends ActionCreator> = ReturnType<T>;
 

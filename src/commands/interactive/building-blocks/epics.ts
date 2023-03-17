@@ -1,8 +1,9 @@
-import { sharedSubscriptions, actions } from './details';
-import { IAction, Epic } from './types';
+import { asyncScheduler } from 'rxjs';
 import { finalize, observeOn } from 'rxjs/operators';
 import { tag } from 'rxjs-spy/operators';
-import { asyncScheduler } from 'rxjs';
+
+import { actions,sharedSubscriptions } from './details';
+import type { Epic,IAction } from './types';
 
 export function runEpic<T extends IAction>(epic: Epic<T>) {
   if (sharedSubscriptions.has(epic)) {

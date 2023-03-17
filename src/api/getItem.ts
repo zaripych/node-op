@@ -1,6 +1,7 @@
-import { spawnAndCheck } from './spawn';
 import { isString } from 'util';
-import { IItemDetails } from './item';
+
+import type { IItemDetails } from './item';
+import { spawnAndCheck } from './spawn';
 
 export interface IGetItemProps {
   uuid: string;

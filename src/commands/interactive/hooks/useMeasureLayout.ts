@@ -1,5 +1,6 @@
+import type { BoxProps } from 'ink';
 import React from 'react';
-import { BoxProps } from 'ink';
+
 import { isTruthy } from '../building-blocks';
 
 // tslint:disable: no-any
@@ -86,9 +87,9 @@ export function useMeasureLayout<K extends string | number | symbol>(
 
       if (
         left === layout?.left &&
-        top === layout?.top &&
-        width === layout?.width &&
-        height === layout?.height
+        top === layout.top &&
+        width === layout.width &&
+        height === layout.height
       ) {
         // no changes
         return;
@@ -108,7 +109,7 @@ export function useMeasureLayout<K extends string | number | symbol>(
     const delayedCalculate = (key: K) => {
       const result = calculateLayout(key);
       if (typeof result !== 'number') {
-        setTimeout(delayedCalculate, 0);
+        setTimeout(delayedCalculate, 0, key);
         return;
       }
       return result;

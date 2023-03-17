@@ -1,8 +1,12 @@
+import type { Stats } from 'fs';
+
+import type { IItem } from '../api';
 import { vaultCheckin } from '../commands/vaultCheckin';
-import { Stats } from 'fs-extra';
+
+type Deps = NonNullable<Parameters<typeof vaultCheckin>[1]>;
 
 describe('vaultCheckin', () => {
-  const anyDeps = () => ({
+  const anyDeps = (): Deps => ({
     listItems: jest.fn(() => Promise.resolve([])),
     createDocument: jest.fn(() => Promise.resolve('new-id')),
     trashItem: jest.fn(() => Promise.resolve()),
@@ -12,7 +16,8 @@ describe('vaultCheckin', () => {
 
   describe('given no props', () => {
     const params: Parameters<typeof vaultCheckin> = [
-      undefined as any,
+      // @ts-expect-error
+      undefined,
       anyDeps(),
     ];
 
@@ -131,7 +136,7 @@ describe('vaultCheckin', () => {
       },
       {
         ...anyDeps(),
-        stat: jest.fn(() => Promise.resolve({ isFile: () => false } as any)),
+        stat: jest.fn(() => Promise.resolve({ isFile: () => false } as Stats)),
       },
     ];
 
@@ -176,7 +181,7 @@ describe('vaultCheckin', () => {
               overview: {
                 title: 'file1',
               },
-            } as any,
+            } as IItem,
           ])
         ),
         createDocument: jest.fn(() => {
@@ -216,7 +221,7 @@ describe('vaultCheckin', () => {
               overview: {
                 title: 'file1',
               },
-            } as any,
+            } as IItem,
           ])
         ),
         trashItem: jest.fn(() => {
@@ -259,7 +264,7 @@ describe('vaultCheckin', () => {
               overview: {
                 title: 'file1',
               },
-            } as any,
+            } as IItem,
           ])
         ),
         unlink: jest.fn(() => {
@@ -302,7 +307,7 @@ describe('vaultCheckin', () => {
               overview: {
                 title: 'file',
               },
-            } as any,
+            } as IItem,
           ])
         ),
       },
@@ -341,7 +346,7 @@ describe('vaultCheckin', () => {
               overview: {
                 title: 'file',
               },
-            } as any,
+            } as IItem,
           ])
         ),
       },
@@ -377,7 +382,7 @@ describe('vaultCheckin', () => {
               overview: {
                 title: 'file',
               },
-            } as any,
+            } as IItem,
           ])
         ),
       },
@@ -442,7 +447,7 @@ describe('vaultCheckin', () => {
               overview: {
                 title: 'file',
               },
-            } as any,
+            } as IItem,
           ])
         ),
       },
@@ -485,7 +490,7 @@ describe('vaultCheckin', () => {
               overview: {
                 title: 'file',
               },
-            } as any,
+            } as IItem,
           ])
         ),
       },

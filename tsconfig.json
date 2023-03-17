@@ -1,10 +1,9 @@
 {
-  "extends": "./node_modules/ts-deps/lib/config/tsconfig.default.json",
+  "extends": "@repka-kit/ts/configs/tsconfig.base.json",
   "compilerOptions": {
-    "baseUrl": ".",
-    "outDir": "lib",
-    "jsx": "preserve",
-    "resolveJsonModule": true
+    "outDir": ".tsc-out",
+    "tsBuildInfoFile": ".tsc-out/.tsbuildinfo",
+    "jsx": "preserve"
   },
-  "include": ["src"]
+  "include": ["src", "package.json"]
 }

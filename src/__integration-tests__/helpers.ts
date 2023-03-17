@@ -1,17 +1,18 @@
-import {
-  readFile,
-  remove,
-  emptyDir,
-  pathExists,
-  unlink,
-  createReadStream,
-  mkdir,
-} from 'fs-extra';
-import { resolve, join, normalize, relative } from 'path';
-import fg from 'fast-glob';
-import { createGunzip } from 'zlib';
-import { extract } from 'tar-fs';
 import { spawn } from 'child_process';
+import fg from 'fast-glob';
+import { createReadStream } from 'fs';
+import {
+  mkdir,
+  readdir,
+  readFile,
+  rmdir,
+  stat,
+  unlink,
+  writeFile,
+} from 'fs/promises';
+import { join, normalize, relative, resolve } from 'path';
+import { extract } from 'tar-fs';
+import { createGunzip } from 'zlib';
 
 export const PKG_JSON = 'package.json';
 export const ROOT = resolve(__dirname, '../../');
@@ -19,14 +20,20 @@ export const ROOT = resolve(__dirname, '../../');
 // - start of the archive file name after npm pack
 const ARCH_PKG_FILE_NAME = 'node-op';
 
+export const pathExists = (path: string) =>
+  stat(path)
+    .then(() => true)
+    .catch(() => false);
+
 export const packageJsonVersions = async () => {
   console.log('Retrieving package json');
 
   const packageJsonLocation = join(ROOT, PKG_JSON);
 
-  const packageJsonContents = await readFile(packageJsonLocation, {
-    encoding: 'utf-8',
-  });
+  const packageJsonContents: string = await readFile(
+    packageJsonLocation,
+    'utf-8'
+  );
 
   const pkg = JSON.parse(packageJsonContents) as {
     version: string;
@@ -51,6 +58,20 @@ const checkSafety = async (dir: string) => {
 
   const exists = await pathExists(normalized);
   return { exists, path: normalized };
+};
+
+export const remove = async (path: string) => {
+  const result = await stat(path);
+  if (result.isDirectory()) {
+    await rmdir(path, { recursive: true });
+  } else {
+    await unlink(path);
+  }
+};
+
+export const emptyDir = async (path: string) => {
+  const entries = await readdir(path, { encoding: 'utf-8' });
+  await Promise.all(entries.map((entry) => remove(entry)));
 };
 
 export const emptyDirSafe = async (relativeToRoot: string) => {
@@ -106,7 +127,7 @@ export const unarchiveTarGz = async (tar: string, out: string) => {
   const stream = createReadStream(tar)
     .pipe(gunzip)
     .pipe(extract(outPath), { end: true });
-  return new Promise((res, rej) => {
+  return new Promise<void>((res, rej) => {
     stream.once('end', () => {
       res();
     });
@@ -128,7 +149,15 @@ const comparePathComponents = (a: string[], b: string[]): 0 | 1 | -1 => {
   if (a.length === 0 && b.length === 0) {
     return 0;
   }
-  const i = compareStrings(a[0], b[0]);
+  const first = a[0];
+  if (!first) {
+    throw new Error();
+  }
+  const firstB = b[0];
+  if (!firstB) {
+    throw new Error();
+  }
+  const i = compareStrings(first, firstB);
   if (i === 0) {
     return comparePathComponents(a.slice(1), b.slice(1));
   } else {
@@ -175,20 +204,20 @@ export function spawnAndCheck(
 
   const output: string[] = [];
 
-  if (proc.stderr as NodeJS.ReadableStream | null) {
+  if (proc.stderr) {
     proc.stderr.setEncoding('utf8');
     proc.stderr.on('data', (chunk: string) => {
       output.push(chunk);
     });
   }
-  if (proc.stdout as NodeJS.ReadableStream | null) {
+  if (proc.stdout) {
     proc.stdout.setEncoding('utf8');
     proc.stdout.on('data', (chunk: string) => {
       output.push(chunk);
     });
   }
 
-  return new Promise((res, rej) => {
+  return new Promise<string>((res, rej) => {
     proc.once('error', (err) => {
       rej(err);
     });
@@ -207,3 +236,12 @@ export function spawnAndCheck(
     });
   });
 }
+
+export const readJSON = <T = object>(path: string) =>
+  readFile(path, 'utf-8').then((file) => JSON.parse(file) as T);
+
+export const writeJSON = <T>(
+  path: string,
+  data: T,
+  opts?: { spaces?: string | number }
+) => writeFile(path, JSON.stringify(data, undefined, opts?.spaces), 'utf-8');

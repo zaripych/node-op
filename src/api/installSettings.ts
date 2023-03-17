@@ -1,6 +1,7 @@
-import { platform, arch } from 'os';
+import { arch,platform } from 'os';
+import type { PeerCertificate } from 'tls';
+
 import { homepage, op_version } from '../../package.json';
-import { PeerCertificate } from 'tls';
 
 export function validateCertificate(certificate: PeerCertificate) {
   console.log('node-op: Certificate information follows', {

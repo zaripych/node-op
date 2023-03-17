@@ -1,6 +1,6 @@
-import { ensureError } from './ensureError';
-import { Optional } from './types';
 import { AggregateError } from './aggregateError';
+import { ensureError } from './ensureError';
+import type { Optional } from './types';
 
 type Fn<O> = (() => Promise<O>) | (() => O);
 

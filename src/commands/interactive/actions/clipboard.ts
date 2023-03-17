@@ -1,4 +1,5 @@
-import { errorInfo, IUiItemDetailsFields } from '../state/types';
+import type { IUiItemDetailsFields } from '../state/types';
+import { errorInfo } from '../state/types';
 
 export function copyToClipboard(field: IUiItemDetailsFields) {
   return {

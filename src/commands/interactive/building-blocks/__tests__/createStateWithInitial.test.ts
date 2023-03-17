@@ -1,7 +1,9 @@
-import { marbles } from 'rxjs-marbles/jest';
-import { createStateWithInitial } from '../state';
-import { IAction } from '../types';
+import { describe, it } from '@jest/globals';
 import { take } from 'rxjs/operators';
+import { marbles } from 'rxjs-marbles/jest';
+
+import { createStateWithInitial } from '../state';
+import type { IAction } from '../types';
 
 describe('createStateWithInitial', () => {
   it(
@@ -12,7 +14,7 @@ describe('createStateWithInitial', () => {
 
       const result = createStateWithInitial(
         (a) => a,
-        ('b' as unknown) as IAction,
+        'b' as unknown as IAction,
         {
           actions,
           sharedSubscriptions,
@@ -35,7 +37,7 @@ describe('createStateWithInitial', () => {
 
       const result = createStateWithInitial(
         (a) => a,
-        ('b' as unknown) as IAction,
+        'b' as unknown as IAction,
         {
           actions,
           sharedSubscriptions: new WeakMap(),
@@ -54,7 +56,7 @@ describe('createStateWithInitial', () => {
       const actions = m.hot<IAction>('--a--|');
       const result = createStateWithInitial(
         (a) => a,
-        ('b' as unknown) as IAction,
+        'b' as unknown as IAction,
         {
           actions,
           sharedSubscriptions: new WeakMap(),
@@ -73,7 +75,7 @@ describe('createStateWithInitial', () => {
       const actions = m.hot<IAction>('--a--|');
       const result = createStateWithInitial(
         (a) => a.pipe(take(1)),
-        ('b' as unknown) as IAction,
+        'b' as unknown as IAction,
         {
           actions,
           sharedSubscriptions: new WeakMap(),

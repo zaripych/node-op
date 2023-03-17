@@ -1,6 +1,7 @@
 import { map } from 'rxjs/operators';
-import { sharedState, ofType } from '../../building-blocks';
+
 import { setVault } from '../../actions';
+import { ofType,sharedState } from '../../building-blocks';
 
 export const vault = sharedState(
   (actions) =>

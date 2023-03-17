@@ -1,4 +1,5 @@
 import commander from 'commander';
+
 import { vaultCheckin } from './commands/vaultCheckin';
 
 const program = new commander.Command();

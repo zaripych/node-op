@@ -1,30 +1,32 @@
-import React from 'react';
+import type React from 'react';
+import { empty, merge,of } from 'rxjs';
 import {
-  setItemsFilter,
+  filter,
+  map,
+  switchMap,
+  takeUntil,
+  withLatestFrom,
+} from 'rxjs/operators';
+
+import {
   keyInput,
+  loadItemDetails,
+  loadItemDetailsFailed,
+  loadItemDetailsSuccess,
+  navigateToItemDetails,
+  setItemsFilter,
   setOffset as setOffsetAction,
   setSelectedItem,
-  loadItemDetails,
-  loadItemDetailsSuccess,
-  loadItemDetailsFailed,
-  navigateToItemDetails,
 } from '../actions';
-import { of, empty, merge } from 'rxjs';
 import {
-  switchMap,
-  withLatestFrom,
-  filter,
-  takeUntil,
-  map,
-} from 'rxjs/operators';
-import {
-  useSelect,
-  useEpicWhenMounted,
   ofType,
   useActionTrigger,
+  useEpicWhenMounted,
+  useSelect,
   useStateActionBinding,
 } from '../building-blocks';
-import { appState, IUiItem } from '../state';
+import type { IUiItem } from '../state';
+import { appState } from '../state';
 
 function cursorFromSelectedItem(item: IUiItem | undefined, items: IUiItem[]) {
   if (!item) {

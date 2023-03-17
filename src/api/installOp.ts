@@ -1,18 +1,14 @@
-import { get } from 'https';
-import {
-  mkdir,
-  chmod,
-  existsSync,
-  createWriteStream,
-  removeSync,
-} from 'fs-extra';
-import { join, extname } from 'path';
-import { spawnSync } from 'child_process';
-import pump from 'pump';
-import { EOL } from 'os';
 import AdmZip from 'adm-zip';
+import { spawnSync } from 'child_process';
 import { randomBytes } from 'crypto';
-import { validateCertificate, settings } from './installSettings';
+import { createWriteStream, existsSync, rmdirSync } from 'fs';
+import { chmod,mkdir } from 'fs/promises';
+import { get } from 'https';
+import { EOL } from 'os';
+import { extname,join } from 'path';
+import pump from 'pump';
+
+import { settings,validateCertificate } from './installSettings';
 
 type TLSSocket = import('tls').TLSSocket;
 type IncomingMessage = import('http').IncomingMessage;
@@ -21,7 +17,7 @@ const pipeline = (
   source: NodeJS.ReadableStream,
   target: NodeJS.WritableStream
 ) => {
-  return new Promise((res, rej) => {
+  return new Promise<void>((res, rej) => {
     pump(source, target, (err: Error | undefined) => {
       if (err) {
         rej(err);
@@ -173,7 +169,7 @@ function unpackPkgOnMacOS(pkgPath: string) {
   const OUT_DIR = `op-pkgutil-output-${randomBytes(4).toString('hex')}`;
   const unpackDir = join(process.cwd(), distDir, OUT_DIR);
   try {
-    removeSync(unpackDir);
+    rmdirSync(unpackDir, { recursive: true });
 
     const result = spawnSync('pkgutil', ['--expand', pkgPath, unpackDir], {
       encoding: 'utf8',
@@ -230,6 +226,6 @@ function unpackPkgOnMacOS(pkgPath: string) {
       throw new Error(`op binary not found after extracting from .pkg`);
     }
   } finally {
-    removeSync(unpackDir);
+    rmdirSync(unpackDir, { recursive: true });
   }
 }

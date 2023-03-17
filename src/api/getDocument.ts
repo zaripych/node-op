@@ -1,6 +1,7 @@
-import { spawnAndCheck } from './spawn';
+import fs from 'fs/promises';
 import { isString } from 'util';
-import fs from 'fs-extra';
+
+import { spawnAndCheck } from './spawn';
 
 export interface IGetDocumentProps {
   uuid: string;
@@ -29,7 +30,7 @@ export async function getDocument(props: IGetDocumentProps) {
     {
       env: process.env,
       verbosity: props.verbosity,
-      stdio: ['inherit', outStream, 'pipe'],
+      stdio: ['inherit', outStream.fd, 'pipe'],
     }
   );
 }

@@ -1,10 +1,13 @@
-import React from 'react';
-import { Box, Text, BoxProps, DOMElement } from 'ink';
-import { IUiItemDetailsFields, appState } from '../state';
-import { useSelect } from '../building-blocks';
-import { skip, map, switchMap } from 'rxjs/operators';
-import { concat, of, timer } from 'rxjs';
+import type { BoxProps, DOMElement} from 'ink';
+import { Box,Text } from 'ink';
 import Spinner from 'ink-spinner';
+import React from 'react';
+import { concat, of, timer } from 'rxjs';
+import { map, skip, switchMap } from 'rxjs/operators';
+
+import { useSelect } from '../building-blocks';
+import type {IUiItemDetailsFields } from '../state';
+import { appState } from '../state';
 
 interface IProps {
   titleColumnWidth: number;

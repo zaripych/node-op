@@ -1,20 +1,22 @@
+import { Box, Text } from 'ink';
 import React from 'react';
+import { empty, of } from 'rxjs';
+import { filter, switchMap, withLatestFrom } from 'rxjs/operators';
+
+import { copyToClipboard, keyInput } from '../actions';
 import {
-  useSelect,
   isTruthy,
-  useEpicWhenMounted,
   ofType,
+  useEpicWhenMounted,
+  useSelect,
   useStateWithActions,
 } from '../building-blocks';
-import { appState, IUiItemDetailsFields } from '../state';
-import { filter, switchMap, withLatestFrom } from 'rxjs/operators';
-import { VerticalLimitView } from './limitView';
-import { Box, Text } from 'ink';
-import { ItemField, FieldStatus } from './itemField';
-import { Keystroke } from './keystroke';
-import { keyInput, copyToClipboard } from '../actions';
-import { of, empty } from 'rxjs';
+import type { IUiItemDetailsFields } from '../state';
+import { appState } from '../state';
 import { ErrorAlert } from './errorAlert';
+import { FieldStatus, ItemField } from './itemField';
+import { Keystroke } from './keystroke';
+import { VerticalLimitView } from './limitView';
 
 interface IProps {
   viewportHeight: number;
@@ -36,6 +38,9 @@ function useCopyToClipboardOnEnter(props: { fields: IUiItemDetailsFields[] }) {
           }
 
           const field = fields[currentCursor];
+          if (!field) {
+            throw new Error('Expected field to be initialized');
+          }
 
           if (action.key.return && !process.stdout.isTTY) {
             process.stdout.write(field.value);
@@ -71,7 +76,7 @@ function useItemDetailsState() {
   const realFields = React.useMemo(
     () => [
       ...itemDetails.fields,
-      ...itemDetails.sections.reduce(
+      ...itemDetails.sections.reduce<IUiItemDetailsFields[]>(
         (acc, section) => [...acc, ...section.fields],
         []
       ),
@@ -109,12 +114,8 @@ function useItemDetailsState() {
 }
 
 export const ItemDetails: React.FC<IProps> = (props) => {
-  const {
-    title,
-    fields,
-    maxFieldNameLength,
-    copyRequest,
-  } = useItemDetailsState();
+  const { title, fields, maxFieldNameLength, copyRequest } =
+    useItemDetailsState();
   const [cursor, setCursor] = useCopyToClipboardOnEnter({ fields });
 
   const components = [

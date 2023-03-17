@@ -1,16 +1,18 @@
 import React from 'react';
-import { IAction, Selector, ActionCreator } from './types';
-import { actions } from './details';
-import { Observable, BehaviorSubject, of } from 'rxjs';
-import { sharedState } from './state';
-import { ofType } from './helpers';
+import type { BehaviorSubject, Observable} from 'rxjs';
+import { of } from 'rxjs';
 import {
-  switchMap,
-  map,
-  withLatestFrom,
   distinctUntilChanged,
+  map,
   startWith,
+  switchMap,
+  withLatestFrom,
 } from 'rxjs/operators';
+
+import { actions } from './details';
+import { ofType } from './helpers';
+import { sharedState } from './state';
+import type { ActionCreator,IAction, Selector } from './types';
 
 export const useActionBinding = <P extends unknown[]>(
   bindCb: (...args: P) => Observable<IAction>,
@@ -148,12 +150,12 @@ export function useSelect<T>(
     'value' in selector
       ? selector.value
       : opts && 'initial' in opts
-      ? opts?.initial
+      ? opts.initial
       : undefined;
   const computedDeps = (Array.isArray(opts)
     ? opts
     : opts && 'deps' in opts
-    ? opts?.deps
+    ? opts.deps
     : undefined) ?? [selector];
   const [state, setState] = React.useState(computedInitial);
 

@@ -1,9 +1,12 @@
-import { from, of, merge } from 'rxjs';
-import { switchMap, withLatestFrom, map, catchError } from 'rxjs/operators';
-import { mapItems, IRequest, IUiItem } from '../types';
+import { from, merge,of } from 'rxjs';
+import { catchError,map, switchMap, withLatestFrom } from 'rxjs/operators';
+
 import { listItems } from '../../../../api';
-import { loadItems, loadItemsSuccess, loadItemsFailed } from '../../actions';
-import { runEpic, sharedState, ofType, Epic } from '../../building-blocks';
+import { loadItems, loadItemsFailed,loadItemsSuccess } from '../../actions';
+import type { Epic} from '../../building-blocks';
+import {ofType, runEpic, sharedState } from '../../building-blocks';
+import type { IRequest, IUiItem} from '../types';
+import {mapItems } from '../types';
 import { vault } from './vault';
 
 const loadItemsEpic: Epic = (actions) =>

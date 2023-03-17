@@ -1,9 +1,9 @@
+import { writeFile } from 'fs/promises';
+import { EOL } from 'os';
 import React from 'react';
-import { formatWithOptions } from 'util';
 import { BehaviorSubject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { writeFile } from 'fs-extra';
-import { EOL } from 'os';
+import { formatWithOptions } from 'util';
 
 const logs = new BehaviorSubject<string[]>([]);
 

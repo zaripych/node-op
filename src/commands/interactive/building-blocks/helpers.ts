@@ -1,6 +1,7 @@
-import { IAction, ActionCreator, ActionOf } from './types';
-import { Observable } from 'rxjs';
+import type { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
+
+import type { ActionCreator, ActionOf,IAction } from './types';
 
 export function isOfType<T extends ActionCreator>(
   action: IAction,

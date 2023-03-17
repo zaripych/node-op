@@ -1,12 +1,13 @@
 import { combineLatest } from 'rxjs';
 import {
+  debounceTime,
   distinctUntilChanged,
   map,
-  debounceTime,
   startWith,
 } from 'rxjs/operators';
-import { sharedState, ofType } from '../../building-blocks';
+
 import { setItemsFilter } from '../../actions';
+import { ofType,sharedState } from '../../building-blocks';
 import { items } from './items';
 
 export const filter = sharedState(

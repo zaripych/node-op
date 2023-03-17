@@ -1,6 +1,8 @@
-import { marbles } from 'rxjs-marbles/jest';
-import { sharedState } from '../state';
+import { describe, expect, it } from '@jest/globals';
 import { take } from 'rxjs/operators';
+import { marbles } from 'rxjs-marbles/jest';
+
+import { sharedState } from '../state';
 
 describe('sharedState', () => {
   it(

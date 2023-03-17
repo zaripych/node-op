@@ -1,7 +1,8 @@
-import { spawnAndCheck } from './spawn';
 import { isString } from 'util';
+
 import { catchAsync } from './catchAsync';
-import { IItem } from './item';
+import type { IItem } from './item';
+import { spawnAndCheck } from './spawn';
 
 export interface ICreateDocumentProps {
   file: string;

@@ -1,8 +1,10 @@
-import React from 'react';
 import { useStdin } from 'ink';
-import { IKey, keyInput } from '../actions';
-import { useActionBinding } from '../building-blocks';
+import React from 'react';
 import { of } from 'rxjs';
+
+import type { IKey} from '../actions';
+import { keyInput } from '../actions';
+import { useActionBinding } from '../building-blocks';
 
 export function dispatchAppInput() {
   useAppInput(useActionBinding((input, key) => of(keyInput(input, key))));
@@ -19,9 +21,9 @@ export function useAppInput(inputHandler?: (input: string, key: IKey) => void) {
     if (!isRawModeSupported) {
       return;
     }
-    setRawMode?.(true);
+    setRawMode(true);
     return () => {
-      setRawMode?.(false);
+      setRawMode(false);
     };
   }, [setRawMode, isRawModeSupported]);
 

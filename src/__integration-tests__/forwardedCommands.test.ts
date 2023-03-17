@@ -1,6 +1,14 @@
-import { installOnePassword, listForwardedCommands, ICommand } from '../api';
-import { pathExists } from 'fs-extra';
+import { beforeAll, describe, it } from '@jest/globals';
+import { stat } from 'fs/promises';
 import { join } from 'path';
+
+import type { ICommand } from '../api';
+import { installOnePassword, listForwardedCommands } from '../api';
+
+const pathExists = (path: string) =>
+  stat(path)
+    .then(() => true)
+    .catch(() => false);
 
 describe('after op is installed', () => {
   beforeAll(async () => {

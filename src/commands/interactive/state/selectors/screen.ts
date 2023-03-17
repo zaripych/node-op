@@ -1,12 +1,14 @@
-import { merge, of, empty } from 'rxjs';
-import { mapTo, withLatestFrom, switchMap } from 'rxjs/operators';
-import { sharedState, ofType, runEpic, Epic } from '../../building-blocks';
+import { empty,merge, of } from 'rxjs';
+import { mapTo, switchMap,withLatestFrom } from 'rxjs/operators';
+
 import {
-  navigateToLog,
-  navigateToSearch,
   keyInput,
   navigateToItemDetails,
+  navigateToLog,
+  navigateToSearch,
 } from '../../actions';
+import type { Epic} from '../../building-blocks';
+import {ofType, runEpic, sharedState } from '../../building-blocks';
 
 export const screen = sharedState(
   (actions) =>

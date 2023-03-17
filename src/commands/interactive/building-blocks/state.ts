@@ -1,14 +1,16 @@
-import { Observable, BehaviorSubject, asyncScheduler } from 'rxjs';
+import type { Observable} from 'rxjs';
+import { asyncScheduler,BehaviorSubject } from 'rxjs';
 import {
   distinctUntilChanged,
-  multicast,
-  shareReplay,
   finalize,
-  startWith,
+  multicast,
   observeOn,
+  shareReplay,
+  startWith,
 } from 'rxjs/operators';
-import { sharedSubscriptions, actions, sharedSelects } from './details';
-import { Selector } from './types';
+
+import { actions, sharedSelects,sharedSubscriptions } from './details';
+import type { Selector } from './types';
 
 export function computeStateInBackground<T>(state: Observable<T>) {
   if (sharedSubscriptions.has(state)) {

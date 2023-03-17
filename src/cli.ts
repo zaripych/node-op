@@ -1,6 +1,7 @@
-import commander from 'commander';
-import { ICommand } from './api';
 import chalk from 'chalk';
+import commander from 'commander';
+
+import type { ICommand } from './api';
 
 const forwarded: ICommand[] = [
   {

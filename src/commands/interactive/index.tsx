@@ -1,6 +1,7 @@
 // import './devTools';
-import React from 'react';
 import { render } from 'ink';
+import React from 'react';
+
 import { Landing } from './components/landing';
 
 export const start = () =>

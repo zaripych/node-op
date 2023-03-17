@@ -1,4 +1,4 @@
-import { IUiItem } from '../state/types';
+import type { IUiItem } from '../state/types';
 
 export function setSelectedItem(item?: IUiItem) {
   return {

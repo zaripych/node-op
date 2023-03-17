@@ -5,7 +5,6 @@ zaripych-node-op*
 node-op*
 .log
 .DS_Store
-
 coverage
 coverage-*
 .jest-cache
@@ -19,3 +18,14 @@ log.txt
 dist
 out
 .local-semantic-release
+.idea/
+.vscode/
+node_modules/
+*.tgz
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm/
+.turbo
+.tsc-out
+.temporary

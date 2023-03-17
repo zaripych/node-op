@@ -1,5 +1,6 @@
-import React from 'react';
 import { Box } from 'ink';
+import React from 'react';
+
 import { useAppInput } from '../hooks';
 
 interface ILimitViewProps {

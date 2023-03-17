@@ -1,13 +1,15 @@
-import { from, of, merge } from 'rxjs';
-import { switchMap, map, catchError } from 'rxjs/operators';
+import { from, merge,of } from 'rxjs';
+import { catchError,map, switchMap } from 'rxjs/operators';
+
 import { clipboardCopy } from '../../../../api';
 import {
   copyToClipboard,
-  copyToClipboardSuccess,
   copyToClipboardFailed,
   copyToClipboardReset,
+  copyToClipboardSuccess,
 } from '../../actions';
-import { runEpic, sharedState, ofType, Epic } from '../../building-blocks';
+import type { Epic} from '../../building-blocks';
+import {ofType, runEpic, sharedState } from '../../building-blocks';
 
 const copyToClipboardEpic: Epic = (actions) =>
   actions.pipe(

@@ -1,5 +1,6 @@
-import { spawnAndCheck } from './spawn';
 import { isString } from 'util';
+
+import { spawnAndCheck } from './spawn';
 
 export interface IDeleteItemProps {
   uuid: string;

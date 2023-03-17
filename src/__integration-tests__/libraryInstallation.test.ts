@@ -1,12 +1,14 @@
+import { mkdir } from 'fs/promises';
+import { join } from 'path';
+
+import { emptyDir, readJSON, writeJSON } from './helpers';
 import {
-  ROOT,
   buildAndPack,
+  ROOT,
   sortedDirectoryContents,
   spawnAndCheck,
   unarchiveTarGz,
 } from './helpers';
-import { join } from 'path';
-import { mkdirp, emptyDir, readJSON, writeJSON } from 'fs-extra';
 
 jest.setTimeout(60000);
 
@@ -23,7 +25,7 @@ describe('given built and packaged library', () => {
   };
 
   beforeAll(async () => {
-    await mkdirp(TEST_DIR);
+    await mkdir(TEST_DIR, { recursive: true });
     await emptyDir(TEST_DIR);
 
     const result = await buildAndPack();
@@ -116,7 +118,7 @@ describe('given built and packaged library', () => {
 
   describe('given empty sub-directory where we initialize a package and add ours as a dependency', () => {
     beforeAll(async () => {
-      await mkdirp(TEST_DIR);
+      await mkdir(TEST_DIR, { recursive: true });
       await emptyDir(TEST_DIR);
 
       await spawnAndCheck('npm', ['init', '-y'], {
@@ -130,9 +132,9 @@ describe('given built and packaged library', () => {
         shell: process.platform === 'win32',
       });
 
-      const pkgJson = (await readJSON(join(TEST_DIR, 'package.json'))) as {
-        scripts?: Record<string, string>;
-      };
+      const pkgJson = await readJSON<{ scripts?: Record<string, string> }>(
+        join(TEST_DIR, 'package.json')
+      );
       const modifiedPkgJson = {
         ...pkgJson,
         scripts: { ...(pkgJson.scripts || {}), op: 'op', 'node-op': 'node-op' },

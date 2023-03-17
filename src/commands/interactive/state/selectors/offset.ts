@@ -1,6 +1,7 @@
 import { map } from 'rxjs/operators';
-import { sharedState, ofType } from '../../building-blocks';
+
 import { setOffset } from '../../actions';
+import { ofType,sharedState } from '../../building-blocks';
 
 export const offset = sharedState(
   (actions) =>

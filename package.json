@@ -20,13 +20,15 @@
   },
   "license": "MIT",
   "author": "@zaripych",
-  "main": "index.js",
+  "type": "module",
+  "exports": "./src/cli.ts",
+  "main": "./src/cli.ts",
+  "types": "./src/cli.ts",
   "bin": {
-    "node-op": "./cli.js",
-    "op": "./dist/binaries/op",
-    "vault-checkin": "./vaultCheckin.js",
-    "vault-checkout": "./vaultCheckout.js",
-    "vault-diff": "./vaultDiff.js"
+    "node-op": "./bin/node-op.gen.mjs",
+    "vault-checkin": "./bin/vault-checkin.gen.mjs",
+    "vault-checkout": "./bin/vault-checkout.gen.mjs",
+    "vault-diff": "./bin/vault-diff.gen.mjs"
   },
   "files": [
     "dist",
@@ -40,56 +42,20 @@
     "README.md"
   ],
   "scripts": {
-    "before-release": "patch-package && npm run build",
-    "prebuild": "node ./scripts/clean.js",
-    "build": "node ./scripts/rollup.js -c",
-    "build:dev": "node ./scripts/build.js -s",
-    "build:source-maps": "node ./scripts/rollup.js -c -m",
-    "build:watch": "node ./scripts/build.js --watch",
-    "check": "concurrently --raw -c \"node ./scripts/build.js\" \"tsc\" \"eslint . --ext .js,.jsx,.ts,.tsx -f pretty\"",
-    "clean": "node ./scripts/clean.js",
-    "combine-coverage": "node ./scripts/combineCoverage.js",
-    "declarations": "tsc -p ./tsconfig.declarations.json",
-    "eslint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "postinstall": "node installOp.js",
-    "integration": "jest --config ./jest.config.integration.js --color -i",
-    "lint": "yarn run eslint -f pretty",
-    "obtain-fingerprint": "echo -n | openssl s_client -connect cache.agilebits.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > cert.pem && openssl x509 -noout -in cert.pem -fingerprint",
-    "patch": "ts-deps patch",
-    "print-current-version": "node ./op-update-watcher/index",
-    "release": "node ./scripts/release.js",
-    "semantic-release": "semantic-release",
-    "test": "jest --color",
-    "ts-deps": "ts-deps",
-    "type-check": "tsc"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "pre-push": "yarn run check"
-    }
-  },
-  "lint-staged": {
-    "*.{tsx,jsx,ts,js,json,md,yaml,yml}": [
-      "prettier --write"
-    ],
-    "package.json": [
-      "sort-package-json"
-    ]
+    "lint": "repka lint",
+    "test": "repka test",
+    "build": "repka build:node"
   },
   "dependencies": {
     "yoga-layout-prebuilt": "1.9.6"
   },
   "devDependencies": {
-    "@babel/preset-react": "7.10.4",
+    "@jest/globals": "29.2.2",
     "@octokit/rest": "18.0.5",
-    "@rollup/plugin-babel": "5.2.0",
-    "@rollup/plugin-commonjs": "15.0.0",
-    "@rollup/plugin-json": "4.1.0",
-    "@rollup/plugin-node-resolve": "9.0.0",
+    "@repka-kit/ts": "file:../repka/packages/build-tools/ts/dist",
     "@types/adm-zip": "0.4.33",
     "@types/ink-spinner": "3.0.0",
+    "@types/jest": "29.2.6",
     "@types/node": "10.17.13",
     "@types/pump": "1.1.0",
     "@types/react": "16.9.49",
@@ -107,14 +73,14 @@
     "pump": "3.0.0",
     "react": "16.13.1",
     "rimraf": "3.0.2",
-    "rollup": "2.26.5",
     "rxjs": "6.6.3",
     "rxjs-marbles": "6.0.1",
     "rxjs-spy": "7.5.3",
     "selenium-webdriver": "3.6.0",
     "semver": "7.3.2",
-    "ts-deps": "0.17.0",
+    "tar-fs": "2.1.1",
     "webdriver-query": "1.0.1"
   },
+  "peerDependencies": {},
   "op_version": "1.6.0"
 }

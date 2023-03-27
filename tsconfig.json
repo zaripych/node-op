@@ -2,6 +2,7 @@
   "extends": "@repka-kit/ts/configs/tsconfig.base.json",
   "compilerOptions": {
     "outDir": ".tsc-out",
+    "incremental": true,
     "tsBuildInfoFile": ".tsc-out/.tsbuildinfo",
     "jsx": "preserve"
   },

@@ -42,12 +42,12 @@
     "README.md"
   ],
   "scripts": {
+    "build": "repka build:node",
     "lint": "repka lint",
-    "test": "repka test",
-    "build": "repka build:node"
+    "test": "repka test"
   },
   "dependencies": {
-    "yoga-layout-prebuilt": "1.9.6"
+    "yoga-layout-prebuilt": "1.10.0"
   },
   "devDependencies": {
     "@jest/globals": "29.2.2",

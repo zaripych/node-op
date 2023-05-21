@@ -1,17 +1,17 @@
 import { isString } from 'util';
 
 import { catchAsync } from './catchAsync';
-import type { IItem } from './item';
+import type { Item } from './item';
 import { spawnAndCheck } from './spawn';
 
-export interface ICreateDocumentProps {
+export interface CreateDocumentProps {
   file: string;
   title?: string;
   vault?: string;
   verbosity: number;
 }
 
-export async function createDocument(props: ICreateDocumentProps) {
+export async function createDocument(props: CreateDocumentProps) {
   const output = await spawnAndCheck(
     'op',
     [
@@ -28,7 +28,7 @@ export async function createDocument(props: ICreateDocumentProps) {
     }
   );
 
-  const parsed = await catchAsync(() => JSON.parse(output) as IItem);
+  const parsed = await catchAsync(() => JSON.parse(output) as Item);
 
   if (parsed.error) {
     throw new Error(

@@ -1,2 +1,2 @@
-export * from './selectors';
+export * from './appState';
 export * from './types';

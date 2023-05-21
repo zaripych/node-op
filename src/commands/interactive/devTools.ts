@@ -1,5 +1,3 @@
-import 'source-map-support/register';
-
 import { create } from 'rxjs-spy';
 
 import { log } from './hooks/log';

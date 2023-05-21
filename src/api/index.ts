@@ -1,4 +1,3 @@
-export * from './aggregateError';
 export * from './catchAsync';
 export * from './copyToClipboard';
 export * from './createDocument';

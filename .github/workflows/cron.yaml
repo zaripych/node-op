@@ -13,21 +13,40 @@ jobs:
 
     strategy:
       matrix:
-        node: ["10"]
+        node: ['18']
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 1
 
-      - name: Setup Node
-        uses: actions/setup-node@v1.1.0
-        with:
-          node-version: ${{ matrix.node }}
+      - name: Get Node Version
+        run: |
+          echo "NODE_VERSION=$(jq -r .engines.node package.json)" >> $GITHUB_ENV
 
-      - name: Install
-        run: |-
-          npm install && npm install chromedriver@$(node -p '/\d+/.exec(process.argv.slice(1).join(" "))[0]' $(google-chrome --version)) --no-save
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
+
+      - name: Get pnpm store directory
+        id: pnpm-store
+        run: |
+          echo "PNPM_STORE_DIR=$(pnpm store path)" >> $GITHUB_ENV
+
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: ${{ env.PNPM_STORE_DIR }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install Dependencies
+        run: pnpm install
 
       - name: Check
         env:
@@ -36,4 +55,4 @@ jobs:
           GIT_AUTHOR_NAME: ${{ secrets.GIT_AUTHOR_NAME }}
           GIT_COMMITTER_EMAIL: ${{ secrets.GIT_COMMITTER_EMAIL }}
           GIT_COMMITTER_NAME: ${{ secrets.GIT_COMMITTER_NAME }}
-        run: node ./op-update-watcher/checkVersionAndPush.js
+        run: tsx ./op-update-watcher/checkVersionAndPush.ts

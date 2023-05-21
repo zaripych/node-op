@@ -1,6 +1,6 @@
 import { spawnAndCheck } from './spawn';
 
-export interface ICopyProps {
+export interface CopyProps {
   value: string;
 }
 
@@ -30,7 +30,7 @@ const xselExists = async () => {
   return result === 0;
 };
 
-export async function clipboardCopy(props: ICopyProps) {
+export async function clipboardCopy(props: CopyProps) {
   const xselAvailable =
     process.platform === 'linux' &&
     process.env['DISPLAY'] &&

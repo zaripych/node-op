@@ -4,7 +4,11 @@
     "outDir": ".tsc-out",
     "incremental": true,
     "tsBuildInfoFile": ".tsc-out/.tsbuildinfo",
-    "jsx": "preserve"
+    "jsx": "react",
+    "paths": {
+      "rxjs-spy": ["./node_modules/rxjs-spy/cjs"],
+      "rxjs-spy/operators": ["./node_modules/rxjs-spy/cjs/operators"]
+    }
   },
   "include": ["src", "package.json"]
 }

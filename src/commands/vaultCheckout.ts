@@ -1,16 +1,10 @@
 import { basename } from 'path';
 import { isError } from 'util';
 
-import type { IItem } from '../api';
-import {
-  AggregateError,
-  catchAsync,
-  getDocument,
-  listItems,
-  rethrowAsync,
-} from '../api';
+import type { Item } from '../api';
+import { catchAsync, getDocument, listItems, rethrowAsync } from '../api';
 
-export interface ICheckoutProps {
+export interface CheckoutProps {
   vault?: string;
   files: string[];
   force?: boolean;
@@ -18,9 +12,9 @@ export interface ICheckoutProps {
 }
 
 async function processFile(
-  props: ICheckoutProps,
+  props: CheckoutProps,
   file: string,
-  items: IItem[],
+  items: Item[],
   deps = {
     getDocument,
   }
@@ -58,7 +52,7 @@ async function processFile(
 }
 
 export async function vaultCheckout(
-  props: ICheckoutProps,
+  props: CheckoutProps,
   /**
    * @ignore
    */
@@ -67,8 +61,7 @@ export async function vaultCheckout(
     getDocument,
   }
 ) {
-  // tslint:disable-next-line: strict-boolean-expressions
-  if (!props || typeof props !== 'object') {
+  if (typeof props !== 'object') {
     throw new TypeError('no properties passed');
   }
 
@@ -113,7 +106,7 @@ export async function vaultCheckout(
       if (!first) {
         throw new Error();
       }
-      throw new AggregateError(first, ...rest);
+      throw new AggregateError([first, ...rest], 'Multiple errors occurred');
     } else {
       throw errorResults[0];
     }

@@ -1,4 +1,6 @@
-export interface IItem {
+import type { JsonWebKey } from 'crypto';
+
+export interface Item {
   uuid: string;
   templateUuid: string;
   trashed: 'N' | 'Y';
@@ -16,7 +18,7 @@ export interface IItem {
   };
 }
 
-export interface IItemDetails {
+export interface ItemDetails {
   uuid: string;
   templateUuid: string;
   trashed: 'N' | 'Y';
@@ -33,30 +35,38 @@ export interface IItemDetails {
     ainfo: string;
   };
   details: {
-    fields?: IDetailField[];
+    fields?: DetailField[];
     documentAttributes?: {
       documentId: string;
       fileName: string;
+      integrityHash?: string;
+      nonce?: string;
+      encryptedSize?: number;
+      unencryptedSize?: number;
+      signingKey?: JsonWebKey;
+      encryptionKey?: JsonWebKey;
     };
     notesPlain?: string;
-    sections?: IDetailSection[];
+    password?: string;
+    passwordHistory?: string[];
+    sections?: DetailSection[];
   };
 }
 
-export interface IDetailField {
+export interface DetailField {
   type: 'E' | 'T' | 'P';
   designation: string;
   value: string;
   name: string;
 }
 
-export interface IDetailSection {
+export interface DetailSection {
   name: string;
   title: string;
-  fields: IDetailSectionField[];
+  fields?: DetailSectionField[];
 }
 
-export interface IDetailSectionField {
+export interface DetailSectionField {
   k: string;
   n: string;
   t: string;

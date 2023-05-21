@@ -1,11 +1,25 @@
 import type { ChildProcess, SpawnOptions } from 'child_process';
 import { spawn, spawnSync } from 'child_process';
 import { EOL } from 'os';
+import { delimiter, resolve } from 'path';
+import { fileURLToPath } from 'url';
+
+const prepare = () => {
+  let binariesPath = resolve(fileURLToPath(new URL('../bin', import.meta.url)));
+  if (binariesPath.endsWith('src/bin')) {
+    binariesPath = resolve(binariesPath, '../../bin');
+  }
+  const path = process.env['PATH'];
+  if (!path || !path.includes(binariesPath)) {
+    process.env['PATH'] = [binariesPath, process.env['PATH']].join(delimiter);
+  }
+};
 
 export function spawnSyncAndCheck(
   ...args: Parameters<typeof spawnSync>
 ): string {
   const [cmd, optsOrArgs, opts] = args;
+  prepare();
   const proc = spawnSync(cmd, Array.isArray(optsOrArgs) ? optsOrArgs : [], {
     ...opts,
     encoding: 'utf8',
@@ -39,6 +53,8 @@ export function spawnAndCheck<R = string>(
 ): Promise<R> {
   const expectedExitCodes = options.expectedExitCodes ?? [0];
   const appendOutputToError = options.appendOutputToError ?? false;
+
+  prepare();
 
   if (options.verbosity > 0) {
     console.log([command, ...args].join(' '));

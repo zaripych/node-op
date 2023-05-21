@@ -1,64 +1,103 @@
+import chalk from 'chalk';
 import { Box, Text } from 'ink';
 import React from 'react';
-import { empty, of } from 'rxjs';
-import { filter, switchMap, withLatestFrom } from 'rxjs/operators';
+import { EMPTY, merge, of } from 'rxjs';
+import { filter, map, switchMap, withLatestFrom } from 'rxjs/operators';
+import { formatWithOptions } from 'util';
 
 import { copyToClipboard, keyInput } from '../actions';
 import {
   isTruthy,
   ofType,
-  useEpicWhenMounted,
+  sharedState,
+  useEpic,
   useSelect,
-  useStateWithActions,
 } from '../building-blocks';
-import type { IUiItemDetailsFields } from '../state';
+import type { UiItemDetailsField } from '../state';
 import { appState } from '../state';
+import { itemDetailsOtpStatus } from '../state/itemDetails';
 import { ErrorAlert } from './errorAlert';
-import { FieldStatus, ItemField } from './itemField';
+import { FieldCursor, FieldStatus, ItemField, ItemOtpField } from './itemField';
 import { Keystroke } from './keystroke';
-import { VerticalLimitView } from './limitView';
+import { VerticalScrollView } from './scrollView';
 
-interface IProps {
-  viewportHeight: number;
-  viewportWidth: number;
-}
+const setCurrentField = (field: UiItemDetailsField) => {
+  return {
+    type: setCurrentField,
+    field,
+  };
+};
 
-function useCopyToClipboardOnEnter(props: { fields: IUiItemDetailsFields[] }) {
-  const { fields } = props;
-  const [cursor, setCursor, cursors] = useStateWithActions(0);
+const currentField = sharedState(
+  (actions) =>
+    actions.pipe(
+      ofType(setCurrentField),
+      map((action) => action.field)
+    ),
+  {
+    initial: undefined,
+  }
+);
 
-  useEpicWhenMounted(
+function useCopyToClipboardOnEnter(props: { allFields: UiItemDetailsField[] }) {
+  const { allFields } = props;
+
+  useEpic(
     (actions) =>
-      actions.pipe(
-        ofType(keyInput),
-        withLatestFrom(cursors),
-        switchMap(([action, currentCursor]) => {
-          if (currentCursor < 0 || currentCursor >= fields.length) {
-            return empty();
-          }
+      merge(
+        // select first field on mount
+        allFields[0] ? of(setCurrentField(allFields[0])) : EMPTY,
 
-          const field = fields[currentCursor];
-          if (!field) {
-            throw new Error('Expected field to be initialized');
-          }
+        // react to keyboard input
+        actions.pipe(
+          ofType(keyInput),
+          withLatestFrom(currentField),
+          switchMap(([action, field]) => {
+            if (!field) {
+              return EMPTY;
+            }
 
-          if (action.key.return && !process.stdout.isTTY) {
-            process.stdout.write(field.value);
-            process.exit(0);
-          } else if (
-            (action.key.ctrl && action.input === '^x') ||
-            (action.key.return && process.stdout.isTTY)
-          ) {
-            return of(copyToClipboard(field));
-          } else {
-            return empty();
-          }
-        })
+            const clamped = (value: number) =>
+              Math.max(0, Math.min(value, allFields.length - 1));
+
+            const index = allFields.indexOf(field);
+
+            if (action.key.return && !process.stdout.isTTY) {
+              process.stdout.write(field.value);
+              process.exit(0);
+            }
+
+            if (
+              (action.key.ctrl && action.input === 'x') ||
+              (action.key.return && process.stdout.isTTY)
+            ) {
+              return of(copyToClipboard(field));
+            }
+
+            if (action.key.downArrow) {
+              const next = allFields[clamped(index + 1)];
+              if (!next) {
+                return EMPTY;
+              }
+
+              return of(setCurrentField(next));
+            }
+
+            if (action.key.upArrow) {
+              const next = allFields[clamped(index - 1)];
+              if (!next) {
+                return EMPTY;
+              }
+
+              return of(setCurrentField(next));
+            }
+
+            return EMPTY;
+          })
+        )
       ),
-    [cursors, fields]
+    [allFields]
   );
-
-  return [cursor, setCursor] as const;
 }
 
 function useItemDetailsState() {
@@ -68,85 +107,86 @@ function useItemDetailsState() {
     );
   }
 
-  const [itemDetails] = useSelect(appState.itemDetails.pipe(filter(isTruthy)), {
-    deps: [appState.itemDetails],
-    initial: appState.itemDetails.value,
-  });
+  const [itemDetails] = useSelect(
+    () => appState.itemDetails.pipe(filter(isTruthy)),
+    [],
+    appState.itemDetails.value
+  );
 
-  const realFields = React.useMemo(
-    () => [
-      ...itemDetails.fields,
-      ...itemDetails.sections.reduce<IUiItemDetailsFields[]>(
+  const allSections = React.useMemo(
+    () => [{ title: '', fields: itemDetails.fields }, ...itemDetails.sections],
+    [itemDetails.sections]
+  );
+
+  const allFields = React.useMemo(
+    () =>
+      allSections.reduce<UiItemDetailsField[]>(
         (acc, section) => [...acc, ...section.fields],
         []
       ),
-    ],
-    [itemDetails]
-  );
-
-  const fields = React.useMemo(
-    () => [
-      ...[
-        itemDetails.notes && {
-          concealed: false,
-          title: 'notes',
-          value: itemDetails.notes,
-        },
-      ].filter(isTruthy),
-      ...realFields,
-    ],
-    [itemDetails.notes, realFields]
-  );
-
-  const maxFieldNameLength = fields.reduce(
-    (max, field) => Math.max(max, field.title.length),
-    0
+    [allSections]
   );
 
   const [copyRequest] = useSelect(appState.copyToClipboardRequest);
 
   return {
     title: itemDetails.title,
-    fields,
-    maxFieldNameLength,
+    allFields,
+    sections: allSections,
     copyRequest,
+    itemDetails,
   };
 }
 
-export const ItemDetails: React.FC<IProps> = (props) => {
-  const { title, fields, maxFieldNameLength, copyRequest } =
-    useItemDetailsState();
-  const [cursor, setCursor] = useCopyToClipboardOnEnter({ fields });
-
-  const components = [
-    ...fields.map((field, i) => (
-      <React.Fragment key={i}>
-        <Box flexDirection="row">
-          <FieldStatus field={field} marginRight={1} />
-          <ItemField
-            field={field}
-            titleColumnWidth={maxFieldNameLength}
-            valueColumnWidth={props.viewportWidth - maxFieldNameLength - 7}
-          />
-        </Box>
-      </React.Fragment>
-    )),
-  ].filter(isTruthy);
-
-  const renderItems = React.useCallback(
-    (start: number, end: number) => (
-      <React.Fragment>{components.slice(start, end)}</React.Fragment>
-    ),
-    [components]
+const ItemFieldRow: React.ComponentType<{
+  field: UiItemDetailsField;
+}> = (props) => {
+  const { field } = props;
+  const [selected] = useSelect(
+    (field) => currentField.pipe(map((current) => current === field)),
+    [field]
   );
+  const [otpField] = useSelect(
+    (field) =>
+      itemDetailsOtpStatus.pipe(
+        switchMap((data) => {
+          const otp = data[field.value];
+          if (!otp) {
+            return EMPTY;
+          }
+          return of(otp);
+        })
+      ),
+    [field]
+  );
+  return (
+    <Box flexDirection="row">
+      {selected ? <FieldCursor field={field} /> : <Box width={1} />}
+      <FieldStatus field={field} marginRight={1} />
+      {otpField ? (
+        <ItemOtpField title={field.title} otpField={otpField} />
+      ) : (
+        <ItemField field={field} />
+      )}
+    </Box>
+  );
+};
 
-  const headerHeight = 2;
-  const footerHeight = copyRequest.status === 'failed' ? 2 : 0;
-  const viewportHeight = props.viewportHeight - headerHeight - footerHeight;
+export const ItemDetails: React.ComponentType = () => {
+  const { title, allFields, sections, copyRequest, itemDetails } =
+    useItemDetailsState();
+
+  useCopyToClipboardOnEnter({ allFields });
+
+  const details = React.useMemo(
+    () =>
+      formatWithOptions({ depth: 10, colors: chalk.level > 0 }, itemDetails),
+    [itemDetails]
+  );
 
   return (
     <Box flexDirection="column">
-      <Box flexDirection="column" marginBottom={1}>
+      <Box flexDirection="column" marginBottom={1} height={2} flexShrink={0}>
         <Text color="bold">{title}</Text>
         {!process.stdout.isTTY && (
           <Box>
@@ -167,74 +207,32 @@ export const ItemDetails: React.FC<IProps> = (props) => {
         )}
       </Box>
 
-      <VerticalLimitView
-        itemHeight={1}
-        showCursor={true}
-        cursor={cursor}
-        setCursor={setCursor}
-        viewportHeight={viewportHeight}
-        itemCount={components.length}
-        render={renderItems}
-      />
+      {sections.length > 0 && (
+        <VerticalScrollView contentHeightDeps={[sections]}>
+          {sections.map((section, si) => (
+            <Box flexDirection="column" key={si}>
+              {section.title && (
+                <Box flexDirection="row" marginTop={1}>
+                  <Text>{section.title}</Text>
+                </Box>
+              )}
+              {section.fields.map((field, fi) => (
+                <ItemFieldRow field={field} key={fi} />
+              ))}
+            </Box>
+          ))}
+        </VerticalScrollView>
+      )}
+      {allFields.length === 0 && (
+        <VerticalScrollView contentHeightDeps={[details]}>
+          <Text>Item cannot be displayed, here is raw information:</Text>
+          <Text>{details}</Text>
+        </VerticalScrollView>
+      )}
+
       {copyRequest.status === 'failed' && (
         <ErrorAlert error={copyRequest.error} />
       )}
     </Box>
   );
 };
-
-// const content = (
-//   <Box flexDirection="column" padding={1}>
-//     <Box
-//       flexDirection="column"
-//       flexShrink={0}
-//       textWrap="wrap"
-//       ref={refForMeasuring('header')}
-//     >
-//       <Box textWrap="wrap">
-//         <Color bold>{itemDetails.title}</Color>
-//       </Box>
-//       {usefulDescription && <Box textWrap="wrap">{usefulDescription}</Box>}
-//       {itemDetails.notes && <Box textWrap="wrap">{itemDetails.notes}</Box>}
-//     </Box>
-//     {itemDetails.fields.length > 0 && (
-//       <Box flexDirection="column" marginLeft={1} marginTop={1} flexShrink={0}>
-//         {itemDetails.fields.map((field, i) => (
-//           <React.Fragment key={i}>
-//             <ItemField
-//               title={field.title}
-//               titleColumnWidth={maxFieldNameLength}
-//               concealed={field.concealed}
-//               value={field.value}
-//             />
-//           </React.Fragment>
-//         ))}
-//       </Box>
-//     )}
-//     {itemDetails.sections.map((section, i) => (
-//       <Box
-//         flexDirection="column"
-//         marginLeft={1}
-//         marginTop={1}
-//         key={i}
-//         flexShrink={0}
-//       >
-//         <Box marginBottom={1}>
-//           <Color>{section.title}</Color>
-//         </Box>
-//         {section.fields.map((field, k) => (
-//           <React.Fragment key={k * i}>
-//             <Box marginLeft={2}>
-//               <ItemField
-//                 title={field.title}
-//                 titleColumnWidth={maxFieldNameLength}
-//                 concealed={field.concealed}
-//                 value={field.value}
-//               />
-//             </Box>
-//           </React.Fragment>
-//         ))}
-//       </Box>
-//     ))}
-//   </Box>
-// );

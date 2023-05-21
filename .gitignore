@@ -30,3 +30,7 @@ yarn-error.log*
 .tsc-out
 .temporary
 dist-prev
+bin/op
+bin/op.cmd
+bin/op.exe
+bin/package.pkg

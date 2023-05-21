@@ -1,6 +1,7 @@
+import { describe, expect,it, jest } from '@jest/globals';
 import type { Stats } from 'fs';
 
-import type { IItem } from '../api';
+import type { Item } from '../api';
 import { vaultCheckin } from '../commands/vaultCheckin';
 
 type Deps = NonNullable<Parameters<typeof vaultCheckin>[1]>;
@@ -181,7 +182,7 @@ describe('vaultCheckin', () => {
               overview: {
                 title: 'file1',
               },
-            } as IItem,
+            } as Item,
           ])
         ),
         createDocument: jest.fn(() => {
@@ -221,7 +222,7 @@ describe('vaultCheckin', () => {
               overview: {
                 title: 'file1',
               },
-            } as IItem,
+            } as Item,
           ])
         ),
         trashItem: jest.fn(() => {
@@ -264,7 +265,7 @@ describe('vaultCheckin', () => {
               overview: {
                 title: 'file1',
               },
-            } as IItem,
+            } as Item,
           ])
         ),
         unlink: jest.fn(() => {
@@ -307,7 +308,7 @@ describe('vaultCheckin', () => {
               overview: {
                 title: 'file',
               },
-            } as IItem,
+            } as Item,
           ])
         ),
       },
@@ -346,7 +347,7 @@ describe('vaultCheckin', () => {
               overview: {
                 title: 'file',
               },
-            } as IItem,
+            } as Item,
           ])
         ),
       },
@@ -382,7 +383,7 @@ describe('vaultCheckin', () => {
               overview: {
                 title: 'file',
               },
-            } as IItem,
+            } as Item,
           ])
         ),
       },
@@ -447,7 +448,7 @@ describe('vaultCheckin', () => {
               overview: {
                 title: 'file',
               },
-            } as IItem,
+            } as Item,
           ])
         ),
       },
@@ -490,7 +491,7 @@ describe('vaultCheckin', () => {
               overview: {
                 title: 'file',
               },
-            } as IItem,
+            } as Item,
           ])
         ),
       },

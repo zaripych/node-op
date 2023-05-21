@@ -3,7 +3,7 @@ import React from 'react';
 
 import { useAppInput } from '../hooks';
 
-interface ILimitViewProps {
+interface LimitViewProps {
   itemHeight: number;
   itemCount: number;
   viewportHeight: number;
@@ -69,7 +69,7 @@ export const useCursorRef = (props: {
   };
 };
 
-export const VerticalLimitView: React.FC<ILimitViewProps> = (props) => {
+export const VerticalLimitView: React.FC<LimitViewProps> = (props) => {
   const totalHeight = props.itemHeight * props.itemCount;
   const viewportHeight = props.viewportHeight;
   const maxOffset = totalHeight - viewportHeight - 1;
@@ -143,14 +143,6 @@ export const VerticalLimitView: React.FC<ILimitViewProps> = (props) => {
   ]);
 
   useAppInput((_, key) => {
-    if (key.home) {
-      setCursor(0);
-      setOffset(0);
-    }
-    if (key.end) {
-      setCursor(props.itemCount);
-      setOffset(maxOffset);
-    }
     if (key.pageUp) {
       setOffset((value) => value - viewportHeight);
     }

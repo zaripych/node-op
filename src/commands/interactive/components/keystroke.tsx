@@ -1,10 +1,11 @@
 import { Text } from 'ink';
+import React from 'react';
 
-interface IProps {
+interface Props {
   value: string;
 }
 
-export const Keystroke: React.FC<IProps> = (props) => {
+export const Keystroke: React.FC<Props> = (props) => {
   return (
     <Text color="red" bold>
       {props.value}

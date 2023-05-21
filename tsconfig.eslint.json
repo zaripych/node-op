@@ -1,8 +1,8 @@
 {
   // Hello fellow developer 👋
-  // 
+  //
   // I'm very sorry to be a shameful plug of an extra config.
-  // 
+  //
   // Please commit me along with the rest of the code, I will help
   // you lint package level scripts that are essential for building and
   // bundling your pretty packages.
@@ -12,5 +12,5 @@
     "tsBuildInfoFile": ".tsc-out/.tsbuildinfo",
     "jsx": "preserve"
   },
-  "include": ["*.ts"]
+  "include": ["*.ts", "scripts/**/*.ts", "package.json"]
 }

@@ -1,14 +1,12 @@
 import { isTruthy } from '../commands/interactive/building-blocks/helpers';
 import { spawnAndCheck } from './spawn';
 
-export interface ICommand {
+export interface Command {
   command: string;
   description: string;
 }
 
-export async function listForwardedCommands(
-  opPath = 'op'
-): Promise<ICommand[]> {
+export async function listForwardedCommands(opPath = 'op'): Promise<Command[]> {
   const result = await spawnAndCheck(opPath, ['--help'], {
     env: process.env,
     verbosity: 0,

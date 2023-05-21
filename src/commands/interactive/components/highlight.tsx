@@ -1,7 +1,7 @@
 import { Text } from 'ink';
 import React from 'react';
 
-interface IProps {
+interface Props {
   text: string;
   substring: string;
 }
@@ -23,7 +23,7 @@ function* allIndexes(text: string, substring: string) {
   }
 }
 
-export const Highlight: React.FC<IProps> = (props) => {
+export const Highlight: React.FC<Props> = (props) => {
   if (!props.text) {
     return null;
   }

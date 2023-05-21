@@ -1,16 +1,20 @@
 import { useStdin } from 'ink';
 import React from 'react';
-import { of } from 'rxjs';
+import { map } from 'rxjs';
 
-import type { IKey} from '../actions';
+import type { Key } from '../actions';
 import { keyInput } from '../actions';
-import { useActionBinding } from '../building-blocks';
+import { useCallbackArgs } from '../building-blocks';
 
 export function dispatchAppInput() {
-  useAppInput(useActionBinding((input, key) => of(keyInput(input, key))));
+  useAppInput(
+    useCallbackArgs((args) =>
+      args.pipe(map(([input, key]) => keyInput(input, key)))
+    )
+  );
 }
 
-export function useAppInput(inputHandler?: (input: string, key: IKey) => void) {
+export function useAppInput(inputHandler?: (input: string, key: Key) => void) {
   const { stdin, setRawMode, isRawModeSupported } = useStdin();
 
   if (!inputHandler) {
@@ -65,6 +69,7 @@ export function useAppInput(inputHandler?: (input: string, key: IKey) => void) {
         escape: input === '\u001B',
         backspace: input === '\b',
         delete: input === '\u007f',
+        tab: input === '\t',
         //
         pageUp: input === '\u001b[5~',
         pageDown: input === '\u001b[6~',
@@ -108,13 +113,9 @@ export function useAppInput(inputHandler?: (input: string, key: IKey) => void) {
       inputHandler(input, key);
     };
 
-    if (stdin) {
-      stdin.on('data', handleData);
-    }
+    stdin.on('data', handleData);
     return () => {
-      if (stdin) {
-        stdin.off('data', handleData);
-      }
+      stdin.off('data', handleData);
     };
   }, [stdin, inputHandler]);
 

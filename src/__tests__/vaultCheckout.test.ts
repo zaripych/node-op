@@ -1,4 +1,6 @@
-import type { IItem } from '../api';
+import { describe, expect, it,jest } from '@jest/globals';
+
+import type { Item } from '../api';
 import { vaultCheckout } from '../commands/vaultCheckout';
 
 describe('vaultCheckout', () => {
@@ -154,7 +156,7 @@ describe('vaultCheckout', () => {
                 title: 'file',
               },
             },
-          ] as IItem[])
+          ] as Item[])
         ),
         getDocument: jest.fn(() => Promise.resolve()),
       },
@@ -208,7 +210,7 @@ describe('vaultCheckout', () => {
                 title: 'file',
               },
             },
-          ] as IItem[])
+          ] as Item[])
         ),
         getDocument: jest.fn(() => {
           throw new Error('Simulated error');
@@ -248,7 +250,7 @@ describe('vaultCheckout', () => {
                 title: 'file3',
               },
             },
-          ] as IItem[])
+          ] as Item[])
         ),
         getDocument: jest.fn(() => Promise.resolve()),
       },
@@ -292,7 +294,7 @@ describe('vaultCheckout', () => {
                 title: 'file5',
               },
             },
-          ] as IItem[])
+          ] as Item[])
         ),
         getDocument: jest.fn(() => Promise.resolve()),
       },
@@ -300,7 +302,7 @@ describe('vaultCheckout', () => {
 
     it('should work', async () => {
       await expect(vaultCheckout(...params)).rejects.toThrowError(
-        `Multiple errors occured`
+        `Multiple errors occurred`
       );
       expect(params[1]?.listItems).toBeCalledWith({
         vault: 'vault',
@@ -324,7 +326,7 @@ describe('vaultCheckout', () => {
                 title: 'file',
               },
             },
-          ] as IItem[])
+          ] as Item[])
         ),
         getDocument: jest.fn(() => Promise.resolve()),
       },
@@ -361,7 +363,7 @@ describe('vaultCheckout', () => {
                 title: 'file',
               },
             },
-          ] as IItem[])
+          ] as Item[])
         ),
         getDocument: jest.fn(() => Promise.resolve()),
       },
@@ -404,7 +406,7 @@ describe('vaultCheckout', () => {
                 title: 'file2',
               },
             },
-          ] as IItem[])
+          ] as Item[])
         ),
         getDocument: jest.fn(() => Promise.resolve()),
       },

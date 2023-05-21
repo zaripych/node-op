@@ -1,1 +1,3 @@
-export * from '../vaultDiff';
+import { main } from '../main';
+
+await main(() => import('../vaultDiff'));

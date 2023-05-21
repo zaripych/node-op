@@ -1,7 +1,7 @@
-import type { IUiItemDetailsFields } from '../state/types';
+import type { UiItemDetailsField } from '../state/types';
 import { errorInfo } from '../state/types';
 
-export function copyToClipboard(field: IUiItemDetailsFields) {
+export function copyToClipboard(field: UiItemDetailsField) {
   return {
     type: copyToClipboard,
     status: 'started' as const,
@@ -16,7 +16,7 @@ export function copyToClipboardReset() {
   };
 }
 
-export function copyToClipboardSuccess(field: IUiItemDetailsFields) {
+export function copyToClipboardSuccess(field: UiItemDetailsField) {
   return {
     type: copyToClipboardSuccess,
     status: 'success' as const,
@@ -25,7 +25,7 @@ export function copyToClipboardSuccess(field: IUiItemDetailsFields) {
 }
 
 export function copyToClipboardFailed(
-  field: IUiItemDetailsFields,
+  field: UiItemDetailsField,
   error: unknown
 ) {
   return {

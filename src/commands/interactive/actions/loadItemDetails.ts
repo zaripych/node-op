@@ -1,14 +1,12 @@
-import type { IUiItemDetails } from '../state/types';
+import type { UiItemDetails } from '../state/types';
 import { errorInfo } from '../state/types';
 
 export function loadItemDetailsReset() {
-  return initial;
+  return {
+    type: loadItemDetailsReset,
+    status: 'initial' as const,
+  };
 }
-
-const initial = {
-  type: loadItemDetailsReset,
-  status: 'initial' as const,
-};
 
 export function loadItemDetails(uuid: string) {
   return {
@@ -18,7 +16,7 @@ export function loadItemDetails(uuid: string) {
   };
 }
 
-export function loadItemDetailsSuccess(uuid: string, data: IUiItemDetails) {
+export function loadItemDetailsSuccess(uuid: string, data: UiItemDetails) {
   return {
     type: loadItemDetailsSuccess,
     status: 'success' as const,

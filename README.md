@@ -142,7 +142,7 @@ $> which op
 
 ## CLI Installation Process
 
-During `npm install` a script is executed which downloads and unpacks [pinned](https://github.com/zaripych/node-op/blob/master/package.json#L119) version of `op` into your `node_modules/node-op/lib/binaries` folder.
+During `npm install` a script is executed which downloads and unpacks [pinned](https://github.com/zaripych/node-op/blob/master/package.json#L119) version of `op` into your `node_modules/node-op/bin` folder.
 
 The `op` executable becomes available to be used through `npm run` or `yarn run`.
 

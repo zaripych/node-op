@@ -2,9 +2,8 @@ import { stat, unlink } from 'fs/promises';
 import { basename } from 'path';
 import { isError } from 'util';
 
-import type { IItem } from '../api';
+import type { Item } from '../api';
 import {
-  AggregateError,
   catchAsync,
   createDocument,
   listItems,
@@ -12,7 +11,7 @@ import {
   trashItem,
 } from '../api';
 
-interface ICheckinProps {
+interface CheckinProps {
   vault?: string;
   files: string[];
   dryRun?: boolean;
@@ -21,7 +20,7 @@ interface ICheckinProps {
   verbosity?: number;
 }
 
-function findSingleFile(file: string, items: IItem[]) {
+function findSingleFile(file: string, items: Item[]) {
   const title = basename(file);
   const filtered = items.filter((item) => title === item.overview.title);
 
@@ -42,7 +41,7 @@ function findSingleFile(file: string, items: IItem[]) {
 
 async function validateFile(
   file: string,
-  items: IItem[],
+  items: Item[],
   deps = { stat: (path: string) => stat(path) }
 ) {
   const result = await deps.stat(file);
@@ -53,7 +52,7 @@ async function validateFile(
 }
 
 async function processFile(
-  props: ICheckinProps,
+  props: CheckinProps,
   file: string,
   trashUuid?: string,
   deps = {
@@ -123,7 +122,7 @@ async function processFile(
 }
 
 export async function vaultCheckin(
-  props: ICheckinProps,
+  props: CheckinProps,
   deps = {
     listItems,
     createDocument,
@@ -132,7 +131,7 @@ export async function vaultCheckin(
     unlink,
   }
 ) {
-  if (!props || typeof props !== 'object') {
+  if (typeof props !== 'object') {
     throw new TypeError('no properties passed');
   }
 
@@ -211,7 +210,7 @@ export async function vaultCheckin(
       if (!first) {
         throw new Error();
       }
-      throw new AggregateError(first, ...rest);
+      throw new AggregateError([first, ...rest]);
     } else {
       throw errorResults[0];
     }

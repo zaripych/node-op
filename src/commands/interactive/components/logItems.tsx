@@ -3,13 +3,9 @@ import React from 'react';
 
 import { useLog } from '../hooks/log';
 import { Keystroke } from './keystroke';
-import { VerticalLimitView } from './limitView';
+import { VerticalScrollView } from './scrollView';
 
-interface IProps {
-  viewportHeight: number;
-}
-
-export const LogItems: React.FC<IProps> = (props) => {
+export const LogItems: React.ComponentType = () => {
   const { lines } = useLog();
 
   return (
@@ -21,27 +17,9 @@ export const LogItems: React.FC<IProps> = (props) => {
           <Keystroke value="Ctrl+C" /> to quit
         </Text>
       </Box>
-      <VerticalLimitView
-        itemHeight={1}
-        itemCount={lines.length}
-        viewportHeight={props.viewportHeight - 1}
-        render={(offset, len) => {
-          const items = React.useMemo(() => lines.slice(offset, offset + len), [
-            offset,
-            len,
-            lines,
-          ]);
-          return (
-            <React.Fragment>
-              {items.map((item, i) => (
-                <Box key={i} flexShrink={0}>
-                  <Text>{item}</Text>
-                </Box>
-              ))}
-            </React.Fragment>
-          );
-        }}
-      />
+      <VerticalScrollView>
+        <Text>{lines.join('\n')}</Text>
+      </VerticalScrollView>
     </Box>
   );
 };

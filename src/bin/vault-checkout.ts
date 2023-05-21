@@ -1,1 +1,3 @@
-export * from '../vaultCheckout';
+import { main } from '../main';
+
+await main(() => import('../vaultCheckout'));

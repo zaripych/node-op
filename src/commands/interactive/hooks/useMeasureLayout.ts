@@ -1,29 +1,21 @@
-import type { BoxProps } from 'ink';
+import type { DOMElement } from 'ink';
 import React from 'react';
 
-import { isTruthy } from '../building-blocks';
+import { screenSize } from '../state/screenSize';
 
-// tslint:disable: no-any
-// tslint:disable: no-unsafe-any
-// tslint:disable: strict-boolean-expressions
-// NOTE: This module is a hackery around internal ink api's, so we allow a little bit of `any`
-
-interface INode {
-  parentNode?: INode;
-  getComputedLeft(): number;
-  getComputedTop(): number;
-  getComputedHeight(): number;
-  getComputedWidth(): number;
-}
-
-export interface ILayout {
+type Layout = {
   left: number;
+  right: number;
   top: number;
+  bottom: number;
   width: number;
   height: number;
-}
+};
 
-function parentAtIndex(node: INode, index: number) {
+function parentAtIndex(node: DOMElement | null, index: number) {
+  if (!node) {
+    return undefined;
+  }
   if (index === 0) {
     return node;
   }
@@ -39,33 +31,24 @@ function parentAtIndex(node: INode, index: number) {
   return result;
 }
 
-export function useMeasureLayout<K extends string | number | symbol>(
-  callback?: (key: K, layout: ILayout) => void,
+export function useMeasureLayout<K extends string>(
+  onUpdate?: (opts: { key: K; layout: Layout }) => void,
   deps: React.DependencyList = []
 ) {
-  const layoutRef = React.useRef<{ [P in K]?: ILayout }>({});
-  const nodeRef = React.useRef<{ [P in K]?: INode }>({});
-  const getNodeRefCb = (key: K, parentIndex = 0) =>
-    React.useCallback(
-      (instance: React.Component<BoxProps> | null) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
-        const anyInstance = instance as any;
-        const node = parentAtIndex(
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-          anyInstance?.nodeRef?.current?.yogaNode,
-          parentIndex
-        );
-        const next = {
-          ...nodeRef.current,
-          [key]: node,
-        };
-        nodeRef.current = next;
-      },
-      [nodeRef, key]
-    );
+  const layoutRef = React.useRef<{ [P in K]?: Layout }>({});
+  const nodeRef = React.useRef<{ [P in K]?: DOMElement }>({});
+  const callbackRef = React.useRef<typeof onUpdate>(onUpdate);
+  callbackRef.current = onUpdate;
 
-  React.useLayoutEffect(() => {
-    const calculateLayout = <S extends K>(key: S) => {
+  const callback = React.useCallback<NonNullable<typeof onUpdate>>(
+    (...args) => {
+      callbackRef.current?.(...args);
+    },
+    []
+  );
+
+  const calculateLayout = React.useCallback(
+    <S extends K>(key: S) => {
       const layout = layoutRef.current[key];
       const node = nodeRef.current[key];
       if (!node) {
@@ -74,54 +57,79 @@ export function useMeasureLayout<K extends string | number | symbol>(
         }
         return;
       }
-      const height = node.getComputedHeight();
-      if (typeof height !== 'number' || Number.isNaN(height)) {
+      const next = node.yogaNode?.getComputedLayout();
+      if (!next || Number.isNaN(next.width)) {
         return;
       }
-      const width = node.getComputedWidth();
-      if (typeof width !== 'number' || Number.isNaN(width)) {
-        return;
-      }
-      const left = node.getComputedLeft();
-      const top = node.getComputedTop();
 
       if (
-        left === layout?.left &&
-        top === layout.top &&
-        width === layout.width &&
-        height === layout.height
+        layout &&
+        next.top === layout.top &&
+        next.left === layout.left &&
+        next.width == layout.width &&
+        next.height === layout.height
       ) {
         // no changes
         return;
       }
 
-      const next = { left, top, width, height };
-
       layoutRef.current[key] = next;
 
-      if (callback) {
-        callback(key, next);
-      }
+      callback({ key, layout: next });
 
       return next;
-    };
+    },
+    [layoutRef, nodeRef, callback]
+  );
 
-    const delayedCalculate = (key: K) => {
+  const updateLayout = React.useCallback(
+    (key: K) => {
       const result = calculateLayout(key);
-      if (typeof result !== 'number') {
-        setTimeout(delayedCalculate, 0, key);
+      if (!result) {
+        setTimeout(updateLayout, 0, key);
         return;
       }
       return result;
-    };
+    },
+    [calculateLayout]
+  );
 
-    (Object.keys(nodeRef.current) as K[]).forEach((key) =>
-      delayedCalculate(key)
+  const refForMeasuring = (key: K, parentIndex = 0) =>
+    React.useCallback(
+      (instance: DOMElement | null) => {
+        const node = parentAtIndex(instance, parentIndex);
+        if (!node) {
+          return;
+        }
+        const next = {
+          ...nodeRef.current,
+          [key]: node,
+        };
+        nodeRef.current = next;
+        updateLayout(key);
+      },
+      [nodeRef, key]
     );
-  }, [layoutRef, Object.values(nodeRef.current).filter(isTruthy).length, deps]);
+
+  React.useLayoutEffect(() => {
+    (Object.keys(nodeRef.current) as K[]).forEach((key) => updateLayout(key));
+  }, [nodeRef, ...deps]);
+
+  React.useLayoutEffect(() => {
+    const subscription = screenSize.subscribe({
+      next: () => {
+        (Object.keys(nodeRef.current) as K[]).forEach((key) =>
+          updateLayout(key)
+        );
+      },
+    });
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
 
   return {
     currentLayout: (key: K) => layoutRef.current[key],
-    refForMeasuring: getNodeRefCb,
+    refForMeasuring,
   };
 }

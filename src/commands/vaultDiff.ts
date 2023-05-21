@@ -2,22 +2,16 @@ import { randomBytes } from 'crypto';
 import { stat, unlink, writeFile } from 'fs/promises';
 import { basename } from 'path';
 
-import type {
-  IItem} from '../api';
-import {
-  getDocument,
-  gitDiffFiles,
-  listItems,
-  rethrowAsync,
-} from '../api';
+import type { Item } from '../api';
+import { getDocument, gitDiffFiles, listItems, rethrowAsync } from '../api';
 
-interface IDiffProps {
+interface DiffProps {
   vault?: string;
   files: string[];
   verbosity?: number;
 }
 
-function findSingleFile(file: string, items: IItem[]) {
+function findSingleFile(file: string, items: Item[]) {
   const title = basename(file);
   const filtered = items.filter((item) => title === item.overview.title);
 
@@ -36,7 +30,7 @@ function findSingleFile(file: string, items: IItem[]) {
   return filtered[0];
 }
 
-async function validateFile(file: string, items: IItem[], deps = { stat }) {
+async function validateFile(file: string, items: Item[], deps = { stat }) {
   const result = await deps.stat(file);
   if (!result.isFile()) {
     throw new Error(`file at path '${file}' is not a file`);
@@ -45,7 +39,7 @@ async function validateFile(file: string, items: IItem[], deps = { stat }) {
 }
 
 async function diffFile(
-  props: IDiffProps,
+  props: DiffProps,
   file: string,
   compareUuid?: string,
   deps = {
@@ -97,7 +91,7 @@ async function diffFile(
 }
 
 export async function vaultDiff(
-  props: IDiffProps,
+  props: DiffProps,
   deps = {
     listItems,
     stat,
@@ -107,8 +101,7 @@ export async function vaultDiff(
     gitDiffFiles,
   }
 ) {
-  // tslint:disable-next-line: strict-boolean-expressions
-  if (!props || typeof props !== 'object') {
+  if (typeof props !== 'object') {
     throw new TypeError('no properties passed');
   }
 

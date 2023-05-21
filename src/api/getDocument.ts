@@ -3,7 +3,7 @@ import { isString } from 'util';
 
 import { spawnAndCheck } from './spawn';
 
-export interface IGetDocumentProps {
+export interface GetDocumentProps {
   uuid: string;
   vault?: string;
   outputFilePath: string;
@@ -11,7 +11,7 @@ export interface IGetDocumentProps {
   verbosity: number;
 }
 
-export async function getDocument(props: IGetDocumentProps) {
+export async function getDocument(props: GetDocumentProps) {
   const forceOverwrite = props.force ?? false;
 
   const outStream = await fs.open(

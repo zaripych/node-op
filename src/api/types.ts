@@ -1,4 +1,4 @@
-export type Optional<T> =
+export type OptionalResult<T> =
   | {
       error: Error;
       result: null;
@@ -8,8 +8,8 @@ export type Optional<T> =
       result: T;
     };
 
-export interface IRethrowInfo {
-  thrown: Error;
+export interface RethrowInfo {
+  cause: Error;
   rethrow: () => Error;
   withMessage: (message: string) => Error;
   toString(): string;

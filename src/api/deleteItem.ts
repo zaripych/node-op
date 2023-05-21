@@ -2,13 +2,13 @@ import { isString } from 'util';
 
 import { spawnAndCheck } from './spawn';
 
-export interface IDeleteItemProps {
+export interface DeleteItemProps {
   uuid: string;
   vault?: string;
   verbosity: number;
 }
 
-export async function trashItem(props: IDeleteItemProps) {
+export async function trashItem(props: DeleteItemProps) {
   await spawnAndCheck(
     'op',
     [

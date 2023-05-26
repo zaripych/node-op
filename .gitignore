@@ -2,7 +2,6 @@ lib
 node_modules
 cert.pem
 zaripych-node-op*
-node-op*
 .log
 .DS_Store
 coverage

@@ -46,7 +46,7 @@
   "devDependencies": {
     "@jest/globals": "29.5.0",
     "@octokit/rest": "19.0.7",
-    "@repka-kit/ts": "1.0.0-beta.6",
+    "@repka-kit/ts": "1.0.0-beta.7",
     "@testing-library/react": "14.0.0",
     "@types/adm-zip": "0.5.0",
     "@types/ink-spinner": "3.0.1",

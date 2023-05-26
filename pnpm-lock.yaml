@@ -13,8 +13,8 @@ devDependencies:
     specifier: 19.0.7
     version: 19.0.7
   '@repka-kit/ts':
-    specifier: 1.0.0-beta.6
-    version: 1.0.0-beta.6
+    specifier: 1.0.0-beta.7
+    version: 1.0.0-beta.7
   '@testing-library/react':
     specifier: 14.0.0
     version: 14.0.0(react-dom@18.2.0)(react@18.2.0)
@@ -1293,8 +1293,8 @@ packages:
       - supports-color
     dev: true
 
-  /@repka-kit/ts@1.0.0-beta.6:
-    resolution: {integrity: sha512-/y4ROlhY/hnkf4CLlybFoJlMQtJlBzboZhHUSRobNg4wbLIGYuOiAhU65631ddHzX5AJ4VoaMugFI7tMiFzCWw==}
+  /@repka-kit/ts@1.0.0-beta.7:
+    resolution: {integrity: sha512-krTA5p4eiZZECIOqnirLeR90yTTcNNuZ9n8W3sjkufugSiryxeDwC4yqg1fbXzdBUIobEqluTq1wnZZ4b0+JRQ==}
     hasBin: true
     dependencies:
       '@jest/globals': 29.5.0

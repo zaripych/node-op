@@ -9,7 +9,6 @@ import { appState } from '../state';
 import { ErrorAlert } from './errorAlert';
 import { ItemDetails } from './itemDetails';
 import { Keystroke } from './keystroke';
-import { LogItems } from './logItems';
 import { SearchItems } from './search-items';
 
 function useLandingState() {
@@ -35,7 +34,6 @@ const defaultDeps = {
   useLandingState,
   SearchItems,
   ItemDetails,
-  LogItems,
 };
 
 export const Landing: React.ComponentType<{
@@ -82,9 +80,6 @@ export const Landing: React.ComponentType<{
           {state.itemsRequest.status === 'success' &&
             state.itemsRequest.data.length > 0 && <deps.SearchItems />}
         </React.Fragment>
-      )}
-      {process.env['NODE_ENV'] === 'development' && state.screen === 'log' && (
-        <deps.LogItems />
       )}
       {state.screen === 'itemDetails' && <deps.ItemDetails />}
     </Box>

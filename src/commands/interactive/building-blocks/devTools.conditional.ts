@@ -4,12 +4,13 @@ import React from 'react';
 import type { Observable } from 'rxjs';
 import { BehaviorSubject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+import { create } from 'rxjs-spy';
 import { tag } from 'rxjs-spy/operators';
 import { formatWithOptions } from 'util';
 
 const logs = new BehaviorSubject<string[]>([]);
 
-export function log(arg: unknown, ...rest: unknown[]) {
+function log(arg: unknown, ...rest: unknown[]) {
   const text = formatWithOptions(
     { colors: true, maxArrayLength: 3 },
     arg as string,
@@ -48,3 +49,18 @@ export function useLog() {
     lines,
   };
 }
+
+const instance = create({
+  defaultPlugins: false,
+  defaultLogger: {
+    log: (...args) => {
+      log(...args);
+    },
+  },
+});
+
+instance.log(/.*/, /.*/);
+
+console.log = (...args) => {
+  log(...args);
+};

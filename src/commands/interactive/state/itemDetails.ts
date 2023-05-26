@@ -28,10 +28,25 @@ import type { Epic } from '../building-blocks';
 import { isTruthy } from '../building-blocks';
 import { ofTypes } from '../building-blocks';
 import { ofType, runEpic, sharedState } from '../building-blocks';
+import { redact } from './redact.conditional';
 import { screen } from './screen';
-import type { UiItemDetailsOtpField } from './types';
+import type {
+  UiItemDetails,
+  UiItemDetailsField,
+  UiItemDetailsOtpField,
+} from './types';
 import { mapItemDetails } from './types';
 import { vault } from './vault';
+
+const maybeRedactField = (field: UiItemDetailsField) => ({
+  ...field,
+  value: redact(field.value, field.concealed),
+});
+
+const maybeRedact = (item: UiItemDetails) => ({
+  ...item,
+  fields: item.fields.map(maybeRedactField),
+});
 
 const loadItemDetailsEpic: Epic = (actions) =>
   actions.pipe(
@@ -46,7 +61,10 @@ const loadItemDetailsEpic: Epic = (actions) =>
         })
       ).pipe(
         map((details) =>
-          loadItemDetailsSuccess(action.uuid, mapItemDetails(details))
+          loadItemDetailsSuccess(
+            action.uuid,
+            maybeRedact(mapItemDetails(details))
+          )
         ),
         catchError((err) => of(loadItemDetailsFailed(action.uuid, err)))
       )
@@ -62,9 +80,11 @@ const loadItemOtpEpic: Epic = (actions) =>
       defer(() => {
         const otp = URI.parse(action.otp);
         if (otp instanceof TOTP) {
+          //
           return merge(of(undefined), interval(otp.period * 1000)).pipe(
             switchMap(() => {
-              const token = otp.generate();
+              const token = redact(otp.generate());
+
               return merge(of(undefined), interval(1000)).pipe(
                 mergeMap((_, i) =>
                   of(loadItemOtpSuccess(action.otp, token, otp.period - i))

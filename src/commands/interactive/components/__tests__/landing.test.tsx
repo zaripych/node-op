@@ -28,7 +28,6 @@ const buildDeps = ({
     ...landingState,
   }),
   ItemDetails: () => <Text>[details]</Text>,
-  LogItems: () => <Text>[log]</Text>,
   SearchItems: () => <Text>[search]</Text>,
   ...deps,
 });

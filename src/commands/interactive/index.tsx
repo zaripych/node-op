@@ -1,4 +1,4 @@
-import './devTools';
+import './building-blocks/devTools.conditional';
 
 import { render } from 'ink';
 import React from 'react';
@@ -8,7 +8,6 @@ import { loadItems, loginFailed, loginSuccess, tryLogin } from './actions';
 import { dispatch, ofTypes } from './building-blocks';
 import { actions } from './building-blocks/details';
 import { Landing } from './components/landing';
-import { log } from './hooks';
 
 const renderApp = () =>
   render(<Landing />, {
@@ -18,9 +17,6 @@ const renderApp = () =>
 
 export const start = () => {
   let instance = renderApp();
-  console.log = (...args) => {
-    log(...args);
-  };
   merge(
     defer(() => {
       // Try loading items:

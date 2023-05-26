@@ -1,6 +1,6 @@
 import { buildForNode, copy, pipeline } from '@repka-kit/ts';
 import { readdir } from 'fs/promises';
-import { join } from 'path';
+import { dirname, join, resolve } from 'path';
 import { fileURLToPath } from 'url';
 
 await pipeline(
@@ -13,6 +13,23 @@ await pipeline(
       // 'react',
       // 'react-dom',
     ],
+
+    resolveId: (id, importer) => {
+      if (id === 'original-fs') {
+        return { id: 'node:fs', external: true };
+      }
+
+      if (id.endsWith('.conditional')) {
+        const result = resolve(
+          importer ? dirname(importer) : process.cwd(),
+          id.replace('.conditional', '.prod.ts')
+        );
+        return { id: result, external: false };
+      }
+
+      return null;
+    },
+
     extraRollupConfigs: async (opts) => {
       const forwards = await readdir('./src/forwards');
       const defaultConfig = opts.defaultRollupConfig();
@@ -33,12 +50,7 @@ await pipeline(
         },
       ];
     },
-    resolveId: (id) => {
-      if (id === 'original-fs') {
-        return { id: 'node:fs', external: true };
-      }
-      return null;
-    },
+
     outputPackageJson: (packageJson) => ({
       ...packageJson,
       bin: {

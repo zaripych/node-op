@@ -1,13 +1,21 @@
-import { EMPTY, from, merge, of } from 'rxjs';
+import { EMPTY, from, of } from 'rxjs';
 import { catchError, map, switchMap, withLatestFrom } from 'rxjs/operators';
 
 import { listItems } from '../../../api';
 import { loadItems, loadItemsFailed, loadItemsSuccess } from '../actions';
 import type { Epic } from '../building-blocks';
+import { ofTypes } from '../building-blocks';
 import { ofType, runEpic, sharedState } from '../building-blocks';
+import { redact } from './redact.conditional';
 import type { IRequest, UiItem } from './types';
 import { mapItems } from './types';
 import { vault } from './vault';
+
+const maybeRedact = (item: UiItem) => ({
+  ...item,
+  title: redact(item.title),
+  description: redact(item.description),
+});
 
 const loadItemsEpic: Epic = (actions) =>
   actions.pipe(
@@ -20,7 +28,7 @@ const loadItemsEpic: Epic = (actions) =>
           verbosity: 0,
         })
       ).pipe(
-        map((next) => loadItemsSuccess(mapItems(next))),
+        map((next) => loadItemsSuccess(mapItems(next).map(maybeRedact))),
         catchError((err) => of(loadItemsFailed(err)))
       )
     )
@@ -30,11 +38,7 @@ runEpic(loadItemsEpic);
 
 export const itemsRequest = sharedState<IRequest<UiItem[]>>(
   (actions) =>
-    merge(
-      actions.pipe(ofType(loadItems)),
-      actions.pipe(ofType(loadItemsSuccess)),
-      actions.pipe(ofType(loadItemsFailed))
-    ),
+    actions.pipe(ofTypes(loadItems, loadItemsSuccess, loadItemsFailed)),
   {
     initial: { status: 'initial' },
   }

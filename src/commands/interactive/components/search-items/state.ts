@@ -1,6 +1,7 @@
 import React from 'react';
 import { defer, EMPTY, merge, of } from 'rxjs';
 import {
+  debounceTime,
   filter,
   ignoreElements,
   map,
@@ -106,9 +107,11 @@ export function useInputAndLayoutChangesToControlScrollView() {
                   setOffset(offset - viewportHeight);
                   return EMPTY;
                 }),
-                of(setSelectedIndex(0))
+                defer(() => (offset === 0 ? of(setSelectedIndex(0)) : EMPTY))
               );
-            } else if (input.key.pageDown) {
+            }
+
+            if (input.key.pageDown) {
               return merge(
                 defer(() => {
                   setOffset(offset + viewportHeight);
@@ -120,11 +123,16 @@ export function useInputAndLayoutChangesToControlScrollView() {
                     : EMPTY
                 )
               );
-            } else if (input.key.upArrow) {
+            }
+
+            if (input.key.upArrow) {
               return of(setSelectedIndex(selectedIndex - 1));
-            } else if (input.key.downArrow) {
+            }
+
+            if (input.key.downArrow) {
               return of(setSelectedIndex(selectedIndex + 1));
             }
+
             return EMPTY;
           }
         )
@@ -138,23 +146,26 @@ export function useInputAndLayoutChangesToControlScrollView() {
           ) {
             setOffset(offset + 5);
           }
+
           if (selectedIndex < offset && selectedIndex > offset - 5) {
             setOffset(offset - 5);
           }
+
           return EMPTY;
         })
       ),
       layoutUpdated.pipe(
-        withLatestFrom(appState.selectedItemOffset),
+        debounceTime(100),
+        withLatestFrom(appState.selectedItemIndex),
         switchMap(([{ viewportHeight, offset }, selectedOffset]) => {
-          if (selectedOffset === undefined) {
-            return EMPTY;
-          }
-          if (selectedOffset > offset + viewportHeight) {
-            return of(setSelectedIndex(offset));
-          } else if (selectedOffset < offset) {
+          if (selectedOffset >= offset + viewportHeight) {
             return of(setSelectedIndex(offset));
           }
+
+          if (selectedOffset < offset) {
+            return of(setSelectedIndex(offset));
+          }
+
           return EMPTY;
         })
       )

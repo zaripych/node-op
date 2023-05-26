@@ -6,7 +6,6 @@ import {
   filteredItems,
   selectedItem,
   selectedItemIndex,
-  selectedItemOffset,
 } from './filter';
 import { itemDetails, itemDetailsRequest } from './itemDetails';
 import { items, itemsRequest } from './items';
@@ -27,7 +26,6 @@ export const appState = {
   filteredItems,
   selectedItem,
   selectedItemIndex,
-  selectedItemOffset,
   itemDetails,
   itemDetailsRequest,
   copyToClipboardRequest,

@@ -1,6 +1,5 @@
 import type { Subscription } from 'rxjs';
-import { asyncScheduler } from 'rxjs';
-import { finalize, observeOn, takeUntil } from 'rxjs/operators';
+import { finalize, takeUntil } from 'rxjs/operators';
 import { tag } from 'rxjs-spy/operators';
 
 import { actions, observableActions, sharedSubscriptions } from './details';
@@ -27,7 +26,6 @@ export function runEpic<T extends Action>(
         subscription.unsubscribe();
         sharedSubscriptions.delete(epic);
       }),
-      observeOn(asyncScheduler),
       opts.silent ? (x) => x : tag(opts.name || epic.name || 'unknownEpic')
     )
     .subscribe({

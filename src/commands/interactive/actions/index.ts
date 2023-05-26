@@ -7,5 +7,4 @@ export * from './navigate';
 export * from './setItemsFilter';
 export * from './setOffset';
 export * from './setSelectedItem';
-export * from './setSelectedItemOffset';
 export * from './setVault';

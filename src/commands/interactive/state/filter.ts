@@ -9,12 +9,7 @@ import {
   withLatestFrom,
 } from 'rxjs/operators';
 
-import {
-  setItemsFilter,
-  setSelectedIndex,
-  setSelectedItem,
-  setSelectedItemOffset,
-} from '../actions';
+import { setItemsFilter, setSelectedIndex, setSelectedItem } from '../actions';
 import type { Epic } from '../building-blocks';
 import { isTruthy, ofType, runEpic, sharedState } from '../building-blocks';
 import { items } from './items';
@@ -77,17 +72,6 @@ export const selectedItemIndex = sharedState(
     ),
   {
     initial: 0,
-  }
-);
-
-export const selectedItemOffset = sharedState(
-  (actions) =>
-    actions.pipe(
-      ofType(setSelectedItemOffset),
-      map((action) => action.offset)
-    ),
-  {
-    initial: undefined,
   }
 );
 

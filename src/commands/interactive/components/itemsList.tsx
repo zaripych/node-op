@@ -1,18 +1,10 @@
-import type { DOMElement } from 'ink';
 import { Box, Text } from 'ink';
 import Spinner from 'ink-spinner';
 import React from 'react';
-import { concat, NEVER, of, timer } from 'rxjs';
-import {
-  distinctUntilChanged,
-  map,
-  skip,
-  switchMap,
-  withLatestFrom,
-} from 'rxjs/operators';
+import { concat, of, timer } from 'rxjs';
+import { map, skip, switchMap } from 'rxjs/operators';
 
-import { setSelectedItemOffset } from '../actions';
-import { useEpic, useSelect } from '../building-blocks';
+import { useSelect } from '../building-blocks';
 import type { UiItem } from '../state';
 import { appState } from '../state';
 import { Highlight } from './highlight';
@@ -76,41 +68,6 @@ export const ItemStatus = (props: { item: UiItem }) => {
   );
 };
 
-const usePublishItemOffset = (opts: { item: UiItem }) => {
-  const { item } = opts;
-
-  const ref = React.useRef<DOMElement>(null);
-
-  useEpic(
-    () =>
-      appState.selectedItemIndex.pipe(
-        withLatestFrom(appState.selectedItem),
-        switchMap(([selectedItemIndex, selectedItem]) => {
-          if (selectedItemIndex === -1) {
-            return NEVER;
-          }
-          if (selectedItem?.uuid !== item.uuid) {
-            return NEVER;
-          }
-          const layout = ref.current?.yogaNode?.getComputedLayout();
-          if (!layout) {
-            return NEVER;
-          }
-          return of(
-            setSelectedItemOffset({
-              uuid: item.uuid,
-              offset: layout.top,
-            })
-          );
-        }),
-        distinctUntilChanged((a, b) => a.offset === b.offset)
-      ),
-    [item.uuid]
-  );
-
-  return { ref };
-};
-
 export const ItemRow = (props: {
   item: UiItem;
   highlight: string;
@@ -125,8 +82,6 @@ export const ItemRow = (props: {
     false
   );
 
-  const { ref } = usePublishItemOffset({ item });
-
   const rowStyle = React.useMemo(() => {
     if (order === 'even') {
       return {};
@@ -138,7 +93,7 @@ export const ItemRow = (props: {
   }, [selected, order]);
 
   return (
-    <Box flexDirection="row" flexShrink={0} ref={ref}>
+    <Box flexDirection="row" flexShrink={0}>
       <Box width={2}>{selected && <ItemCursor item={props.item} />}</Box>
       <Box width={2}>
         <ItemStatus item={props.item} />

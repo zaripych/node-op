@@ -1,6 +1,5 @@
 import { ensureError } from './ensureError';
-import { Optional } from './types';
-import { AggregateError } from './aggregateError';
+import type { OptionalResult } from './types';
 
 type Fn<O> = (() => Promise<O>) | (() => O);
 
@@ -17,7 +16,7 @@ export const catchAsync = async <O>(
   opts: {
     errorMessage?: string;
   } = {}
-): Promise<Optional<O>> => {
+): Promise<OptionalResult<O>> => {
   try {
     const result = await safeCall(fn);
     return {
@@ -27,7 +26,7 @@ export const catchAsync = async <O>(
   } catch (err) {
     return {
       error: opts.errorMessage
-        ? new AggregateError(opts.errorMessage, ensureError(err))
+        ? new Error(opts.errorMessage, { cause: ensureError(err) })
         : ensureError(err),
       result: null,
     };
@@ -36,7 +35,7 @@ export const catchAsync = async <O>(
 
 type SyncFn<O> = () => O;
 
-export const catchSync = <O>(fn: SyncFn<O>): Optional<O> => {
+export const catchSync = <O>(fn: SyncFn<O>): OptionalResult<O> => {
   try {
     return {
       error: null,

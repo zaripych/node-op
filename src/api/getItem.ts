@@ -1,14 +1,15 @@
-import { spawnAndCheck } from './spawn';
 import { isString } from 'util';
-import { IItemDetails } from './item';
 
-export interface IGetItemProps {
+import type { ItemDetails } from './item';
+import { spawnAndCheck } from './spawn';
+
+export interface GetItemProps {
   uuid: string;
   vault?: string;
   verbosity: number;
 }
 
-export async function getItem(props: IGetItemProps) {
+export async function getItem(props: GetItemProps) {
   const result = await spawnAndCheck(
     'op',
     ['get', 'item', props.uuid, props.vault && `--vault=${props.vault}`].filter(
@@ -22,5 +23,5 @@ export async function getItem(props: IGetItemProps) {
     }
   );
 
-  return JSON.parse(result.trim()) as IItemDetails;
+  return JSON.parse(result.trim()) as ItemDetails;
 }

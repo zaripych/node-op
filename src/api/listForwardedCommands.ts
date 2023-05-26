@@ -1,14 +1,12 @@
-import { spawnAndCheck } from './spawn';
 import { isTruthy } from '../commands/interactive/building-blocks/helpers';
+import { spawnAndCheck } from './spawn';
 
-export interface ICommand {
+export interface Command {
   command: string;
   description: string;
 }
 
-export async function listForwardedCommands(
-  opPath = 'op'
-): Promise<ICommand[]> {
+export async function listForwardedCommands(opPath = 'op'): Promise<Command[]> {
   const result = await spawnAndCheck(opPath, ['--help'], {
     env: process.env,
     verbosity: 0,
@@ -25,6 +23,9 @@ export async function listForwardedCommands(
   }
 
   const searchString = searchStrings[searchStringIndex];
+  if (!searchString) {
+    return [];
+  }
   const index = result.indexOf(searchString);
 
   const stopString = 'Flags:';

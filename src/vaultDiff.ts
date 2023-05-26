@@ -1,4 +1,5 @@
 import commander from 'commander';
+
 import { vaultDiff } from './commands/vaultDiff';
 
 const program = new commander.Command();

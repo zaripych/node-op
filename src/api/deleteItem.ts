@@ -1,13 +1,14 @@
-import { spawnAndCheck } from './spawn';
 import { isString } from 'util';
 
-export interface IDeleteItemProps {
+import { spawnAndCheck } from './spawn';
+
+export interface DeleteItemProps {
   uuid: string;
   vault?: string;
   verbosity: number;
 }
 
-export async function trashItem(props: IDeleteItemProps) {
+export async function trashItem(props: DeleteItemProps) {
   await spawnAndCheck(
     'op',
     [

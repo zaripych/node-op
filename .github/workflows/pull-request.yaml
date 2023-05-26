@@ -9,40 +9,43 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        node: ['10']
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 1
 
+      - name: Get Node Version
+        run: |
+          echo "NODE_VERSION=$(jq -r .engines.node package.json)" >> $GITHUB_ENV
+
       - name: Setup Node
-        uses: actions/setup-node@v1.1.0
+        uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node }}
+          node-version: ${{ env.NODE_VERSION }}
 
-      - name: Install Yarn
-        run: npm install -g yarn
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
 
-      - name: Get yarn cache
-        id: yarn-cache
-        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - name: Get pnpm store directory
+        id: pnpm-store
+        run: |
+          echo "PNPM_STORE_DIR=$(pnpm store path)" >> "$GITHUB_ENV"
+          echo "PNPM_STORE_DIR=$(pnpm store path)" >> "$Env:GITHUB_ENV"
 
-      - uses: actions/cache@v1
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
         with:
-          path: ${{ steps.yarn-cache.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+          path: ${{ steps.pnpm-store.outputs.name }}"
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-
+            ${{ runner.os }}-pnpm-store-
 
-      - name: Install
-        run: yarn install --frozen-lockfile
-
-      - name: Checks
-        run: yarn run check
+      - name: Install Dependencies
+        run: pnpm install
 
       - name: Unit Tests
-        run: yarn run test
+        run: pnpm jest
 
       - name: Integration Tests
-        run: yarn run integration
+        run: pnpm jest --integration

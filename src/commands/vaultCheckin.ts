@@ -1,17 +1,17 @@
-import {
-  listItems,
-  IItem,
-  createDocument,
-  trashItem,
-  AggregateError,
-  rethrowAsync,
-  catchAsync,
-} from '../api';
-import { isError } from 'util';
-import { stat, unlink } from 'fs-extra';
+import { stat, unlink } from 'fs/promises';
 import { basename } from 'path';
+import { isError } from 'util';
 
-interface ICheckinProps {
+import type { Item } from '../api';
+import {
+  catchAsync,
+  createDocument,
+  listItems,
+  rethrowAsync,
+  trashItem,
+} from '../api';
+
+interface CheckinProps {
   vault?: string;
   files: string[];
   dryRun?: boolean;
@@ -20,9 +20,9 @@ interface ICheckinProps {
   verbosity?: number;
 }
 
-function findSingleFile(file: string, items: IItem[]) {
+function findSingleFile(file: string, items: Item[]) {
   const title = basename(file);
-  const filtered = items.filter((item) => title === item?.overview?.title);
+  const filtered = items.filter((item) => title === item.overview.title);
 
   if (filtered.length === 0) {
     return null;
@@ -39,7 +39,11 @@ function findSingleFile(file: string, items: IItem[]) {
   return filtered[0];
 }
 
-async function validateFile(file: string, items: IItem[], deps = { stat }) {
+async function validateFile(
+  file: string,
+  items: Item[],
+  deps = { stat: (path: string) => stat(path) }
+) {
   const result = await deps.stat(file);
   if (!result.isFile()) {
     throw new Error(`file at path '${file}' is not a file`);
@@ -48,7 +52,7 @@ async function validateFile(file: string, items: IItem[], deps = { stat }) {
 }
 
 async function processFile(
-  props: ICheckinProps,
+  props: CheckinProps,
   file: string,
   trashUuid?: string,
   deps = {
@@ -57,7 +61,7 @@ async function processFile(
     unlink,
   }
 ) {
-  const verbosity = props?.verbosity ?? 0;
+  const verbosity = props.verbosity ?? 0;
 
   const newUuid = await rethrowAsync(
     () =>
@@ -118,17 +122,16 @@ async function processFile(
 }
 
 export async function vaultCheckin(
-  props: ICheckinProps,
+  props: CheckinProps,
   deps = {
     listItems,
     createDocument,
     trashItem,
-    stat,
+    stat: (path: string) => stat(path),
     unlink,
   }
 ) {
-  // tslint:disable-next-line: strict-boolean-expressions
-  if (!props || typeof props !== 'object') {
+  if (typeof props !== 'object') {
     throw new TypeError('no properties passed');
   }
 
@@ -152,7 +155,7 @@ export async function vaultCheckin(
     throw new TypeError('files should be a non-empty array of strings');
   }
 
-  const verbosity = props?.verbosity ?? 0;
+  const verbosity = props.verbosity ?? 0;
 
   const items = await rethrowAsync(
     () =>
@@ -204,7 +207,10 @@ export async function vaultCheckin(
   if (errorResults.length > 0) {
     if (errorResults.length > 1) {
       const [first, ...rest] = errorResults;
-      throw new AggregateError(first, ...rest);
+      if (!first) {
+        throw new Error();
+      }
+      throw new AggregateError([first, ...rest]);
     } else {
       throw errorResults[0];
     }

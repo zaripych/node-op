@@ -1,4 +1,5 @@
 import commander from 'commander';
+
 import { start } from './commands/interactive';
 
 const program = new commander.Command();

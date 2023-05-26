@@ -20,101 +20,75 @@
   },
   "license": "MIT",
   "author": "@zaripych",
-  "main": "index.js",
+  "type": "module",
+  "exports": {
+    ".": "./src/nodeOp.ts",
+    "./installOp": "./src/installOpOptional.ts",
+    "./interactive": "./src/interactive.ts"
+  },
+  "main": "./src/nodeOp.ts",
+  "types": "./src/nodeOp.ts",
   "bin": {
-    "node-op": "./cli.js",
-    "op": "./dist/binaries/op",
-    "vault-checkin": "./vaultCheckin.js",
-    "vault-checkout": "./vaultCheckout.js",
-    "vault-diff": "./vaultDiff.js"
+    "node-op": "./bin/node-op.gen.mjs",
+    "vault-checkin": "./bin/vault-checkin.gen.mjs",
+    "vault-checkout": "./bin/vault-checkout.gen.mjs",
+    "vault-diff": "./bin/vault-diff.gen.mjs"
   },
-  "files": [
-    "dist",
-    "cli.js",
-    "installOp.js",
-    "vaultCheckin.js",
-    "vaultCheckout.js",
-    "vaultDiff.js",
-    "interactive.js",
-    "package.json",
-    "README.md"
-  ],
   "scripts": {
-    "before-release": "patch-package && npm run build",
-    "prebuild": "node ./scripts/clean.js",
-    "build": "node ./scripts/rollup.js -c",
-    "build:dev": "node ./scripts/build.js -s",
-    "build:source-maps": "node ./scripts/rollup.js -c -m",
-    "build:watch": "node ./scripts/build.js --watch",
-    "check": "concurrently --raw -c \"node ./scripts/build.js\" \"tsc\" \"eslint . --ext .js,.jsx,.ts,.tsx -f pretty\"",
-    "clean": "node ./scripts/clean.js",
-    "combine-coverage": "node ./scripts/combineCoverage.js",
-    "declarations": "tsc -p ./tsconfig.declarations.json",
-    "eslint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "postinstall": "node installOp.js",
-    "integration": "jest --config ./jest.config.integration.js --color -i",
-    "lint": "yarn run eslint -f pretty",
-    "obtain-fingerprint": "echo -n | openssl s_client -connect cache.agilebits.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > cert.pem && openssl x509 -noout -in cert.pem -fingerprint",
-    "patch": "ts-deps patch",
-    "print-current-version": "node ./op-update-watcher/index",
-    "release": "node ./scripts/release.js",
-    "semantic-release": "semantic-release",
-    "test": "jest --color",
-    "ts-deps": "ts-deps",
-    "type-check": "tsc"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "pre-push": "yarn run check"
-    }
-  },
-  "lint-staged": {
-    "*.{tsx,jsx,ts,js,json,md,yaml,yml}": [
-      "prettier --write"
-    ],
-    "package.json": [
-      "sort-package-json"
-    ]
+    "build": "repka build:node",
+    "cli": "./bin/node-op.gen.mjs",
+    "lint": "repka lint",
+    "test": "repka test"
   },
   "dependencies": {
-    "yoga-layout-prebuilt": "1.9.6"
+    "yoga-wasm-web": "0.3.3"
   },
   "devDependencies": {
-    "@babel/preset-react": "7.10.4",
-    "@octokit/rest": "18.0.5",
-    "@rollup/plugin-babel": "5.2.0",
-    "@rollup/plugin-commonjs": "15.0.0",
-    "@rollup/plugin-json": "4.1.0",
-    "@rollup/plugin-node-resolve": "9.0.0",
-    "@types/adm-zip": "0.4.33",
-    "@types/ink-spinner": "3.0.0",
-    "@types/node": "10.17.13",
-    "@types/pump": "1.1.0",
-    "@types/react": "16.9.49",
-    "@types/rimraf": "3.0.0",
-    "@types/tar-fs": "2.0.0",
-    "adm-zip": "0.4.16",
-    "chalk": "4.1.0",
+    "@jest/globals": "29.5.0",
+    "@octokit/rest": "19.0.7",
+    "@repka-kit/ts": "1.0.0-beta.7",
+    "@testing-library/react": "14.0.0",
+    "@types/adm-zip": "0.5.0",
+    "@types/ink-spinner": "3.0.1",
+    "@types/jest": "29.5.1",
+    "@types/node": "18.16.3",
+    "@types/pump": "1.1.1",
+    "@types/react": "18.2.0",
+    "@types/semver": "7.3.13",
+    "@types/tar-fs": "2.0.1",
+    "adm-zip": "0.5.10",
+    "chalk": "5.2.0",
     "commander": "6.1.0",
+    "fast-glob": "3.2.12",
     "husky": "4.3.0",
-    "ink": "3.0.5",
-    "ink-spinner": "4.0.1",
-    "ink-text-input": "4.0.0",
-    "lint-staged": "10.3.0",
-    "patch-package": "6.2.2",
+    "ink": "4.2.0",
+    "ink-spinner": "5.0.0",
+    "ink-testing-library": "3.0.0",
+    "ink-text-input": "5.0.1",
+    "jest-environment-jsdom": "29.5.0",
+    "otpauth": "9.1.2",
     "pump": "3.0.0",
-    "react": "16.13.1",
-    "rimraf": "3.0.2",
-    "rollup": "2.26.5",
-    "rxjs": "6.6.3",
-    "rxjs-marbles": "6.0.1",
-    "rxjs-spy": "7.5.3",
-    "selenium-webdriver": "3.6.0",
-    "semver": "7.3.2",
-    "ts-deps": "0.17.0",
-    "webdriver-query": "1.0.1"
+    "puppeteer": "19.11.1",
+    "react": "18.2.0",
+    "react-devtools-core": "4.27.6",
+    "react-dom": "18.2.0",
+    "rimraf": "5.0.0",
+    "rxjs": "7.8.1",
+    "rxjs-marbles": "7.0.1",
+    "rxjs-spy": "8.0.2",
+    "semver": "7.5.0",
+    "tar-fs": "2.1.1"
+  },
+  "packageManager": "pnpm@8.4.0",
+  "engines": {
+    "node": "18",
+    "npm": "👻 please-use-pnpm 👻",
+    "pnpm": ">=7",
+    "yarn": "👻 please-use-pnpm 👻"
+  },
+  "publishConfig": {
+    "directory": "dist",
+    "linkDirectory": false
   },
   "op_version": "1.6.0"
 }

@@ -1,14 +1,15 @@
-import { spawnAndCheck } from './spawn';
 import { isString } from 'util';
-import { IItem } from './item';
 
-export interface IListItemsProps {
+import type { Item } from './item';
+import { spawnAndCheck } from './spawn';
+
+export interface ListItemsProps {
   vault?: string;
   includeTrash?: boolean;
   verbosity: number;
 }
 
-export async function listItems(props?: IListItemsProps) {
+export async function listItems(props?: ListItemsProps) {
   const result = await spawnAndCheck(
     'op',
     [
@@ -25,5 +26,5 @@ export async function listItems(props?: IListItemsProps) {
     }
   );
 
-  return JSON.parse(result) as IItem[];
+  return JSON.parse(result) as Item[];
 }

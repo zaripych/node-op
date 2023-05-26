@@ -1,7 +1,7 @@
-import React from 'react';
 import { Text } from 'ink';
+import React from 'react';
 
-interface IProps {
+interface Props {
   text: string;
   substring: string;
 }
@@ -23,7 +23,7 @@ function* allIndexes(text: string, substring: string) {
   }
 }
 
-export const Highlight: React.FC<IProps> = (props) => {
+export const Highlight: React.FC<Props> = (props) => {
   if (!props.text) {
     return null;
   }
@@ -43,7 +43,7 @@ export const Highlight: React.FC<IProps> = (props) => {
         <React.Fragment key={i}>
           <Text>
             {props.text.substring(
-              i === 0 ? 0 : indexes[i - 1].end,
+              i === 0 ? 0 : indexes[i - 1]?.end || 0,
               index.start
             )}
           </Text>
@@ -52,7 +52,7 @@ export const Highlight: React.FC<IProps> = (props) => {
           </Text>
         </React.Fragment>
       ))}
-      <Text>{props.text.substring(indexes[indexes.length - 1].end)}</Text>
+      <Text>{props.text.substring(indexes[indexes.length - 1]?.end || 0)}</Text>
     </React.Fragment>
   );
 };

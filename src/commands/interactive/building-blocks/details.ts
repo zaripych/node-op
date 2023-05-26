@@ -1,9 +1,8 @@
-import { Subject, Observable, Subscription, BehaviorSubject } from 'rxjs';
-import { IAction } from './types';
+import type { Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
 
-export const actions = new Subject<IAction>();
-export const sharedSelects = new WeakMap<
-  object,
-  Observable<unknown> | BehaviorSubject<unknown>
->();
+import type { Action } from './types';
+
+export const actions = new Subject<Action>();
+export const observableActions = actions.asObservable();
 export const sharedSubscriptions = new WeakMap<object, Subscription>();

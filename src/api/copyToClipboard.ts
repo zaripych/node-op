@@ -1,14 +1,14 @@
 import { spawnAndCheck } from './spawn';
 
-export interface ICopyProps {
+export interface CopyProps {
   value: string;
 }
 
 async function clipboardCopyOSC52(value: string) {
-  await new Promise((res, rej) => {
+  await new Promise<void>((res, rej) => {
     process.stderr.write(
       `\x1b]52;c;${Buffer.from(value).toString('base64')}\x07`,
-      (err: Error | null) => {
+      (err?: Error) => {
         if (err) {
           rej(err);
         } else {
@@ -30,18 +30,24 @@ const xselExists = async () => {
   return result === 0;
 };
 
-export async function clipboardCopy(props: ICopyProps) {
+export async function clipboardCopy(props: CopyProps) {
   const xselAvailable =
-    process.platform === 'linux' && process.env.DISPLAY && (await xselExists());
+    process.platform === 'linux' &&
+    process.env['DISPLAY'] &&
+    (await xselExists());
   if (xselAvailable) {
     try {
       await spawnAndCheck('xsel', ['--clipboard', '--input'], {
         created: (cp) => {
-          cp.stdin.write(props.value, (err) => {
+          const stdin = cp.stdin;
+          if (!stdin) {
+            throw new Error('Expected stdin to be initialized');
+          }
+          stdin.write(props.value, (err) => {
             if (err) {
               cp.emit('error', err);
             }
-            cp.stdin.end();
+            stdin.end();
           });
         },
         stdio: ['pipe', 'pipe', 'pipe'],
@@ -55,11 +61,15 @@ export async function clipboardCopy(props: ICopyProps) {
   } else if (process.platform === 'darwin') {
     await spawnAndCheck('pbcopy', [], {
       created: (cp) => {
-        cp.stdin.write(props.value, (err) => {
+        const stdin = cp.stdin;
+        if (!stdin) {
+          throw new Error('Expected stdin to be initialized');
+        }
+        stdin.write(props.value, (err) => {
           if (err) {
             cp.emit('error', err);
           }
-          cp.stdin.end();
+          stdin.end();
         });
       },
       stdio: ['pipe', 'pipe', 'pipe'],

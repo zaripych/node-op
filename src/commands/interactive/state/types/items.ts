@@ -6,7 +6,7 @@ export type ItemType =
   | 'card'
   | 'other';
 
-export interface IUiItem {
+export interface UiItem {
   type: ItemType;
   uuid: string;
   title: string;
@@ -16,7 +16,7 @@ export interface IUiItem {
   description?: string;
 }
 
-export interface IUiItemDetails {
+export interface UiItemDetails {
   type: ItemType;
   uuid: string;
   title: string;
@@ -24,19 +24,24 @@ export interface IUiItemDetails {
   updatedAt: string;
   urlHost?: string;
   description?: string;
-  fields: IUiItemDetailsFields[];
-  sections: IUiItemDetailsSection[];
-  notes?: string;
+  fields: UiItemDetailsField[];
+  sections: UiItemDetailsSection[];
   original: unknown;
 }
 
-export interface IUiItemDetailsFields {
+export interface UiItemDetailsField {
   concealed: boolean;
   title: string;
   value: string;
 }
 
-export interface IUiItemDetailsSection {
+export interface UiItemDetailsOtpField {
+  otp: string;
+  token: string;
+  expiresInSeconds: number;
+}
+
+export interface UiItemDetailsSection {
   title: string;
-  fields: IUiItemDetailsFields[];
+  fields: UiItemDetailsField[];
 }

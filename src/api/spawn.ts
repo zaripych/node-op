@@ -1,10 +1,25 @@
-import { spawnSync, spawn, SpawnOptions, ChildProcess } from 'child_process';
+import type { ChildProcess, SpawnOptions } from 'child_process';
+import { spawn, spawnSync } from 'child_process';
 import { EOL } from 'os';
+import { delimiter, resolve } from 'path';
+import { fileURLToPath } from 'url';
+
+const prepare = () => {
+  let binariesPath = resolve(fileURLToPath(new URL('../bin', import.meta.url)));
+  if (binariesPath.endsWith('src/bin')) {
+    binariesPath = resolve(binariesPath, '../../bin');
+  }
+  const path = process.env['PATH'];
+  if (!path || !path.includes(binariesPath)) {
+    process.env['PATH'] = [binariesPath, process.env['PATH']].join(delimiter);
+  }
+};
 
 export function spawnSyncAndCheck(
   ...args: Parameters<typeof spawnSync>
 ): string {
   const [cmd, optsOrArgs, opts] = args;
+  prepare();
   const proc = spawnSync(cmd, Array.isArray(optsOrArgs) ? optsOrArgs : [], {
     ...opts,
     encoding: 'utf8',
@@ -36,14 +51,16 @@ export function spawnAndCheck<R = string>(
     chooseReturn?: (code?: number, signal?: string, output?: string) => R;
   }
 ): Promise<R> {
-  const expectedExitCodes = options?.expectedExitCodes ?? [0];
-  const appendOutputToError = options?.appendOutputToError ?? false;
+  const expectedExitCodes = options.expectedExitCodes ?? [0];
+  const appendOutputToError = options.appendOutputToError ?? false;
+
+  prepare();
 
   if (options.verbosity > 0) {
-    console.log([command, ...(args ?? [])].join(' '));
+    console.log([command, ...args].join(' '));
   }
 
-  const proc = spawn(command, args ?? [], options ?? {});
+  const proc = spawn(command, args, options);
 
   if (options.created) {
     options.created(proc);
@@ -51,7 +68,7 @@ export function spawnAndCheck<R = string>(
 
   const output: string[] = [];
 
-  if (proc.stderr as NodeJS.ReadableStream | null) {
+  if (proc.stderr) {
     proc.stderr.setEncoding('utf8');
     proc.stderr.on('data', (chunk: string) => {
       output.push(chunk);
@@ -61,7 +78,7 @@ export function spawnAndCheck<R = string>(
     });
   }
 
-  if (proc.stdout as NodeJS.ReadableStream | null) {
+  if (proc.stdout) {
     proc.stdout.setEncoding('utf8');
     proc.stdout.on('data', (chunk: string) => {
       output.push(chunk);

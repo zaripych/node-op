@@ -1,6 +1,5 @@
 import { ensureError } from './ensureError';
-import { AggregateError } from './aggregateError';
-import { IRethrowInfo } from './types';
+import type { RethrowInfo } from './types';
 
 type Fn<O> = (() => Promise<O>) | (() => O);
 
@@ -21,23 +20,21 @@ function safeCall<O>(fn: Fn<O>) {
  */
 export async function rethrowAsync<O>(
   future: Fn<O>,
-  throwError: (info: IRethrowInfo) => Error | never
+  throwError: (info: RethrowInfo) => Error | never
 ) {
   try {
     return await safeCall(future);
   } catch (err) {
     const error = ensureError(err);
     const newError = throwError({
-      rethrow: () => new AggregateError(error.message, error),
-      withMessage: (msg) => new AggregateError(msg, error),
-      thrown: error,
-      // tslint:disable-next-line:strict-string-expressions
+      rethrow: () => new Error(error.message, { cause: error }),
+      withMessage: (msg) => new Error(msg, { cause: error }),
       toString: () => `${String(error)}`,
+      cause: error,
     }) as Error | undefined;
     if (newError) {
       throw newError;
     }
-    // istanbul-ignore-next
     throw error;
   }
 }

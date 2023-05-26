@@ -1,23 +1,19 @@
-import {
-  listItems,
-  IItem,
-  getDocument,
-  rethrowAsync,
-  gitDiffFiles,
-} from '../api';
-import { stat, unlink, createFile } from 'fs-extra';
-import { basename } from 'path';
 import { randomBytes } from 'crypto';
+import { stat, unlink, writeFile } from 'fs/promises';
+import { basename } from 'path';
 
-interface IDiffProps {
+import type { Item } from '../api';
+import { getDocument, gitDiffFiles, listItems, rethrowAsync } from '../api';
+
+interface DiffProps {
   vault?: string;
   files: string[];
   verbosity?: number;
 }
 
-function findSingleFile(file: string, items: IItem[]) {
+function findSingleFile(file: string, items: Item[]) {
   const title = basename(file);
-  const filtered = items.filter((item) => title === item?.overview?.title);
+  const filtered = items.filter((item) => title === item.overview.title);
 
   if (filtered.length === 0) {
     return null;
@@ -34,7 +30,7 @@ function findSingleFile(file: string, items: IItem[]) {
   return filtered[0];
 }
 
-async function validateFile(file: string, items: IItem[], deps = { stat }) {
+async function validateFile(file: string, items: Item[], deps = { stat }) {
   const result = await deps.stat(file);
   if (!result.isFile()) {
     throw new Error(`file at path '${file}' is not a file`);
@@ -43,17 +39,17 @@ async function validateFile(file: string, items: IItem[], deps = { stat }) {
 }
 
 async function diffFile(
-  props: IDiffProps,
+  props: DiffProps,
   file: string,
   compareUuid?: string,
   deps = {
     getDocument,
-    createFile,
+    writeFile,
     unlink,
     gitDiffFiles,
   }
 ) {
-  const verbosity = props?.verbosity ?? 0;
+  const verbosity = props.verbosity ?? 0;
 
   const fileTheirs = `${file}.orig.${randomBytes(8).toString('hex')}`;
 
@@ -66,7 +62,7 @@ async function diffFile(
             uuid: compareUuid,
             ...(props.vault && { vault: props.vault }),
           })
-        : deps.createFile(fileTheirs),
+        : deps.writeFile(fileTheirs, '', { encoding: 'utf-8' }),
     (errInfo) =>
       errInfo.withMessage(
         `Cannot download previous version of "${file}" from 1-Password`
@@ -95,18 +91,17 @@ async function diffFile(
 }
 
 export async function vaultDiff(
-  props: IDiffProps,
+  props: DiffProps,
   deps = {
     listItems,
     stat,
     unlink,
     getDocument,
-    createFile,
+    writeFile,
     gitDiffFiles,
   }
 ) {
-  // tslint:disable-next-line: strict-boolean-expressions
-  if (!props || typeof props !== 'object') {
+  if (typeof props !== 'object') {
     throw new TypeError('no properties passed');
   }
 
@@ -126,7 +121,7 @@ export async function vaultDiff(
     throw new TypeError('files should be a non-empty array of strings');
   }
 
-  const verbosity = props?.verbosity ?? 0;
+  const verbosity = props.verbosity ?? 0;
 
   const items = await rethrowAsync(
     () =>
@@ -159,7 +154,7 @@ export async function vaultDiff(
         diffFile(props, next.file, next.uuid, {
           getDocument: deps.getDocument,
           unlink: deps.unlink,
-          createFile: deps.createFile,
+          writeFile: deps.writeFile,
           gitDiffFiles: deps.gitDiffFiles,
         })
       ),

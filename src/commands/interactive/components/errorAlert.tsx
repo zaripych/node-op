@@ -1,13 +1,14 @@
+import { Box, Text } from 'ink';
 import React from 'react';
-import { Text, Box } from 'ink';
-import { IErrorInfo } from '../state';
 
-interface IProps {
-  error: IErrorInfo;
+import type { ErrorInfo } from '../state';
+
+interface Props {
+  error: ErrorInfo;
   retry?: () => void;
 }
 
-export const ErrorAlert: React.FC<IProps> = (props) => {
+export const ErrorAlert: React.FC<Props> = (props) => {
   return (
     <Box flexDirection="column">
       <Box flexShrink={0}>
@@ -22,7 +23,7 @@ export const ErrorAlert: React.FC<IProps> = (props) => {
   );
 };
 
-export const HorizontalErrorAlert: React.FC<IProps> = (props) => {
+export const HorizontalErrorAlert: React.FC<Props> = (props) => {
   return (
     <Box flexDirection="row">
       <Box flexShrink={0}>

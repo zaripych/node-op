@@ -1,20 +1,21 @@
-import {
-  IItem,
-  catchSync,
-  IItemDetails,
-  IDetailField,
-  IDetailSectionField,
-  IDetailSection,
-} from '../../../../api';
-import {
-  IUiItem,
-  IUiItemDetails,
-  ItemType,
-  IUiItemDetailsFields,
-  IUiItemDetailsSection,
-} from './items';
 import { URL } from 'url';
+
+import type {
+  DetailField,
+  DetailSection,
+  DetailSectionField,
+  Item,
+  ItemDetails,
+} from '../../../../api';
+import { catchSync } from '../../../../api/catchAsync';
 import { isTruthy } from '../../building-blocks';
+import type {
+  ItemType,
+  UiItem,
+  UiItemDetails,
+  UiItemDetailsField,
+  UiItemDetailsSection,
+} from './items';
 
 const typeByTemplateUuid: Record<string, ItemType> = {
   '001': 'login',
@@ -24,10 +25,10 @@ const typeByTemplateUuid: Record<string, ItemType> = {
   '006': 'document',
 };
 
-export function mapItems(items: IItem[]): IUiItem[] {
+export function mapItems(items: Item[]): UiItem[] {
   const mapped = items.map((item) => {
     const url = catchSync(() => new URL(item.overview.url).host);
-    const result: IUiItem = {
+    const result: UiItem = {
       uuid: item.uuid,
       type: typeByTemplateUuid[item.templateUuid] ?? 'other',
       title: item.overview.title,
@@ -46,7 +47,7 @@ export function mapItems(items: IItem[]): IUiItem[] {
   return mapped;
 }
 
-function mapDetailField(field: IDetailField): IUiItemDetailsFields | null {
+function mapDetailField(field: DetailField): UiItemDetailsField | null {
   if (field.designation === 'username') {
     return {
       title: 'username',
@@ -64,9 +65,7 @@ function mapDetailField(field: IDetailField): IUiItemDetailsFields | null {
   return null;
 }
 
-function mapSectionField(
-  field: IDetailSectionField
-): IUiItemDetailsFields | null {
+function mapSectionField(field: DetailSectionField): UiItemDetailsField | null {
   if (typeof field.v !== 'string') {
     return null;
   }
@@ -77,10 +76,10 @@ function mapSectionField(
   };
 }
 
-function mapSection(section: IDetailSection): IUiItemDetailsSection | null {
-  const fields =
-    section.fields?.map((field) => mapSectionField(field)).filter(isTruthy) ??
-    [];
+function mapSection(section: DetailSection): UiItemDetailsSection | null {
+  const fields = (section.fields || [])
+    .map((field) => mapSectionField(field))
+    .filter(isTruthy);
   if (fields.length === 0) {
     return null;
   }
@@ -90,7 +89,7 @@ function mapSection(section: IDetailSection): IUiItemDetailsSection | null {
   };
 }
 
-export function mapItemDetails(item: IItemDetails): IUiItemDetails {
+export function mapItemDetails(item: ItemDetails): UiItemDetails {
   const url = catchSync(() => new URL(item.overview.url).host);
   const allFields =
     item.details.fields
@@ -100,7 +99,7 @@ export function mapItemDetails(item: IItemDetails): IUiItemDetails {
     item.details.sections
       ?.map((section) => mapSection(section))
       .filter(isTruthy) ?? [];
-  const result: IUiItemDetails = {
+  const result: UiItemDetails = {
     uuid: item.uuid,
     type: typeByTemplateUuid[item.templateUuid] ?? 'other',
     title: item.overview.title,
@@ -116,10 +115,22 @@ export function mapItemDetails(item: IItemDetails): IUiItemDetails {
       ...allFields,
       ...allSections
         .filter((section) => section.title.length === 0)
-        .reduce((acc, section) => [...acc, ...section.fields], []),
-    ],
+        .reduce<UiItemDetailsField[]>(
+          (acc, section) => [...acc, ...section.fields],
+          []
+        ),
+      item.details.password && {
+        concealed: true,
+        title: 'password',
+        value: item.details.password,
+      },
+      item.details.notesPlain && {
+        concealed: false,
+        title: 'notes',
+        value: item.details.notesPlain,
+      },
+    ].filter(isTruthy),
     sections: allSections.filter((section) => section.title.length > 0),
-    notes: item.details.notesPlain,
     original: item,
   };
   return result;

@@ -1,18 +1,25 @@
-import { Observable } from 'rxjs';
+import type { Observable } from 'rxjs';
 
-export interface IAction {
+import type { AnyParams, BivariantFn } from './bivariantFn';
+
+export interface Action {
   type: ActionCreator;
 }
 
 export type ActionCreator<
-  A extends IAction = IAction,
-  P extends unknown[] = unknown[]
-> = (...args: P) => A;
+  A extends Action = Action,
+  P extends AnyParams = unknown[]
+> = BivariantFn<P, A>;
 
-export type ActionOf<T extends ActionCreator> = ReturnType<T>;
+export type ActionOf<T extends ActionCreator> = ReturnType<T> & {
+  type: T;
+};
 
-export type Selector<T> = (actions: Observable<IAction>) => Observable<T>;
+export type ActionsTransform<
+  T,
+  Args extends [...AnyParams, Observable<Action>] = [Observable<Action>]
+> = (...args: Args) => Observable<T>;
 
-export type Epic<T extends IAction = IAction> = (
-  actions: Observable<IAction>
+export type Epic<T extends Action = Action> = (
+  actions: Observable<Action>
 ) => Observable<T>;

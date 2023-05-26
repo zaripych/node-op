@@ -1,6 +1,7 @@
-import { platform, arch } from 'os';
-import { homepage, op_version } from '../../package.json';
-import { PeerCertificate } from 'tls';
+import { arch, platform } from 'os';
+import type { PeerCertificate } from 'tls';
+
+import * as PackageJson from '../../package.json';
 
 export function validateCertificate(certificate: PeerCertificate) {
   console.log('node-op: Certificate information follows', {
@@ -10,7 +11,10 @@ export function validateCertificate(certificate: PeerCertificate) {
   });
 
   if (certificate.subject.CN === '*.cachefly.net') {
-    if (!certificate.subjectaltname.includes('DNS:cache.agilebits.com')) {
+    if (
+      !certificate.subjectaltname ||
+      !certificate.subjectaltname.includes('DNS:cache.agilebits.com')
+    ) {
       return {
         isValid: false,
         message:
@@ -28,8 +32,8 @@ export function validateCertificate(certificate: PeerCertificate) {
 }
 
 export function settings() {
-  const contributeUrl = homepage;
-  const version = op_version;
+  const contributeUrl = PackageJson.homepage;
+  const version = PackageJson.op_version;
 
   const config: {
     [key in NodeJS.Platform]?: {

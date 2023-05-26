@@ -1,15 +1,10 @@
-import {
-  listItems,
-  IItem,
-  getDocument,
-  AggregateError,
-  rethrowAsync,
-  catchAsync,
-} from '../api';
-import { isError } from 'util';
 import { basename } from 'path';
+import { isError } from 'util';
 
-export interface ICheckoutProps {
+import type { Item } from '../api';
+import { catchAsync, getDocument, listItems, rethrowAsync } from '../api';
+
+export interface CheckoutProps {
   vault?: string;
   files: string[];
   force?: boolean;
@@ -17,15 +12,15 @@ export interface ICheckoutProps {
 }
 
 async function processFile(
-  props: ICheckoutProps,
+  props: CheckoutProps,
   file: string,
-  items: IItem[],
+  items: Item[],
   deps = {
     getDocument,
   }
 ) {
   const title = basename(file);
-  const filtered = items.filter((item) => title === item?.overview?.title);
+  const filtered = items.filter((item) => title === item.overview.title);
 
   if (filtered.length === 0) {
     throw new Error(`No document with title '${file}' found`);
@@ -35,13 +30,18 @@ async function processFile(
     throw new Error(`More than one document with title '${file}' found`);
   }
 
-  const verbosity = props?.verbosity ?? 0;
+  const firstFiltered = filtered[0];
+  const verbosity = props.verbosity ?? 0;
+
+  if (!firstFiltered) {
+    throw new Error();
+  }
 
   return await rethrowAsync(
     () =>
       deps.getDocument({
         verbosity,
-        uuid: filtered[0].uuid,
+        uuid: firstFiltered.uuid,
         outputFilePath: file,
         ...(props.vault && { vault: props.vault }),
         ...(typeof props.force === 'boolean' && { force: props.force }),
@@ -52,7 +52,7 @@ async function processFile(
 }
 
 export async function vaultCheckout(
-  props: ICheckoutProps,
+  props: CheckoutProps,
   /**
    * @ignore
    */
@@ -61,8 +61,7 @@ export async function vaultCheckout(
     getDocument,
   }
 ) {
-  // tslint:disable-next-line: strict-boolean-expressions
-  if (!props || typeof props !== 'object') {
+  if (typeof props !== 'object') {
     throw new TypeError('no properties passed');
   }
 
@@ -104,7 +103,10 @@ export async function vaultCheckout(
   if (errorResults.length > 0) {
     if (errorResults.length > 1) {
       const [first, ...rest] = errorResults;
-      throw new AggregateError(first, ...rest);
+      if (!first) {
+        throw new Error();
+      }
+      throw new AggregateError([first, ...rest], 'Multiple errors occurred');
     } else {
       throw errorResults[0];
     }

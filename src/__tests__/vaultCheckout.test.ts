@@ -1,9 +1,13 @@
+import { describe, expect, it,jest } from '@jest/globals';
+
+import type { Item } from '../api';
 import { vaultCheckout } from '../commands/vaultCheckout';
 
 describe('vaultCheckout', () => {
   describe('given no props', () => {
     const params: Parameters<typeof vaultCheckout> = [
-      undefined as any,
+      // @ts-expect-error
+      undefined,
       {
         listItems: jest.fn(() => Promise.resolve([])),
         getDocument: jest.fn(() => Promise.resolve()),
@@ -19,7 +23,8 @@ describe('vaultCheckout', () => {
 
   describe('given invalid props', () => {
     const params: Parameters<typeof vaultCheckout> = [
-      'undefined' as any,
+      // @ts-expect-error
+      'undefined',
       {
         listItems: jest.fn(() => Promise.resolve([])),
         getDocument: jest.fn(() => Promise.resolve()),
@@ -93,9 +98,10 @@ describe('vaultCheckout', () => {
   describe('given invalid vault parameter', () => {
     const params: Parameters<typeof vaultCheckout> = [
       {
+        // @ts-expect-error
         vault: 1,
         files: ['x'],
-      } as any,
+      },
       {
         listItems: jest.fn(() => Promise.resolve([])),
         getDocument: jest.fn(() => Promise.resolve()),
@@ -114,7 +120,7 @@ describe('vaultCheckout', () => {
       {
         vault: 'vault',
         files: ['file'],
-      } as any,
+      },
       {
         listItems: jest.fn(() => Promise.resolve([])),
         getDocument: jest.fn(() => Promise.resolve()),
@@ -134,7 +140,7 @@ describe('vaultCheckout', () => {
       {
         vault: 'vault',
         files: ['file'],
-      } as any,
+      },
       {
         listItems: jest.fn(() =>
           Promise.resolve([
@@ -150,7 +156,7 @@ describe('vaultCheckout', () => {
                 title: 'file',
               },
             },
-          ] as any)
+          ] as Item[])
         ),
         getDocument: jest.fn(() => Promise.resolve()),
       },
@@ -169,7 +175,7 @@ describe('vaultCheckout', () => {
       {
         vault: 'vault',
         files: ['file'],
-      } as any,
+      },
       {
         listItems: jest.fn(() => {
           throw new Error('Simulated error');
@@ -194,7 +200,7 @@ describe('vaultCheckout', () => {
       {
         vault: 'vault',
         files: ['file'],
-      } as any,
+      },
       {
         listItems: jest.fn(() =>
           Promise.resolve([
@@ -204,7 +210,7 @@ describe('vaultCheckout', () => {
                 title: 'file',
               },
             },
-          ] as any)
+          ] as Item[])
         ),
         getDocument: jest.fn(() => {
           throw new Error('Simulated error');
@@ -228,7 +234,7 @@ describe('vaultCheckout', () => {
       {
         vault: 'vault',
         files: ['file1', 'file2'],
-      } as any,
+      },
       {
         listItems: jest.fn(() =>
           Promise.resolve([
@@ -244,7 +250,7 @@ describe('vaultCheckout', () => {
                 title: 'file3',
               },
             },
-          ] as any)
+          ] as Item[])
         ),
         getDocument: jest.fn(() => Promise.resolve()),
       },
@@ -266,7 +272,7 @@ describe('vaultCheckout', () => {
       {
         vault: 'vault',
         files: ['file1', 'file2', 'file4'],
-      } as any,
+      },
       {
         listItems: jest.fn(() =>
           Promise.resolve([
@@ -288,7 +294,7 @@ describe('vaultCheckout', () => {
                 title: 'file5',
               },
             },
-          ] as any)
+          ] as Item[])
         ),
         getDocument: jest.fn(() => Promise.resolve()),
       },
@@ -296,7 +302,7 @@ describe('vaultCheckout', () => {
 
     it('should work', async () => {
       await expect(vaultCheckout(...params)).rejects.toThrowError(
-        `Multiple errors occured`
+        `Multiple errors occurred`
       );
       expect(params[1]?.listItems).toBeCalledWith({
         vault: 'vault',
@@ -310,7 +316,7 @@ describe('vaultCheckout', () => {
       {
         vault: 'vault',
         files: ['file'],
-      } as any,
+      },
       {
         listItems: jest.fn(() =>
           Promise.resolve([
@@ -320,7 +326,7 @@ describe('vaultCheckout', () => {
                 title: 'file',
               },
             },
-          ] as any)
+          ] as Item[])
         ),
         getDocument: jest.fn(() => Promise.resolve()),
       },
@@ -357,7 +363,7 @@ describe('vaultCheckout', () => {
                 title: 'file',
               },
             },
-          ] as any)
+          ] as Item[])
         ),
         getDocument: jest.fn(() => Promise.resolve()),
       },
@@ -384,7 +390,7 @@ describe('vaultCheckout', () => {
       {
         vault: 'vault',
         files: ['file1', 'file2'],
-      } as any,
+      },
       {
         listItems: jest.fn(() =>
           Promise.resolve([
@@ -400,7 +406,7 @@ describe('vaultCheckout', () => {
                 title: 'file2',
               },
             },
-          ] as any)
+          ] as Item[])
         ),
         getDocument: jest.fn(() => Promise.resolve()),
       },

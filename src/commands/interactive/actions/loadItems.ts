@@ -1,4 +1,5 @@
-import { IUiItem, errorInfo } from '../state/types';
+import type { UiItem } from '../state/types';
+import { errorInfo } from '../state/types';
 
 export function loadItems() {
   return {
@@ -7,7 +8,7 @@ export function loadItems() {
   };
 }
 
-export function loadItemsSuccess(data: IUiItem[]) {
+export function loadItemsSuccess(data: UiItem[]) {
   return {
     type: loadItemsSuccess,
     status: 'success' as const,

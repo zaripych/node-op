@@ -1,8 +1,9 @@
-import { spawnAndCheck } from './spawn';
+import fs from 'fs/promises';
 import { isString } from 'util';
-import fs from 'fs-extra';
 
-export interface IGetDocumentProps {
+import { spawnAndCheck } from './spawn';
+
+export interface GetDocumentProps {
   uuid: string;
   vault?: string;
   outputFilePath: string;
@@ -10,7 +11,7 @@ export interface IGetDocumentProps {
   verbosity: number;
 }
 
-export async function getDocument(props: IGetDocumentProps) {
+export async function getDocument(props: GetDocumentProps) {
   const forceOverwrite = props.force ?? false;
 
   const outStream = await fs.open(
@@ -29,7 +30,7 @@ export async function getDocument(props: IGetDocumentProps) {
     {
       env: process.env,
       verbosity: props.verbosity,
-      stdio: ['inherit', outStream, 'pipe'],
+      stdio: ['inherit', outStream.fd, 'pipe'],
     }
   );
 }

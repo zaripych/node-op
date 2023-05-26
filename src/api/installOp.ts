@@ -1,27 +1,23 @@
-import { get } from 'https';
-import {
-  mkdir,
-  chmod,
-  existsSync,
-  createWriteStream,
-  removeSync,
-} from 'fs-extra';
-import { join, extname } from 'path';
-import { spawnSync } from 'child_process';
-import pump from 'pump';
-import { EOL } from 'os';
 import AdmZip from 'adm-zip';
+import { spawnSync } from 'child_process';
 import { randomBytes } from 'crypto';
-import { validateCertificate, settings } from './installSettings';
+import { createWriteStream, existsSync, rmSync } from 'fs';
+import { chmod, mkdir } from 'fs/promises';
+import type { IncomingMessage } from 'http';
+import { get } from 'https';
+import { EOL } from 'os';
+import { extname, join } from 'path';
+import pump from 'pump';
+import type { TLSSocket } from 'tls';
+import { fileURLToPath } from 'url';
 
-type TLSSocket = import('tls').TLSSocket;
-type IncomingMessage = import('http').IncomingMessage;
+import { settings, validateCertificate } from './installSettings';
 
 const pipeline = (
   source: NodeJS.ReadableStream,
   target: NodeJS.WritableStream
 ) => {
-  return new Promise((res, rej) => {
+  return new Promise<void>((res, rej) => {
     pump(source, target, (err: Error | undefined) => {
       if (err) {
         rej(err);
@@ -34,11 +30,7 @@ const pipeline = (
 
 const { packageFileName, entry, contributeUrl, version, url } = settings();
 
-const distDir = './dist/binaries';
-const packagePath = join(distDir, packageFileName);
-const opPath = join(distDir, entry);
-
-function getOpVersion() {
+function getOpVersion(opPath: string) {
   const result = spawnSync(opPath, ['--version'], { encoding: 'utf8' });
   if (result.error) {
     throw new Error(`Cannot check version of op ${String(result.error)}`);
@@ -58,13 +50,18 @@ function getOpVersion() {
   return firstMatch[0];
 }
 
-export async function installOnePassword() {
+export async function installOnePassword(directory?: string) {
+  const distDir =
+    directory || fileURLToPath(new URL('../bin', import.meta.url));
+  const packagePath = join(distDir, packageFileName);
+  const opPath = join(distDir, entry);
+
   if (existsSync(packagePath) && existsSync(opPath)) {
     console.log(
       'node-op: The binary already downloaded and unpacked, checking version ... '
     );
 
-    const currentVersion = getOpVersion();
+    const currentVersion = getOpVersion(opPath);
     if (currentVersion === version) {
       console.log('node-op: Version matches', version);
       console.log('');
@@ -95,7 +92,7 @@ export async function installOnePassword() {
       socket.on('secureConnect', () => {
         if (!socket.authorized) {
           req.emit('error', new Error('Unauthorized'));
-          req.abort();
+          req.destroy();
           return;
         }
 
@@ -116,7 +113,7 @@ export async function installOnePassword() {
                 .join(' ')
             )
           );
-          req.abort();
+          req.destroy();
           return;
         }
       });
@@ -144,7 +141,14 @@ export async function installOnePassword() {
     zip.extractEntryTo(entry, distDir, false, true);
     zip.extractEntryTo(entry + '.sig', distDir, false, true);
   } else if (extension === '.pkg') {
-    unpackPkgOnMacOS(packagePath);
+    // reduce possibility we delete something on users system by generating random dir name
+    const OUT_DIR = `op-pkgutil-output-${randomBytes(4).toString('hex')}`;
+    const unpackDir = join(distDir, OUT_DIR);
+    unpackPkgOnMacOS(packagePath, unpackDir);
+
+    if (!existsSync(opPath)) {
+      throw new Error(`op binary not found after extracting from .pkg`);
+    }
   } else {
     throw new Error(`Unexpected extension ${extension}`);
   }
@@ -157,10 +161,12 @@ export async function installOnePassword() {
   }
   const requestedVersion = semVer[0];
 
-  const downloadedVersion = getOpVersion();
+  const downloadedVersion = getOpVersion(opPath);
   if (downloadedVersion !== requestedVersion) {
     throw new Error(
-      `The downloaded version ${downloadedVersion} doesn't match ${version}`
+      `The downloaded version ${String(
+        downloadedVersion
+      )} doesn't match ${version}`
     );
   }
 
@@ -168,12 +174,13 @@ export async function installOnePassword() {
   console.log('');
 }
 
-function unpackPkgOnMacOS(pkgPath: string) {
-  // reduce possibility we delete something on users system by generating random dir name
-  const OUT_DIR = `op-pkgutil-output-${randomBytes(4).toString('hex')}`;
-  const unpackDir = join(process.cwd(), distDir, OUT_DIR);
+function unpackPkgOnMacOS(pkgPath: string, unpackDir: string) {
   try {
-    removeSync(unpackDir);
+    try {
+      rmSync(unpackDir, { recursive: true });
+    } catch (err) {
+      // ignore
+    }
 
     const result = spawnSync('pkgutil', ['--expand', pkgPath, unpackDir], {
       encoding: 'utf8',
@@ -201,10 +208,10 @@ function unpackPkgOnMacOS(pkgPath: string) {
       );
     }
 
-    const tarResult = spawnSync('tar', ['xzvf', join(OUT_DIR, 'Payload')], {
+    const tarResult = spawnSync('tar', ['xzvf', join(unpackDir, 'Payload')], {
       encoding: 'utf8',
       env: process.env,
-      cwd: distDir,
+      cwd: join(unpackDir, '../'),
     });
 
     const logTarOutput = () => {
@@ -225,11 +232,11 @@ function unpackPkgOnMacOS(pkgPath: string) {
         `Cannot unpack .pkg file. tar quit with status ${result.status}`
       );
     }
-
-    if (!existsSync(opPath)) {
-      throw new Error(`op binary not found after extracting from .pkg`);
-    }
   } finally {
-    removeSync(unpackDir);
+    try {
+      rmSync(unpackDir, { recursive: true });
+    } catch (err) {
+      // ignore
+    }
   }
 }

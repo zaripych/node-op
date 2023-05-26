@@ -1,22 +1,37 @@
-import { IErrorInfo } from './errorInfo';
+import type { ErrorInfo } from './errorInfo';
 
-export interface ISuccessRequest<D> {
+export interface SuccessRequest<D> {
   status: 'success';
   data: D;
 }
 
-export type IRequest<D> =
-  | {
-      status: 'initial';
-    }
-  | {
-      status: 'started';
-    }
-  | {
-      status: 'success';
-      data: D;
-    }
-  | {
-      status: 'failed';
-      error: IErrorInfo;
-    };
+export type IRequest<D> = D extends void
+  ?
+      | {
+          status: 'initial';
+        }
+      | {
+          status: 'started';
+        }
+      | {
+          status: 'success';
+        }
+      | {
+          status: 'failed';
+          error: ErrorInfo;
+        }
+  :
+      | {
+          status: 'initial';
+        }
+      | {
+          status: 'started';
+        }
+      | {
+          status: 'success';
+          data: D;
+        }
+      | {
+          status: 'failed';
+          error: ErrorInfo;
+        };

@@ -1,22 +1,12 @@
-export interface IKey {
-  upArrow: boolean;
-  downArrow: boolean;
-  leftArrow: boolean;
-  rightArrow: boolean;
-  backspace: boolean;
-  delete: boolean;
-  pageUp: boolean;
-  pageDown: boolean;
+import type { Key as InkKey } from 'ink';
+
+export type Key = InkKey & {
   home: boolean;
   end: boolean;
-  return: boolean;
-  escape: boolean;
-  ctrl: boolean;
-  shift: boolean;
-  meta: boolean;
-}
+  tab: boolean;
+};
 
-export function keyInput(input: string, key: IKey) {
+export function keyInput(input: string, key: Key) {
   return {
     type: keyInput,
     input,
